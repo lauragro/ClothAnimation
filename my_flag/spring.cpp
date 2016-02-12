@@ -7,7 +7,7 @@ Spring::Spring()
 
     // Initialize spring details
 
-    dampingConstant = 0.0;
+    dampingConstant = 0.8;
     mass = 1.0;
     restLength = 100;
     springConstant = 1.0;

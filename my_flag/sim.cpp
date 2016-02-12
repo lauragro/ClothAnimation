@@ -12,8 +12,6 @@ Sim::Sim()
         {
             myFlag->springs[i][j]->xCoord = (j+1)*50;
             myFlag->springs[i][j]->yCoord = (i+1)*50;
-            /*myFlag->springs[i][j]->xCoordWall = (j)*50;
-            myFlag->springs[i][j]->yCoordWall = (i)*50;*/
 
             // initialize wall coord to be coord of neighboring spring
             if(j>0)
@@ -131,13 +129,13 @@ void Sim::simStep()
             double length =  myFlag->springs[i][j]->xCoord - myFlag->springs[i][j]->xCoordWall;
             if( length > 2.0*myFlag->springs[i][j]->restLength )
             {
-                length = myFlag->springs[i][j]->restLength;
+                length = 2.0* myFlag->springs[i][j]->restLength;
             } else if( length < -2.0*myFlag->springs[i][j]->restLength )
             {
-                length = -1.0 * myFlag->springs[i][j]->restLength;
+                length = -2.0 * myFlag->springs[i][j]->restLength;
             }
 
-            double x = myFlag->springs[i][j]->xCoord - myFlag->springs[i][j]->restLength; // because stationary block is at (x=0)
+            double x = length - myFlag->springs[i][j]->restLength;
             double v = myFlag->springs[i][j]->xVelocity;
             double k = myFlag->springs[i][j]->springConstant;
             double c = myFlag->springs[i][j]->dampingConstant;
