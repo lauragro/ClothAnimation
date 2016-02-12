@@ -17,7 +17,8 @@ SOURCES += main.cpp\
     window.cpp \
     openglwidget.cpp \
     spring.cpp \
-    flag.cpp
+    flag.cpp \
+    vector3d.cpp
 
 HEADERS  += \
     sim.h \
@@ -26,7 +27,8 @@ HEADERS  += \
     ui_MainWindow.h \
     openglwidget.h \
     spring.h \
-    flag.h
+    flag.h \
+    vector3d.h
 
 FORMS    += \
     MainWindow.ui

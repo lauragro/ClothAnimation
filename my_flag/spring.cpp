@@ -12,13 +12,6 @@ Spring::Spring()
     restLength = 100;
     springConstant = 1.0;
 
-    /*xCoord = 150.0;
-    yCoord = 300.0;
-
-    // Coordinates of side of spring without mass
-    xCoordWall = 0.0;
-    yCoordWall = 300.0;*/
-
     // Derivatives
     xVelocity = 0.0;
     yVelocity = 0.0;

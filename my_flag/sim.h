@@ -23,6 +23,10 @@ class Sim
 
         // Progesses the simulation forward
         void simStep();
+        void rightStep(double dt);
+        void eulerStep(double dt);
+        void rungeKuttaStep(double dt);
+        double acceleration(Spring *thisSpring);
 
         // The spring objects belonging to this simulation
         Flag * myFlag;

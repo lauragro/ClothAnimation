@@ -61,14 +61,6 @@ void Sim::draw()
 {
     double radius = 10.0;
 
-    // Draw square
-    /*glBegin(GL_QUADS);
-        glVertex2f(0, mySprings[0]->yCoordWall + radius);
-        glVertex2f(0, mySprings[0]->yCoordWall - radius);
-        glVertex2f(50, mySprings[0]->yCoordWall - radius);
-        glVertex2f(50, mySprings[0]->yCoordWall + radius);
-    glEnd();*/
-
     // Draw blue circles
     for( int i=0; i<myFlag->springsHigh; i++ )
     {
@@ -103,21 +95,45 @@ void Sim::draw()
 // Simulation step using interpolation
 void Sim::simStep()
 {
+    int type = 1;
     double dt = 0.1;
 
-    // Move mass right
-    /*for(int i=0; i<myFlag->springsHigh; i++)
+    switch (type)
+    {
+        case 0:
+            rightStep(dt);
+            break;
+        case 1:
+            eulerStep(dt);
+            break;
+        case 2:
+            rungeKuttaStep(dt);
+        default:
+            break;
+    }
+
+}
+
+// Move right simulation step
+void Sim::rightStep(double dt)
+{
+    for(int i=0; i<myFlag->springsHigh; i++)
     {
         for(int j=0; j<myFlag->springsWide; j++)
         {
             myFlag->springs[i][j]->xCoord += 10;
         }
-    }*/
+    }
+}
 
-    // Euler step
-    for( int i=0; i<myFlag->springsHigh; i++ )
+// Euler simulation step
+void Sim::eulerStep(double dt)
+{
+    int i,j;
+    double v, a;
+    for( i=0; i<myFlag->springsHigh; i++ )
     {
-        for( int j=0; j<myFlag->springsWide; j++ )
+        for( j=0; j<myFlag->springsWide; j++ )
         {
             // update wall coord to be that of neighboring spring
             if(j>0)
@@ -126,43 +142,71 @@ void Sim::simStep()
                 myFlag->springs[i][j]->yCoordWall = myFlag->springs[i][j-i]->yCoord;
             }
 
-            double length =  myFlag->springs[i][j]->xCoord - myFlag->springs[i][j]->xCoordWall;
-            if( length > 2.0*myFlag->springs[i][j]->restLength )
-            {
-                length = 2.0* myFlag->springs[i][j]->restLength;
-            } else if( length < -2.0*myFlag->springs[i][j]->restLength )
-            {
-                length = -2.0 * myFlag->springs[i][j]->restLength;
-            }
+            // set acceleration of spring
+            a = acceleration(myFlag->springs[i][j]);
 
-            double x = length - myFlag->springs[i][j]->restLength;
-            double v = myFlag->springs[i][j]->xVelocity;
-            double k = myFlag->springs[i][j]->springConstant;
-            double c = myFlag->springs[i][j]->dampingConstant;
-            double m = myFlag->springs[i][j]->mass;
-            double a = -1.0*(k*x + c*v)/m;
-            myFlag->springs[i][j]->xAcceleration = a;
-
+            // set velocity of spring
+            v = myFlag->springs[i][j]->xVelocity;
             v = v + a*dt;
             myFlag->springs[i][j]->xVelocity = v;
 
+            // set position of spring
             myFlag->springs[i][j]->xCoord += v * dt + a * dt * dt * 0.5;
         }
+
     }
 
-    // RK4 step
-    /*double k1, k2, k3, k4, a1, a2, a3, a4, h;
-    double length = abs(mySprings[0]->xCoordWall - mySprings[0]->xCoord);
+}
 
-    // position step
-    h = mySprings[0]->xVelocity * dt + 0.5 * mySprings[0]->xAcceleration * dt * dt;
-    // acceleration
-    a1 = mySprings[0]->springConstant * (length - mySprings[0]->restLength)
-                /mySprings[0]->mass - mySprings[0]->dampingConstant * mySprings[0]->xVelocity;
-    a2 = mySprings[0]->springConstant * (length + 0.5*mySprings[0]->xVelocity - )
+// Runge Kutta simulation step
+void Sim::rungeKuttaStep(double dt)
+{
+    int i,j;
+    double h,x,v,a,k1,k2,k3,k4;
+    h = dt;
 
-    // velocity
-    k1 = dt * mySprings[0]->xAcceleration;
-    k2 =*/
+    for(i=0; i<myFlag->springsHigh; i++)
+    {
+        for(j=0; j<myFlag->springsWide; j++)
+        {
+            // K1
+            a = acceleration(myFlag->springs[i][j]);
+            v = myFlag->springs[i][j]->xVelocity;
+            v += a*dt;
+            k1 = h * v;
+
+            // K2
+            a = acceleration(myFlag->springs[i][j]);
+            // ...etc
+
+        }
+    }
+}
+
+// set acceleration of thisSpring
+double Sim::acceleration(Spring *thisSpring)
+{
+    // get length of spring
+    double length =  thisSpring->xCoord - thisSpring->xCoordWall;
+
+    // limit stretch of spring
+    if( length > 2.0*thisSpring->restLength )
+    {
+        length = 2.0* thisSpring->restLength;
+    } else if( length < -2.0*thisSpring->restLength )
+    {
+        length = -2.0 * thisSpring->restLength;
+    }
+
+    // calculate acceleration
+    double x = length - thisSpring->restLength;
+    double v = thisSpring->xVelocity;
+    double k = thisSpring->springConstant;
+    double c = thisSpring->dampingConstant;
+    double m = thisSpring->mass;
+    double a = -1.0*(k*x + c*v)/m;
+
+    // return acceleration
+    return a;
 
 }
