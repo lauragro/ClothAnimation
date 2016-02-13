@@ -14,14 +14,14 @@ public:
     double x,y,z;
 
     // operators
-    Vector3D* add(Vector3D a, Vector3D b);
-    Vector3D* subtract(Vector3D a, Vector3D b);
-    Vector3D* scaleUp(Vector3D a, double factor);
-    Vector3D* scaleDown(Vector3D a, double factor);
-    double dot(Vector3D a, Vector3D b);
-    Vector3D* cross(Vector3D a, Vector3D b);
-    double magnitude(Vector3D a);
-    Vector3D* normalize(Vector3D a);
+    Vector3D* add(Vector3D *a, Vector3D *b);
+    Vector3D* subtract(Vector3D *a, Vector3D *b);
+    Vector3D* scaleUp(Vector3D *a, double factor);
+    Vector3D* scaleDown(Vector3D *a, double factor);
+    double dot(Vector3D *a, Vector3D *b);
+    Vector3D* cross(Vector3D *a, Vector3D *b);
+    double magnitude(Vector3D *a);
+    Vector3D* normalize(Vector3D *a);
 
 };
 

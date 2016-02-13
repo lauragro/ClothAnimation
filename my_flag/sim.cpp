@@ -6,21 +6,6 @@ Sim::Sim()
     cout << "Simulator Initialization\n";
 
     myFlag = new Flag();
-    for(int i=0; i<myFlag->springsHigh; i++)
-    {
-        for(int j=0; j<myFlag->springsWide; j++)
-        {
-            myFlag->springs[i][j]->xCoord = (j+1)*50;
-            myFlag->springs[i][j]->yCoord = (i+1)*50;
-
-            // initialize wall coord to be coord of neighboring spring
-            if(j>0)
-            {
-                myFlag->springs[i][j]->xCoordWall = myFlag->springs[i][j-1]->xCoord;
-                myFlag->springs[i][j]->yCoordWall = myFlag->springs[i][j-i]->yCoord;
-            }
-        }
-    }
 
 }
 
@@ -31,61 +16,24 @@ Sim::~Sim()
     delete this;
 }
 
-// Draw circle using triangle fan
-void Sim::drawCircle(double x, double y, double radius, double resolution)
-{
-    cout << "circ x draw = " << x << endl;
-    cout << "circ y draw = " << y << endl;
-
-    // Compute angle of each triangle in fan
-    double theta = 2.0 * PI / resolution;
-
-    glColor3f(0,0.4,0.6);
-    glBegin(GL_TRIANGLE_FAN);
-
-        glVertex2f(x,y);  // centre point
-        for( int i=0; i<=resolution; i++ )
-        {
-            // Apply the Pythagorean Theorem to get next point
-            glVertex2f(
-                x + radius * sin( i * theta ),
-                y + radius * cos( i * theta )
-            );
-        }
-    glEnd();
-
-}
-
 // Draw everything on screen
 void Sim::draw()
 {
-    double radius = 10.0;
-
     // Draw blue circles
-    for( int i=0; i<myFlag->springsHigh; i++ )
+    for( int i=0; i<myFlag->particlesHigh; i++ )
     {
-        for(int j=0; j<myFlag->springsWide; j++)
+        for(int j=0; j<myFlag->particlesWide; j++)
         {
-            drawCircle(myFlag->springs[i][j]->xCoord, myFlag->springs[i][j]->yCoord, radius, 20);
+            myFlag->particles[i][j]->draw();
         }
     }
 
     // Draw connecting lines
-    glPointSize(5.0);
-    glLineWidth(2.0);
-    for( int i=0; i<myFlag->springsHigh; i++ )
+    for( int i=0; i<myFlag->implementedSprings; i++ )
     {
-        for( int j=1; j<myFlag->springsWide; j++ )
-        {
-            glBegin(GL_LINE_STRIP);
-                //glVertex2f(myFlag->springs[i][j]->xCoordWall, myFlag->springs[i][j]->yCoordWall);
-
-                glVertex2f(myFlag->springs[i][j-1]->xCoord, myFlag->springs[i][j-1]->yCoord);
-
-                glVertex2f(myFlag->springs[i][j]->xCoord, myFlag->springs[i][j]->yCoord);
-            glEnd();
-        }
+        myFlag->springs[i]->draw();
     }
+
 
     //cout << "x coord = " << myFlag->springs[0]->xCoord << endl;
     //cout << "y coord = " << myFlag->springs[0]->yCoord << endl;
@@ -117,11 +65,11 @@ void Sim::simStep()
 // Move right simulation step
 void Sim::rightStep(double dt)
 {
-    for(int i=0; i<myFlag->springsHigh; i++)
+    for(int i=0; i<myFlag->particlesHigh; i++)
     {
-        for(int j=0; j<myFlag->springsWide; j++)
+        for(int j=0; j<myFlag->particlesWide; j++)
         {
-            myFlag->springs[i][j]->xCoord += 10;
+            myFlag->particles[i][j]->position->x += 10;
         }
     }
 }
@@ -130,28 +78,46 @@ void Sim::rightStep(double dt)
 void Sim::eulerStep(double dt)
 {
     int i,j;
-    double v, a;
-    for( i=0; i<myFlag->springsHigh; i++ )
+    Vector3D *x, *v, *a;
+
+    // Fix corners
+    int top = 0;
+    int bottom = myFlag->particlesHigh-1;
+    int left = 1;
+    int right = myFlag->particlesWide-2;
+
+    myFlag->particles[top][left]->position->x = 2 * myFlag->width / myFlag->particlesWide;
+    myFlag->particles[top][left]->position->y = myFlag->height / myFlag->particlesHigh;
+    myFlag->particles[top][left]->position->z = 0.0;
+
+    myFlag->particles[top][right]->position->x = myFlag->width - (myFlag->width / myFlag->particlesWide);
+    myFlag->particles[top][right]->position->y = myFlag->height / myFlag->particlesHigh;
+    myFlag->particles[top][right]->position->z = 0.0;
+
+    // update forces on particles
+    updateForces();
+
+    // update velocities and positions of particles
+    for( i=0; i<myFlag->particlesHigh; i++ )
     {
-        for( j=0; j<myFlag->springsWide; j++ )
+        for( j=0; j<myFlag->particlesWide; j++ )
         {
-            // update wall coord to be that of neighboring spring
-            if(j>0)
-            {
-                myFlag->springs[i][j]->xCoordWall = myFlag->springs[i][j-1]->xCoord;
-                myFlag->springs[i][j]->yCoordWall = myFlag->springs[i][j-i]->yCoord;
-            }
+            // a = F/m
+            a = a->scaleDown(myFlag->particles[i][j]->force, myFlag->particles[i][j]->mass);
 
-            // set acceleration of spring
-            a = acceleration(myFlag->springs[i][j]);
+            // get velocity of spring
+            v = myFlag->particles[i][j]->velocity;
 
-            // set velocity of spring
-            v = myFlag->springs[i][j]->xVelocity;
-            v = v + a*dt;
-            myFlag->springs[i][j]->xVelocity = v;
+            // v = v + a*dt
+            v = v->add(v, v->scaleUp(a,dt));
+            myFlag->particles[i][j]->velocity = v;
 
-            // set position of spring
-            myFlag->springs[i][j]->xCoord += v * dt + a * dt * dt * 0.5;
+            // get position of spring
+            x = myFlag->particles[i][j]->position;
+
+            // x = x + v * dt;
+            x = x->add(x, x->scaleUp(v, dt));
+            myFlag->particles[i][j]->position = x;
         }
 
     }
@@ -165,7 +131,7 @@ void Sim::rungeKuttaStep(double dt)
     double h,x,v,a,k1,k2,k3,k4;
     h = dt;
 
-    for(i=0; i<myFlag->springsHigh; i++)
+    /*for(i=0; i<myFlag->springsHigh; i++)
     {
         for(j=0; j<myFlag->springsWide; j++)
         {
@@ -180,33 +146,76 @@ void Sim::rungeKuttaStep(double dt)
             // ...etc
 
         }
-    }
+    }*/
 }
 
-// set acceleration of thisSpring
-double Sim::acceleration(Spring *thisSpring)
+// set acceleration of thisParticle
+double Sim::acceleration(Particle *thisParticle)
 {
     // get length of spring
-    double length =  thisSpring->xCoord - thisSpring->xCoordWall;
+    /*Vector3D length =  subtract(thisParticle->position, thisParticle->xCoordWall;
 
     // limit stretch of spring
-    if( length > 2.0*thisSpring->restLength )
+    if( length > 2.0*thisParticle->restLength )
     {
-        length = 2.0* thisSpring->restLength;
-    } else if( length < -2.0*thisSpring->restLength )
+        length = 2.0* thisParticle->restLength;
+    } else if( length < -2.0*thisParticle->restLength )
     {
-        length = -2.0 * thisSpring->restLength;
+        length = -2.0 * thisParticle->restLength;
     }
 
     // calculate acceleration
-    double x = length - thisSpring->restLength;
-    double v = thisSpring->xVelocity;
-    double k = thisSpring->springConstant;
-    double c = thisSpring->dampingConstant;
-    double m = thisSpring->mass;
+    double x = length - thisParticle->restLength;
+    double v = thisParticle->xVelocity;
+    double k = thisParticle->springConstant;
+    double c = thisParticle->dampingConstant;
+    double m = thisParticle->mass;
     double a = -1.0*(k*x + c*v)/m;
 
     // return acceleration
-    return a;
+    return a;*/
 
+    return 0.0;
+
+}
+
+// Update forces on all particles
+void Sim::updateForces()
+{
+    int i,j;
+    double length;
+    Vector3D* force,v;
+
+    // Reset forces
+    for( i=0; i<myFlag->particlesHigh; i++ )
+    {
+        for( j=0; j<myFlag->particlesWide; j++ )
+        {
+            myFlag->particles[i][j]->springForce->x = 0;
+            myFlag->particles[i][j]->springForce->y = 0;
+            myFlag->particles[i][j]->springForce->z = 0;
+        }
+    }
+
+    // Add on current spring forces
+    for( i=0; i<myFlag->implementedSprings; i++ )
+    {
+        force = myFlag->springs[i]->force();
+
+        // force1 += force
+        myFlag->springs[i]->particle1->springForce = v.add(myFlag->springs[i]->particle1->springForce, force);
+
+        // force2 -= force
+        myFlag->springs[i]->particle2->springForce = v.subtract(myFlag->springs[i]->particle2->springForce,force);
+
+    }
+
+    // Update total forces on particles
+    for( i=0; i<myFlag->particlesHigh; i++ )
+    {
+        for( j=0; j<myFlag->particlesWide; j++ )
+        {
+            myFlag->particles[i][j]->force = v.add(myFlag->particles[i][j]->externalForce, myFlag->particles[i][j]->springForce);
+        }
+    }
 }

@@ -8,7 +8,7 @@ QT       += core gui opengl
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = my_spring
+TARGET = my_flag
 TEMPLATE = app
 
 
@@ -18,7 +18,8 @@ SOURCES += main.cpp\
     openglwidget.cpp \
     spring.cpp \
     flag.cpp \
-    vector3d.cpp
+    vector3d.cpp \
+    particle.cpp
 
 HEADERS  += \
     sim.h \
@@ -28,7 +29,8 @@ HEADERS  += \
     openglwidget.h \
     spring.h \
     flag.h \
-    vector3d.h
+    vector3d.h \
+    particle.h
 
 FORMS    += \
     MainWindow.ui

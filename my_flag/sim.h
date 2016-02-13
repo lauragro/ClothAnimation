@@ -5,10 +5,12 @@
 
 #include "foundation.h"
 #include "spring.h"
+#include "particle.h"
 #include "flag.h"
 
 class Flag;
 class Spring;
+class Vector3D;
 
 class Sim
 {
@@ -18,7 +20,6 @@ class Sim
         ~Sim();
 
         // Draws all graphics
-        void drawCircle(double x, double y, double radius, double resolution);
         void draw();
 
         // Progesses the simulation forward
@@ -26,7 +27,8 @@ class Sim
         void rightStep(double dt);
         void eulerStep(double dt);
         void rungeKuttaStep(double dt);
-        double acceleration(Spring *thisSpring);
+        double acceleration(Particle *thisParticle);
+        void updateForces();
 
         // The spring objects belonging to this simulation
         Flag * myFlag;
