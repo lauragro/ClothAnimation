@@ -21,6 +21,7 @@ public:
     Vector3D *force;
     Vector3D *externalForce;
     Vector3D *springForce;
+    bool pinned = false;
 
     // draw function
     void draw();

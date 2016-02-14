@@ -27,6 +27,8 @@ class Spring
 
         // force function
         Vector3D* force();
+        Vector3D* forcePinned1();
+        Vector3D* forcePinned2();
 
 };
 

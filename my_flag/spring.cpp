@@ -10,7 +10,7 @@ Spring::Spring(Particle *particle1, Particle *particle2, int springType)
     this->particle1 = particle1;
     this->particle2 = particle2;
 
-    this->restLength = 40;
+    this->restLength = 20;
     this->springConstant = 1.0;
     this->dampingConstant = 0.8;
     this->springType = springType;
@@ -23,7 +23,7 @@ Spring::Spring(Particle *particle1, int springType)
     // Initialize spring details
     this->particle1 = particle1;
 
-    this->restLength = 40;
+    this->restLength = 20;
     this->springConstant = 1.0;
     this->dampingConstant = 0.8;
     this->springType = springType;
@@ -71,6 +71,68 @@ Vector3D* Spring::force()
     Vector3D *v;
     Vector3D *x;
 
+    // velocity of pinned particle is zero
+    if(particle1->pinned)
+    {
+        particle1->velocity->x = 0.0;
+        particle1->velocity->y = 0.0;
+        particle1->velocity->z = 0.0;
+    }
+    if(particle2->pinned)
+    {
+        particle2->velocity->x = 0.0;
+        particle2->velocity->y = 0.0;
+        particle2->velocity->z = 0.0;
+    }
+
+    // length = x2 - x1
+    length = x->subtract(particle2->position, particle1->position);
+
+    // limit stretch
+    if( x->magnitude(length) < restLength*0.5 )
+    {
+        length = x->scaleUp(x->normalize(length), restLength*0.5);
+
+        if( !particle2->pinned )
+        {
+            particle2->position = x->add(particle1->position, length);
+        }
+
+    }
+    else if( x->magnitude(length) > restLength*1.5 )
+    {
+        length = x->scaleUp(x->normalize(length), restLength*1.5);
+
+        if( !particle2->pinned )
+        {
+            particle2->position = x->add(particle1->position, length);
+        }
+    }
+
+    // x = (|L| - L0)(L/|L|)
+    x = x->scaleUp(x->normalize(length), x->magnitude(length)-restLength);
+
+    // v = v2 - v1
+    v = x->subtract(particle2->velocity, particle1->velocity);
+
+    // F = -kx + cv
+    force = x->add(x->scaleUp(x, -1.0*springConstant), x->scaleUp(v, dampingConstant));
+
+    return force;
+}
+
+Vector3D* Spring::forcePinned1()
+{
+    Vector3D *force;
+    Vector3D *length;
+    Vector3D *v;
+    Vector3D *x;
+
+    // velocity of pinned particle is zero
+    particle1->velocity->x = 0.0;
+    particle1->velocity->y = 0.0;
+    particle1->velocity->z = 0.0;
+
     // length = x2 - x1
     length = x->subtract(particle2->position, particle1->position);
 
@@ -84,6 +146,45 @@ Vector3D* Spring::force()
     {
         length = x->scaleUp(x->normalize(length), restLength*1.5);
         particle2->position = x->add(particle1->position, length);
+    }
+
+    // x = (|L| - L0)(L/|L|)
+    x = x->scaleUp(x->normalize(length), x->magnitude(length)-restLength);
+
+    // v = v2 - v1
+    v = x->subtract(particle2->velocity, particle1->velocity);
+
+    // F = -kx + cv
+    force = x->add(x->scaleUp(x, -1.0*springConstant), x->scaleUp(v, dampingConstant));
+
+    return force;
+}
+
+Vector3D* Spring::forcePinned2()
+{
+    Vector3D *force;
+    Vector3D *length;
+    Vector3D *v;
+    Vector3D *x;
+
+    // velocity of pinned particle is zero
+    particle2->velocity->x = 0.0;
+    particle2->velocity->y = 0.0;
+    particle2->velocity->z = 0.0;
+
+    // length = x2 - x1
+    length = x->subtract(particle2->position, particle1->position);
+
+    // limit stretch
+    if( x->magnitude(length) < restLength*0.5 )
+    {
+        length = x->scaleUp(x->normalize(length), restLength*0.5);
+        particle1->position = x->subtract(particle2->position, length);
+    }
+    else if( x->magnitude(length) > restLength*1.5 )
+    {
+        length = x->scaleUp(x->normalize(length), restLength*1.5);
+        particle1->position = x->subtract(particle2->position, length);
     }
 
     // x = (|L| - L0)(L/|L|)

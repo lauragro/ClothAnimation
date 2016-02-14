@@ -12,6 +12,13 @@ Flag::Flag()
     double x,y,z;
     z=0.0;
 
+    // positions of corners
+    int top = 0;
+    int bottom = particlesHigh-1;
+    int left = 1;
+    int right = particlesWide-2;
+
+
     // Particles
     for(int i=0; i<particlesHigh; i++)
     {
@@ -26,10 +33,17 @@ Flag::Flag()
             // create particle
             particles[i][j] = new Particle(x,y,z);
 
-            // add gravity
-            particles[i][j]->externalForce = new Vector3D(0,9.81,0);
-            particles[i][j]->force = particles[i][j]->externalForce;
-
+            // pin the corners
+            if( i==top && (j==left || j==right) )
+            {
+                particles[i][j]->pinned = true;
+            }
+            else
+            {
+                // add gravity
+                particles[i][j]->externalForce = new Vector3D(0,9.81,0);
+                particles[i][j]->force = particles[i][j]->externalForce;
+            }
         }
 
     }
