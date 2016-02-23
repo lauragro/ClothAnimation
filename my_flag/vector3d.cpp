@@ -1,4 +1,5 @@
 #include "vector3d.h"
+#include "foundation.h"
 #include <math.h>
 
 // constructor/destructor
@@ -18,7 +19,7 @@ Vector3D::Vector3D(double x, double y, double z)
 
 Vector3D::~Vector3D()
 {
-    //delete this;
+    cout << "vector3d deconstruction" << endl;
 }
 
 

@@ -17,8 +17,7 @@ OpenGLWidget::OpenGLWidget(QWidget *parent) : QGLWidget(parent)
 // Destructor
 OpenGLWidget::~OpenGLWidget()
 {
-    cout << "widget deconstruction" << endl;
-    delete mySim;
+
 }
 
 // Connect to signals

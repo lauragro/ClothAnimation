@@ -13,7 +13,7 @@ Sim::Sim()
 Sim::~Sim()
 {
     cout << "Simulator Destruction\n";
-    delete this;
+    delete myFlag;
 }
 
 // Draw everything on screen
@@ -80,20 +80,6 @@ void Sim::eulerStep(double dt)
     int i,j;
     Vector3D *x, *v, *a;
 
-    // positions of corners
-    int top = 0;
-    int bottom = myFlag->particlesHigh-1;
-    int left = 1;
-    int right = myFlag->particlesWide-2;
-
-    myFlag->particles[top][left]->position->x = 2 * myFlag->width / myFlag->particlesWide;
-    myFlag->particles[top][left]->position->y = myFlag->height / myFlag->particlesHigh;
-    myFlag->particles[top][left]->position->z = 0.0;
-
-    myFlag->particles[top][right]->position->x = myFlag->width - (myFlag->width / myFlag->particlesWide);
-    myFlag->particles[top][right]->position->y = myFlag->height / myFlag->particlesHigh;
-    myFlag->particles[top][right]->position->z = 0.0;
-
     // update forces on particles
     updateForces();
 
@@ -103,28 +89,11 @@ void Sim::eulerStep(double dt)
         for( j=0; j<myFlag->particlesWide; j++ )
         {
             // pin the corners
-            if(i==top && j==left)
-            //if(myFlag->particles[i][j]->pinned)
+            if(myFlag->particles[i][j]->pinned)
             {
-                myFlag->particles[i][j]->position->x = 2 * myFlag->width / myFlag->particlesWide;
-                myFlag->particles[i][j]->position->y = myFlag->height / myFlag->particlesHigh;
-                myFlag->particles[i][j]->position->z = 0.0;
-                myFlag->particles[i][j]->velocity->x = 0.0;
-                myFlag->particles[i][j]->velocity->y = 0.0;
-                myFlag->particles[i][j]->velocity->z = 0.0;
                 continue;   // skip euler for this particle
             }
-            else if(i==top && j==right)
-            {
-                myFlag->particles[i][j]->position->x = myFlag->width - (myFlag->width / myFlag->particlesWide);
-                myFlag->particles[i][j]->position->y = myFlag->height / myFlag->particlesHigh;
-                myFlag->particles[i][j]->position->z = 0.0;
-                myFlag->particles[i][j]->velocity->x = 0.0;
-                myFlag->particles[i][j]->velocity->y = 0.0;
-                myFlag->particles[i][j]->velocity->z = 0.0;
-                continue;   // skip euler for this particle
-            }
-
+            // update all other particles
             else
             {
                 // a = F/m
@@ -150,6 +119,7 @@ void Sim::eulerStep(double dt)
 
 }
 
+
 // Runge Kutta simulation step
 void Sim::rungeKuttaStep(double dt)
 {
@@ -174,6 +144,7 @@ void Sim::rungeKuttaStep(double dt)
         }
     }*/
 }
+
 
 // set acceleration of thisParticle
 double Sim::acceleration(Particle *thisParticle)
@@ -205,27 +176,12 @@ double Sim::acceleration(Particle *thisParticle)
 
 }
 
+
 // Update forces on all particles
 void Sim::updateForces()
 {
     int i,j;
-    double length;
     Vector3D* force,v;
-
-    // positions of corners
-    int top = 0;
-    int bottom = myFlag->particlesHigh-1;
-    int left = 1;
-    int right = myFlag->particlesWide-2;
-
-    // position of pinned particle is fixed
-    myFlag->particles[top][left]->position->x = 2 * myFlag->width / myFlag->particlesWide;;
-    myFlag->particles[top][left]->position->y = myFlag->height / myFlag->particlesHigh;
-    myFlag->particles[top][left]->position->z = 0.0;
-
-    myFlag->particles[top][right]->position->x = myFlag->width - (myFlag->width / myFlag->particlesWide);
-    myFlag->particles[top][right]->position->y = myFlag->height / myFlag->particlesHigh;
-    myFlag->particles[top][right]->position->z = 0.0;
 
     // Reset forces
     for( i=0; i<myFlag->particlesHigh; i++ )
@@ -241,34 +197,13 @@ void Sim::updateForces()
     // Add on current spring forces
     for( i=0; i<myFlag->implementedSprings; i++ )
     {
-        // if particle1 is pinned
-        if ((myFlag->springs[i]->particle1 == myFlag->particles[top][left]) || (myFlag->springs[i]->particle1 == myFlag->particles[top][right]))
-        //if(myFlag->springs[i]->particle1->pinned)
-        {
-            force = myFlag->springs[i]->forcePinned1();
-        }
-        // if particle 2 is pinned
-        else if((myFlag->springs[i]->particle2 == myFlag->particles[top][left]) || (myFlag->springs[i]->particle2 == myFlag->particles[top][right]))
-        //if(myFlag->springs[i]->particle2->pinned)
-        {
-            force = myFlag->springs[i]->forcePinned2();
-        }
-        // if neither are pinned
-        else
-        {
-            force = myFlag->springs[i]->force();
-        }
+        // get current spring force
+        force = myFlag->springs[i]->force();
 
-        // force1 += force
-        //if(!myFlag->springs[i]->particle1->pinned)
-        //{
-            myFlag->springs[i]->particle1->springForce = v.add(myFlag->springs[i]->particle1->springForce, force);
-        //}
-        // force2 -= force
-        //if(!myFlag->springs[i]->particle2->pinned)
-        //{
-            myFlag->springs[i]->particle2->springForce = v.subtract(myFlag->springs[i]->particle2->springForce,force);
-        //}
+        // add current spring force to end particles
+        myFlag->springs[i]->particle1->springForce = v.add(myFlag->springs[i]->particle1->springForce, force);
+        myFlag->springs[i]->particle2->springForce = v.subtract(myFlag->springs[i]->particle2->springForce,force);
+
     }
 
     // Update total forces on particles
@@ -276,15 +211,8 @@ void Sim::updateForces()
     {
         for( j=0; j<myFlag->particlesWide; j++ )
         {
-            //if( i==top && (j==left || j==right))
-            if(myFlag->particles[i][j]->pinned)
-            {
-                continue;   // pin these particles
-            }
-            else
-            {
-                myFlag->particles[i][j]->force = v.add(myFlag->particles[i][j]->externalForce, myFlag->particles[i][j]->springForce);
-            }
+            myFlag->particles[i][j]->force = v.add(myFlag->particles[i][j]->externalForce, myFlag->particles[i][j]->springForce);
+
         }
     }
 }

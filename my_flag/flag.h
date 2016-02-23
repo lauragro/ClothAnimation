@@ -23,7 +23,7 @@ public:
     static const int numShearSprings = 2*(particlesHigh-1)*(particlesWide-1); // max 4 per particle
     static const int numBendSprings = (particlesHigh-2) * particlesWide + (particlesWide-2) * particlesHigh; // max 4 per particle
     static const int numSprings = numStructureSprings + numShearSprings + numBendSprings;
-    int implementedSprings = 0.0;
+    int implementedSprings = 0;
 
     // attributes
     double height;

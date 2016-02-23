@@ -20,7 +20,6 @@ class Spring
         double springConstant;
         double dampingConstant;
         double restLength;
-        double length;
         int springType;
 
         // draw function
@@ -28,6 +27,8 @@ class Spring
 
         // force function
         Vector3D* force();
+        Vector3D* forcePinned1();
+        Vector3D* forcePinned2();
 
 };
 

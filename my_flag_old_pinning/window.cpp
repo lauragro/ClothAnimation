@@ -1,5 +1,4 @@
 #include "window.h"
-#include "foundation.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -17,7 +16,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-    cout << "window deconstruction" << endl;
     delete ui;
 }
 

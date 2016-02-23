@@ -39,7 +39,7 @@ Particle::Particle(Vector3D *position, Vector3D *velocity, Vector3D *acceleratio
 // destructor
 Particle::~Particle()
 {
-    delete this;
+    cout << "Particle deconstruction" << endl;
 }
 
 // Draw function
