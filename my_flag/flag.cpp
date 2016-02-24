@@ -34,7 +34,7 @@ Flag::Flag()
             particles[i][j] = new Particle(x,y,z);
 
             // add gravity
-            particles[i][j]->externalForce = new Vector3D(0,9.81,0);
+            particles[i][j]->externalForce = new Vector3D(0,9.8,0);
             particles[i][j]->force = particles[i][j]->externalForce;
 
         }
