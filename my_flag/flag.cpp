@@ -6,8 +6,8 @@ Flag::Flag()
     height = 300.0;
     width = 450.0;
     particleMass = 1.0;
-    springConstant = 200.0;
-    dampingConstant = 100.0;
+    springConstant = 100.0;
+    dampingConstant = 600.0;
 
     double x,y,z;
     z=0.0;
@@ -34,7 +34,7 @@ Flag::Flag()
             particles[i][j] = new Particle(x,y,z);
 
             // add gravity
-            particles[i][j]->externalForce = new Vector3D(0,9.8,0);
+            particles[i][j]->externalForce = new Vector3D(0,9.81,0);
             particles[i][j]->force = particles[i][j]->externalForce;
 
         }
@@ -71,7 +71,7 @@ Flag::Flag()
                 springs[springIndex] = new Spring(particles[i][j], particles[i-1][j+1], 1);
                 springIndex++;
             }
-            /*if( j<particlesWide-2 )
+            if( j<particlesWide-2 )
             {
                 // Horizontal bend spring
                 springs[springIndex] = new Spring(particles[i][j], particles[i][j+2], 2);
@@ -84,7 +84,7 @@ Flag::Flag()
                 springs[springIndex] = new Spring(particles[i][j], particles[i+2][j], 2);
                 springs[springIndex]->springConstant = 20.0;
                 springIndex++;
-            }*/
+            }
 
         }
 
@@ -95,13 +95,13 @@ Flag::Flag()
             springIndex++;
         }
 
-        /*if( i<particlesHigh-2 )
+        if( i<particlesHigh-2 )
         {
             // Vertical bend spring
             springs[springIndex] = new Spring(particles[i][particlesWide-1], particles[i+2][particlesWide-1], 2);
             springs[springIndex]->springConstant = 20.0;
             springIndex++;
-        }*/
+        }
 
     }
     implementedSprings = springIndex;

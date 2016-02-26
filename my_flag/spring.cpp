@@ -4,29 +4,40 @@
 // Constructors/destructor
 Spring::Spring(Particle *particle1, Particle *particle2, int springType)
 {
+    Vector3D *x = new Vector3D;
+    Vector3D *lengthVector;
+
     cout << "Spring Initialization\n";
 
     // Initialize spring details
     this->particle1 = particle1;
     this->particle2 = particle2;
 
-    this->restLength = 20;
-    this->springConstant = 1.0;
-    this->dampingConstant = 0.8;
+    // Set spring type
     this->springType = springType;
-}
 
-Spring::Spring(Particle *particle1, int springType)
-{
-    cout << "Spring Initialization\n";
+    // rest length distance between 2 particles
+    lengthVector = x->subtract(particle2->position, particle1->position);
+    this->restLength = x->magnitude(lengthVector);
 
-    // Initialize spring details
-    this->particle1 = particle1;
 
-    this->restLength = 20;
-    this->springConstant = 1.0;
-    this->dampingConstant = 0.8;
-    this->springType = springType;
+    // set spring constants struct > shear,bend
+    switch(springType){
+        case 0:
+            this->springConstant = 0.5;
+            break;
+        case 1:
+            this->springConstant = 0.4;
+            break;
+        default:
+            this->springConstant = 0.4;
+    }
+
+    // set damping constants
+    this->dampingConstant = 0.5;
+
+
+
 }
 
 Spring::~Spring()
@@ -75,8 +86,9 @@ Vector3D* Spring::force()
     // length = x2 - x1
     lengthVector = x->subtract(particle2->position, particle1->position);
 
+    /* Remove the stretch limitations - replace with stronger spring constants
     // limit stretch
-    length = x->magnitude(lengthVector);
+    /*length = x->magnitude(lengthVector);
     if( length < restLength * 0.5 )
     {
         length = restLength * 0.5;
@@ -102,7 +114,7 @@ Vector3D* Spring::force()
         {
             particle2->position = x->add(particle1->position, lengthVector);
         }
-    }
+    }*/
 
     // x = (|L| - L0)(L/|L|)
     x = x->scaleUp(x->normalize(lengthVector), length-restLength);

@@ -11,7 +11,6 @@ class Spring
     public:
         // constructor/destructor
         Spring(Particle *particle1, Particle *particle2, int springType);
-        Spring(Particle *particle1, int springType);
         ~Spring();
 
         // spring details
