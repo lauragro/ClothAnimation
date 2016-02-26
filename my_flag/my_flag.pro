@@ -19,7 +19,8 @@ SOURCES += main.cpp\
     spring.cpp \
     flag.cpp \
     vector3d.cpp \
-    particle.cpp
+    particle.cpp \
+    ball.cpp
 
 HEADERS  += \
     sim.h \
@@ -30,7 +31,8 @@ HEADERS  += \
     spring.h \
     flag.h \
     vector3d.h \
-    particle.h
+    particle.h \
+    ball.h
 
 FORMS    += \
     MainWindow.ui

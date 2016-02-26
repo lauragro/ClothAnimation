@@ -24,13 +24,13 @@ Spring::Spring(Particle *particle1, Particle *particle2, int springType)
     // set spring constants struct > shear,bend
     switch(springType){
         case 0:
-            this->springConstant = 0.5;
+            this->springConstant = .5;
             break;
         case 1:
-            this->springConstant = 0.4;
+            this->springConstant = .4;
             break;
         default:
-            this->springConstant = 0.4;
+            this->springConstant = .4;
     }
 
     // set damping constants
@@ -78,53 +78,62 @@ void Spring::draw()
 // get spring force
 Vector3D* Spring::force()
 {
-    Vector3D *force;
+    Vector3D *force = new Vector3D();
     Vector3D *lengthVector;
     Vector3D *v;
     Vector3D *x;
 
     // length = x2 - x1
     lengthVector = x->subtract(particle2->position, particle1->position);
+    length = x->magnitude(lengthVector);
 
-    /* Remove the stretch limitations - replace with stronger spring constants
-    // limit stretch
-    /*length = x->magnitude(lengthVector);
-    if( length < restLength * 0.5 )
+    // calculate force if length does not equal rest length
+    if( (length - restLength) > EPSILON )// && (length - restLength) < 0.5*restLength)
     {
-        length = restLength * 0.5;
-        lengthVector = x->scaleUp(x->normalize(lengthVector), length);
-        if( particle2->pinned )
+
+        /* Remove the stretch limitations - replace with stronger spring constants
+        // limit stretch
+        /*length = x->magnitude(lengthVector);
+        if( length < restLength * 0.5 )
         {
-            particle1->position = x->subtract(particle2->position, lengthVector);
+            length = restLength * 0.5;
+            lengthVector = x->scaleUp(x->normalize(lengthVector), length);
+            if( particle2->pinned )
+            {
+                particle1->position = x->subtract(particle2->position, lengthVector);
+            }
+            else
+            {
+                particle2->position = x->add(particle1->position, lengthVector);
+            }
         }
-        else
+        else if( length > restLength * 1.5 )
         {
-            particle2->position = x->add(particle1->position, lengthVector);
-        }
+            length = restLength * 1.5;
+            lengthVector = x->scaleUp(x->normalize(lengthVector), length);
+            if( particle2->pinned )
+            {
+                particle1->position = x->subtract(particle2->position, lengthVector);
+            }
+            else
+            {
+                particle2->position = x->add(particle1->position, lengthVector);
+            }
+        }*/
+
+        // x = (|L| - L0)(L/|L|)
+        x = x->scaleUp(x->normalize(lengthVector), length-restLength);
+
+        // v = v2 - v1
+        v = x->subtract(particle2->velocity, particle1->velocity);
+
+        // F = -kx, damping added later as +cv
+        force = x->scaleUp(x, -1.0*springConstant);
+
+        // F = -kx + cv
+        //force = x->add(x->scaleUp(x, -1.0*springConstant), x->scaleUp(v, dampingConstant));
+
+        return force;
     }
-    else if( length > restLength * 1.5 )
-    {
-        length = restLength * 1.5;
-        lengthVector = x->scaleUp(x->normalize(lengthVector), length);
-        if( particle2->pinned )
-        {
-            particle1->position = x->subtract(particle2->position, lengthVector);
-        }
-        else
-        {
-            particle2->position = x->add(particle1->position, lengthVector);
-        }
-    }*/
-
-    // x = (|L| - L0)(L/|L|)
-    x = x->scaleUp(x->normalize(lengthVector), length-restLength);
-
-    // v = v2 - v1
-    v = x->subtract(particle2->velocity, particle1->velocity);
-
-    // F = -kx + cv
-    force = x->add(x->scaleUp(x, -1.0*springConstant), x->scaleUp(v, dampingConstant));
-
-    return force;
 }
 

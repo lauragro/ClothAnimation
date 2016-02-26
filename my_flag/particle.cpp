@@ -10,6 +10,7 @@ Particle::Particle()
     force = new Vector3D();
     externalForce = new Vector3D();
     springForce = new Vector3D();
+    gravityForce = new Vector3D(0,9.81,0);
 }
 
 // position constructor
@@ -22,6 +23,7 @@ Particle::Particle(double x, double y, double z)
     force = new Vector3D();
     externalForce = new Vector3D();
     springForce = new Vector3D();
+    gravityForce = new Vector3D(0,9.81,0);
 }
 
 // total state constructor
@@ -34,6 +36,7 @@ Particle::Particle(Vector3D *position, Vector3D *velocity, Vector3D *acceleratio
     force = new Vector3D();
     externalForce = new Vector3D();
     springForce = new Vector3D();
+    gravityForce = new Vector3D(0,9.81,0);
 }
 
 // destructor

@@ -21,6 +21,7 @@ public:
     Vector3D *force;
     Vector3D *externalForce;
     Vector3D *springForce;
+    Vector3D *gravityForce;
     bool pinned = false;
 
 
