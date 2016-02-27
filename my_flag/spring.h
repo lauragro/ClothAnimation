@@ -3,7 +3,6 @@
 
 #include "foundation.h"
 #include "openglwidget.h"
-#include "vector3d.h"
 #include "particle.h"
 
 class Spring
@@ -16,17 +15,17 @@ class Spring
         // spring details
         Particle *particle1;
         Particle *particle2;
-        double springConstant;
-        double dampingConstant;
-        double restLength;
-        double length;
+        float springConstant;
+        float dampingConstant;
+        float restLength;
+        float springLength;
         int springType;
 
         // draw function
         void draw();
 
         // force function
-        Vector3D* force();
+        glm::vec3 force();
 
 };
 

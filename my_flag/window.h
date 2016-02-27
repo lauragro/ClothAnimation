@@ -1,8 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
-#include <QDialog>
+//#include <QMainWindow>
+//#include <QDialog>
 #include "ui_MainWindow.h"
 #include "openglwidget.h"
 #include "spring.h"
@@ -29,10 +29,10 @@ private:
     void displaySpringDetails();
 
 public slots:
-    void box_dampingConstant(double value);
-    void box_restLength(double value);
-    void box_mass(double value);
-    void box_springConstant(double value);
+    void box_dampingConstant(float value);
+    void box_restLength(float value);
+    void box_mass(float value);
+    void box_springConstant(float value);
 
 
 };

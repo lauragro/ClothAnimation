@@ -4,8 +4,7 @@
 // Constructors/destructor
 Spring::Spring(Particle *particle1, Particle *particle2, int springType)
 {
-    Vector3D *x = new Vector3D;
-    Vector3D *lengthVector;
+    glm::vec3 x,lengthVector;
 
     cout << "Spring Initialization\n";
 
@@ -17,26 +16,23 @@ Spring::Spring(Particle *particle1, Particle *particle2, int springType)
     this->springType = springType;
 
     // rest length distance between 2 particles
-    lengthVector = x->subtract(particle2->position, particle1->position);
-    this->restLength = x->magnitude(lengthVector);
-
+    /*lengthVector = x->subtract(particle2->position, particle1->position);
+    this->restLength = x->magnitude(lengthVector);*/
+    lengthVector = particle2->position - particle1->position;
+    this->restLength = (float)length(lengthVector);
+    this->springLength = (float)length(lengthVector);  // initialize length to rest length
 
     // set spring constants struct > shear,bend
     switch(springType){
         case 0:
-            this->springConstant = .5;
+            this->springConstant = 10.0f;
             break;
         case 1:
-            this->springConstant = .4;
+            this->springConstant = 8.0f;
             break;
         default:
-            this->springConstant = .4;
+            this->springConstant = 8.0f;
     }
-
-    // set damping constants
-    this->dampingConstant = 0.5;
-
-
 
 }
 
@@ -70,25 +66,24 @@ void Spring::draw()
     }
 
     glBegin(GL_LINE_STRIP);
-        glVertex2f(particle1->position->x, particle1->position->y);
-        glVertex2f(particle2->position->x, particle2->position->y);
+        glVertex2f(particle1->position.x, particle1->position.y);
+        glVertex2f(particle2->position.x, particle2->position.y);
     glEnd();
 }
 
 // get spring force
-Vector3D* Spring::force()
+glm::vec3 Spring::force()
 {
-    Vector3D *force = new Vector3D();
-    Vector3D *lengthVector;
-    Vector3D *v;
-    Vector3D *x;
+    glm::vec3 force,lengthVector,v,x;
 
     // length = x2 - x1
-    lengthVector = x->subtract(particle2->position, particle1->position);
-    length = x->magnitude(lengthVector);
+    /*lengthVector = x->subtract(particle2->position, particle1->position);
+    length = x->magnitude(lengthVector);*/
+    lengthVector = particle1->position - particle2->position;
+    springLength = (float)length(lengthVector);
 
     // calculate force if length does not equal rest length
-    if( (length - restLength) > EPSILON )// && (length - restLength) < 0.5*restLength)
+    if( (springLength - restLength) >= EPSILON  )//&& springLength <= 1.5f*restLength)
     {
 
         /* Remove the stretch limitations - replace with stronger spring constants
@@ -122,14 +117,17 @@ Vector3D* Spring::force()
         }*/
 
         // x = (|L| - L0)(L/|L|)
-        x = x->scaleUp(x->normalize(lengthVector), length-restLength);
+        //x = x->scaleUp(x->normalize(lengthVector), length-restLength);
+        x = normalize(lengthVector) * (springLength-restLength);
+
 
         // v = v2 - v1
-        v = x->subtract(particle2->velocity, particle1->velocity);
+        //v = x->subtract(particle2->velocity, particle1->velocity);
+        v = particle1->velocity - particle2->velocity;
 
         // F = -kx, damping added later as +cv
-        force = x->scaleUp(x, -1.0*springConstant);
-
+        //force = x->scaleUp(x, -1.0*springConstant);
+        force = -1.0f * springConstant * x;
         // F = -kx + cv
         //force = x->add(x->scaleUp(x, -1.0*springConstant), x->scaleUp(v, dampingConstant));
 

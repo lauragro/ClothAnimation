@@ -26,16 +26,16 @@ public:
     int implementedSprings = 0;
 
     // attributes
-    double height;
-    double width;
-    double particleMass;
-    double springConstant;
-    double dampingConstant;
+    float height;
+    float width;
+    float particleMass;
+    float springConstant;
+    float dampingConstant;
 
-    // grid containing all particles
+    // grid containing all particle pointers
     Particle *particles[particlesHigh][particlesWide];
 
-    // array containing all springs
+    // array containing all spring pointers
     Spring *springs[numSprings];
 
 

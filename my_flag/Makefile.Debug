@@ -14,32 +14,32 @@ CXX           = g++
 DEFINES       = -DUNICODE -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_NEEDS_QMAIN
 CFLAGS        = -pipe -fno-keep-inline-dllexport -g -Wall -Wextra $(DEFINES)
 CXXFLAGS      = -pipe -fno-keep-inline-dllexport -g -frtti -Wall -Wextra -fexceptions -mthreads $(DEFINES)
-INCPATH       = -I"." -I"C:\Qt\5.4\mingw491_32\include" -I"C:\Qt\5.4\mingw491_32\include\QtOpenGL" -I"C:\Qt\5.4\mingw491_32\include\QtWidgets" -I"C:\Qt\5.4\mingw491_32\include\QtGui" -I"C:\Qt\5.4\mingw491_32\include\QtCore" -I"debug" -I"." -I"C:\Qt\5.4\mingw491_32\mkspecs\win32-g++" 
+INCPATH       = -I'.' -I'C:/Qt/5.4/mingw491_32/include' -I'C:/Qt/5.4/mingw491_32/include/QtOpenGL' -I'C:/Qt/5.4/mingw491_32/include/QtWidgets' -I'C:/Qt/5.4/mingw491_32/include/QtGui' -I'C:/Qt/5.4/mingw491_32/include/QtCore' -I'debug' -I'.' -I'C:/Qt/5.4/mingw491_32/mkspecs/win32-g++' 
 LINKER      =        g++
 LFLAGS        =        -Wl,-subsystem,windows -mthreads
-LIBS        =        -lgdi32 -luser32 -lmingw32 -LC:/Qt/5.4/mingw491_32/lib -lqtmaind -LC:\mingw491\mingw32\lib -LC:\Utils\icu32_53_1_mingw482\lib -LC:\utils\postgresql\pgsql\lib -LC:\utils\mysql\mysql\lib -LC:\opensll\lib -lshell32 -LC:\Qt\5.4\mingw491_32/lib -lglu32 -lopengl32 -lglut -lQt5OpenGLd -lQt5Widgetsd -lQt5Guid -lQt5Cored 
-QMAKE         = C:\Qt\5.4\mingw491_32\bin\qmake.exe
+LIBS        =        -lgdi32 -luser32 -lmingw32 -LC:/Qt/5.4/mingw491_32/lib -lqtmaind -LC:\mingw491\mingw32\lib -LC:\Utils\icu32_53_1_mingw482\lib -LC:\utils\postgresql\pgsql\lib -LC:\utils\mysql\mysql\lib -LC:\opensll\lib -lshell32 -LC:\Qt\5.4\mingw491_32/lib -lglu32 -lopengl32 -lQt5OpenGLd -lQt5Widgetsd -lQt5Guid -lQt5Cored 
+QMAKE         = C:/Qt/5.4/mingw491_32/bin/qmake.exe
 IDC           = idc
 IDL           = midl
-ZIP           = zip -r -9
+ZIP           = 
 DEF_FILE      = 
 RES_FILE      = 
-COPY          = copy /y
-SED           = $(QMAKE) -install sed
-COPY_FILE     = $(COPY)
-COPY_DIR      = xcopy /s /q /y /i
-DEL_FILE      = del
+COPY          = cp -f
+SED           = sed
+COPY_FILE     = cp -f
+COPY_DIR      = cp -f -R
+DEL_FILE      = rm -f
 DEL_DIR       = rmdir
-MOVE          = move
-CHK_DIR_EXISTS= if not exist
-MKDIR         = mkdir
-INSTALL_FILE    = $(COPY_FILE)
-INSTALL_PROGRAM = $(COPY_FILE)
+MOVE          = mv -f
+CHK_DIR_EXISTS= test -d
+MKDIR         = mkdir -p
+INSTALL_FILE    = cp -f
+INSTALL_PROGRAM = cp -f
 INSTALL_DIR     = $(COPY_DIR)
 
 ####### Output directory
 
-OBJECTS_DIR   = debug
+OBJECTS_DIR   = debug/
 
 ####### Files
 
@@ -49,16 +49,14 @@ SOURCES       = main.cpp \
 		openglwidget.cpp \
 		spring.cpp \
 		flag.cpp \
-		vector3d.cpp \
-		particle.cpp debug\moc_window.cpp \
-		debug\moc_openglwidget.cpp
+		particle.cpp debug/moc_window.cpp \
+		debug/moc_openglwidget.cpp
 OBJECTS       = debug/main.o \
 		debug/sim.o \
 		debug/window.o \
 		debug/openglwidget.o \
 		debug/spring.o \
 		debug/flag.o \
-		debug/vector3d.o \
 		debug/particle.o \
 		debug/moc_window.o \
 		debug/moc_openglwidget.o
@@ -70,19 +68,17 @@ DIST          =  sim.h \
 		openglwidget.h \
 		spring.h \
 		flag.h \
-		vector3d.h \
 		particle.h main.cpp \
 		sim.cpp \
 		window.cpp \
 		openglwidget.cpp \
 		spring.cpp \
 		flag.cpp \
-		vector3d.cpp \
 		particle.cpp
 QMAKE_TARGET  = my_flag
-DESTDIR        = debug\ #avoid trailing-slash linebreak
+DESTDIR        = debug/ #avoid trailing-slash linebreak
 TARGET         = my_flag.exe
-DESTDIR_TARGET = debug\my_flag.exe
+DESTDIR_TARGET = debug/my_flag.exe
 
 ####### Implicit rules
 
@@ -106,7 +102,7 @@ first: all
 all: Makefile.Debug  $(DESTDIR_TARGET)
 
 $(DESTDIR_TARGET): ui_MainWindow.h $(OBJECTS) 
-	$(LINKER) $(LFLAGS) -o $(DESTDIR_TARGET) object_script.my_flag.Debug  $(LIBS)
+	$(LINKER) $(LFLAGS) -o $(DESTDIR_TARGET) $(OBJECTS)  $(LIBS)
 
 qmake: FORCE
 	@$(QMAKE) -spec win32-g++ CONFIG+=debug -o Makefile.Debug my_flag.pro
@@ -114,10 +110,10 @@ qmake: FORCE
 qmake_all: FORCE
 
 dist:
-	$(ZIP) my_flag.zip $(SOURCES) $(DIST) my_flag.pro C:\Qt\5.4\mingw491_32\mkspecs\features\spec_pre.prf C:\Qt\5.4\mingw491_32\mkspecs\qdevice.pri C:\Qt\5.4\mingw491_32\mkspecs\features\device_config.prf C:\Qt\5.4\mingw491_32\mkspecs\common\shell-win32.conf C:\Qt\5.4\mingw491_32\mkspecs\qconfig.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_axbase.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_axbase_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_axcontainer.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_axcontainer_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_axserver.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_axserver_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_bluetooth.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_bluetooth_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_bootstrap_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_clucene_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_concurrent.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_concurrent_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_core.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_core_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_dbus.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_dbus_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_declarative.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_declarative_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_designer.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_designer_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_designercomponents_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_enginio.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_enginio_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_gui.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_gui_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_help.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_help_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_location.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_location_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_multimedia.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_multimedia_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_multimediawidgets.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_multimediawidgets_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_network.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_network_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_nfc.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_nfc_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_opengl.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_opengl_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_openglextensions.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_openglextensions_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_platformsupport_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_positioning.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_positioning_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_printsupport.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_printsupport_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_qml.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_qml_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_qmldevtools_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_qmltest.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_qmltest_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_qtmultimediaquicktools_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_quick.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_quick_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_quickparticles_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_quickwidgets.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_quickwidgets_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_script.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_script_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_scripttools.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_scripttools_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_sensors.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_sensors_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_serialport.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_serialport_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_sql.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_sql_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_svg.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_svg_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_testlib.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_testlib_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_uitools.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_uitools_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_webchannel.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_webchannel_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_webkit.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_webkit_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_webkitwidgets.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_webkitwidgets_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_websockets.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_websockets_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_webview.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_webview_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_widgets.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_widgets_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_winextras.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_winextras_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_xml.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_xml_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_xmlpatterns.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_xmlpatterns_private.pri C:\Qt\5.4\mingw491_32\mkspecs\features\qt_functions.prf C:\Qt\5.4\mingw491_32\mkspecs\features\qt_config.prf C:\Qt\5.4\mingw491_32\mkspecs\features\win32\qt_config.prf C:\Qt\5.4\mingw491_32\mkspecs\win32-g++\qmake.conf C:\Qt\5.4\mingw491_32\mkspecs\features\spec_post.prf C:\Qt\5.4\mingw491_32\mkspecs\features\exclusive_builds.prf C:\Qt\5.4\mingw491_32\mkspecs\features\default_pre.prf C:\Qt\5.4\mingw491_32\mkspecs\features\win32\default_pre.prf C:\Qt\5.4\mingw491_32\mkspecs\features\resolve_config.prf C:\Qt\5.4\mingw491_32\mkspecs\features\exclusive_builds_post.prf C:\Qt\5.4\mingw491_32\mkspecs\features\default_post.prf C:\Qt\5.4\mingw491_32\mkspecs\features\build_pass.prf C:\Qt\5.4\mingw491_32\mkspecs\features\win32\rtti.prf C:\Qt\5.4\mingw491_32\mkspecs\features\precompile_header.prf C:\Qt\5.4\mingw491_32\mkspecs\features\warn_on.prf C:\Qt\5.4\mingw491_32\mkspecs\features\qt.prf C:\Qt\5.4\mingw491_32\mkspecs\features\resources.prf C:\Qt\5.4\mingw491_32\mkspecs\features\moc.prf C:\Qt\5.4\mingw491_32\mkspecs\features\win32\opengl.prf C:\Qt\5.4\mingw491_32\mkspecs\features\uic.prf C:\Qt\5.4\mingw491_32\mkspecs\features\win32\windows.prf C:\Qt\5.4\mingw491_32\mkspecs\features\testcase_targets.prf C:\Qt\5.4\mingw491_32\mkspecs\features\exceptions.prf C:\Qt\5.4\mingw491_32\mkspecs\features\yacc.prf C:\Qt\5.4\mingw491_32\mkspecs\features\lex.prf my_flag.pro C:/Qt/5.4/mingw491_32/lib/qtmaind.prl C:/Qt/5.4/mingw491_32/lib/Qt5Cored.prl C:/Qt/5.4/mingw491_32/lib/Qt5OpenGLd.prl C:/Qt/5.4/mingw491_32/lib/Qt5Widgetsd.prl C:/Qt/5.4/mingw491_32/lib/Qt5Guid.prl  NO_PCH_SOURCES RESOURCES HEADERS SOURCES OBJECTIVE_SOURCES FORMS YACCSOURCES YACCSOURCES LEXSOURCES 
+	$(ZIP) my_flag.zip $(SOURCES) $(DIST) my_flag.pro C:/Qt/5.4/mingw491_32/mkspecs/features/spec_pre.prf C:/Qt/5.4/mingw491_32/mkspecs/qdevice.pri C:/Qt/5.4/mingw491_32/mkspecs/features/device_config.prf C:/Qt/5.4/mingw491_32/mkspecs/common/shell-unix.conf C:/Qt/5.4/mingw491_32/mkspecs/qconfig.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_axbase.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_axbase_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_axcontainer.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_axcontainer_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_axserver.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_axserver_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_bluetooth.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_bluetooth_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_bootstrap_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_clucene_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_concurrent.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_concurrent_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_core.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_core_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_dbus.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_dbus_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_declarative.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_declarative_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_designer.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_designer_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_designercomponents_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_enginio.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_enginio_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_gui.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_gui_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_help.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_help_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_location.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_location_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_multimedia.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_multimedia_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_multimediawidgets.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_multimediawidgets_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_network.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_network_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_nfc.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_nfc_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_opengl.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_opengl_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_openglextensions.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_openglextensions_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_platformsupport_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_positioning.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_positioning_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_printsupport.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_printsupport_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_qml.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_qml_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_qmldevtools_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_qmltest.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_qmltest_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_qtmultimediaquicktools_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_quick.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_quick_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_quickparticles_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_quickwidgets.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_quickwidgets_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_script.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_script_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_scripttools.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_scripttools_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_sensors.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_sensors_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_serialport.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_serialport_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_sql.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_sql_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_svg.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_svg_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_testlib.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_testlib_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_uitools.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_uitools_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_webchannel.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_webchannel_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_webkit.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_webkit_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_webkitwidgets.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_webkitwidgets_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_websockets.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_websockets_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_webview.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_webview_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_widgets.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_widgets_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_winextras.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_winextras_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_xml.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_xml_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_xmlpatterns.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_xmlpatterns_private.pri C:/Qt/5.4/mingw491_32/mkspecs/features/qt_functions.prf C:/Qt/5.4/mingw491_32/mkspecs/features/qt_config.prf C:/Qt/5.4/mingw491_32/mkspecs/features/win32/qt_config.prf C:/Qt/5.4/mingw491_32/mkspecs/win32-g++/qmake.conf C:/Qt/5.4/mingw491_32/mkspecs/features/spec_post.prf C:/Qt/5.4/mingw491_32/mkspecs/features/exclusive_builds.prf C:/Qt/5.4/mingw491_32/mkspecs/features/default_pre.prf C:/Qt/5.4/mingw491_32/mkspecs/features/win32/default_pre.prf C:/Qt/5.4/mingw491_32/mkspecs/features/resolve_config.prf C:/Qt/5.4/mingw491_32/mkspecs/features/exclusive_builds_post.prf C:/Qt/5.4/mingw491_32/mkspecs/features/default_post.prf C:/Qt/5.4/mingw491_32/mkspecs/features/build_pass.prf C:/Qt/5.4/mingw491_32/mkspecs/features/win32/rtti.prf C:/Qt/5.4/mingw491_32/mkspecs/features/precompile_header.prf C:/Qt/5.4/mingw491_32/mkspecs/features/warn_on.prf C:/Qt/5.4/mingw491_32/mkspecs/features/qt.prf C:/Qt/5.4/mingw491_32/mkspecs/features/resources.prf C:/Qt/5.4/mingw491_32/mkspecs/features/moc.prf C:/Qt/5.4/mingw491_32/mkspecs/features/win32/opengl.prf C:/Qt/5.4/mingw491_32/mkspecs/features/uic.prf C:/Qt/5.4/mingw491_32/mkspecs/features/win32/windows.prf C:/Qt/5.4/mingw491_32/mkspecs/features/testcase_targets.prf C:/Qt/5.4/mingw491_32/mkspecs/features/exceptions.prf C:/Qt/5.4/mingw491_32/mkspecs/features/yacc.prf C:/Qt/5.4/mingw491_32/mkspecs/features/lex.prf my_flag.pro C:/Qt/5.4/mingw491_32/lib/qtmaind.prl C:/Qt/5.4/mingw491_32/lib/Qt5Cored.prl C:/Qt/5.4/mingw491_32/lib/Qt5OpenGLd.prl C:/Qt/5.4/mingw491_32/lib/Qt5Widgetsd.prl C:/Qt/5.4/mingw491_32/lib/Qt5Guid.prl  NO_PCH_SOURCES RESOURCES HEADERS SOURCES OBJECTIVE_SOURCES FORMS YACCSOURCES YACCSOURCES LEXSOURCES 
 
 clean: compiler_clean 
-	-$(DEL_FILE) debug\main.o debug\sim.o debug\window.o debug\openglwidget.o debug\spring.o debug\flag.o debug\vector3d.o debug\particle.o debug\moc_window.o debug\moc_openglwidget.o
+	-$(DEL_FILE) debug/main.o debug/sim.o debug/window.o debug/openglwidget.o debug/spring.o debug/flag.o debug/particle.o debug/moc_window.o debug/moc_openglwidget.o
 
 distclean: clean 
 	-$(DEL_FILE) $(DESTDIR_TARGET)
@@ -135,11 +131,11 @@ compiler_rcc_make_all:
 compiler_rcc_clean:
 compiler_moc_header_make_all: debug/moc_window.cpp debug/moc_openglwidget.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) debug\moc_window.cpp debug\moc_openglwidget.cpp
-debug/moc_window.cpp: C:/Qt/5.4/mingw491_32/include/QtWidgets/QMainWindow \
-		C:/Qt/5.4/mingw491_32/include/QtWidgets/qmainwindow.h \
-		C:/Qt/5.4/mingw491_32/include/QtWidgets/qwidget.h \
-		C:/Qt/5.4/mingw491_32/include/QtGui/qwindowdefs.h \
+	-$(DEL_FILE) debug/moc_window.cpp debug/moc_openglwidget.cpp
+debug/moc_window.cpp: ui_MainWindow.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/QVariant \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qvariant.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qatomic.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qglobal.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qconfig.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qfeatures.h \
@@ -151,7 +147,9 @@ debug/moc_window.cpp: C:/Qt/5.4/mingw491_32/include/QtWidgets/QMainWindow \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qsysinfo.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qlogging.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qflags.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qatomic.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qglobalstatic.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qmutex.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qnumeric.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qbasicatomic.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qatomic_bootstrap.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qgenericatomic.h \
@@ -165,47 +163,57 @@ debug/moc_window.cpp: C:/Qt/5.4/mingw491_32/include/QtWidgets/QMainWindow \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qatomic_cxx11.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qatomic_gcc.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qatomic_unix.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qglobalstatic.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qmutex.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qnumeric.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qobjectdefs.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qnamespace.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qobjectdefs_impl.h \
-		C:/Qt/5.4/mingw491_32/include/QtGui/qwindowdefs_win.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qobject.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qstring.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qchar.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qbytearray.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qrefcount.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qnamespace.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qarraydata.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qstring.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qchar.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qstringbuilder.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qlist.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qalgorithms.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qiterator.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qbytearraylist.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qcoreevent.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qscopedpointer.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qmetatype.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qvarlengtharray.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qcontainerfwd.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qisenum.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qobjectdefs.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qobjectdefs_impl.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qmap.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qpair.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qdebug.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qhash.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qtextstream.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qiodevice.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qobject.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qcoreevent.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qscopedpointer.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qobject_impl.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qlocale.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qshareddata.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qvector.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qpoint.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qset.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qcontiguouscache.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qstringlist.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qdatastream.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qregexp.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qstringmatcher.h \
+		C:/Qt/5.4/mingw491_32/include/QtWidgets/QAction \
+		C:/Qt/5.4/mingw491_32/include/QtWidgets/qaction.h \
+		C:/Qt/5.4/mingw491_32/include/QtGui/qkeysequence.h \
+		C:/Qt/5.4/mingw491_32/include/QtWidgets/qwidget.h \
+		C:/Qt/5.4/mingw491_32/include/QtGui/qwindowdefs.h \
+		C:/Qt/5.4/mingw491_32/include/QtGui/qwindowdefs_win.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qmargins.h \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qpaintdevice.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qrect.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qsize.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qpoint.h \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qpalette.h \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qcolor.h \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qrgb.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qstringlist.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qdatastream.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qiodevice.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qpair.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qregexp.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qstringmatcher.h \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qbrush.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qvector.h \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qmatrix.h \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qpolygon.h \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qregion.h \
@@ -216,37 +224,20 @@ debug/moc_window.cpp: C:/Qt/5.4/mingw491_32/include/QtWidgets/QMainWindow \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qpixelformat.h \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qpixmap.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qsharedpointer.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qshareddata.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qhash.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qsharedpointer_impl.h \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qfont.h \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qfontmetrics.h \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qfontinfo.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qsizepolicy.h \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qcursor.h \
-		C:/Qt/5.4/mingw491_32/include/QtGui/qkeysequence.h \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qevent.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qvariant.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qmap.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qdebug.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qtextstream.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qlocale.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qset.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qcontiguouscache.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qurl.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qurlquery.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qfile.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qfiledevice.h \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qvector2d.h \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qtouchdevice.h \
-		C:/Qt/5.4/mingw491_32/include/QtWidgets/qtabwidget.h \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qicon.h \
-		C:/Qt/5.4/mingw491_32/include/QtWidgets/QDialog \
-		C:/Qt/5.4/mingw491_32/include/QtWidgets/qdialog.h \
-		ui_MainWindow.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/QVariant \
-		C:/Qt/5.4/mingw491_32/include/QtWidgets/QAction \
-		C:/Qt/5.4/mingw491_32/include/QtWidgets/qaction.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qactiongroup.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/QApplication \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qapplication.h \
@@ -280,11 +271,14 @@ debug/moc_window.cpp: C:/Qt/5.4/mingw491_32/include/QtWidgets/QMainWindow \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qabstractslider.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qstyle.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qtabbar.h \
+		C:/Qt/5.4/mingw491_32/include/QtWidgets/qtabwidget.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qrubberband.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/QLCDNumber \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qlcdnumber.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/QLabel \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qlabel.h \
+		C:/Qt/5.4/mingw491_32/include/QtWidgets/QMainWindow \
+		C:/Qt/5.4/mingw491_32/include/QtWidgets/qmainwindow.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/QMenuBar \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qmenubar.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qmenu.h \
@@ -319,12 +313,42 @@ debug/moc_window.cpp: C:/Qt/5.4/mingw491_32/include/QtWidgets/QMainWindow \
 		C:/Qt/5.4/mingw491_32/include/QtCore/QObject \
 		C:/Qt/5.4/mingw491_32/include/QtCore/QScopedPointer \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qopenglversionfunctions.h \
+		../glm/glm/geometric.hpp \
+		../glm/glm/detail/func_geometric.hpp \
+		../glm/glm/detail/type_vec3.hpp \
+		../glm/glm/detail/type_vec.hpp \
+		../glm/glm/detail/precision.hpp \
+		../glm/glm/detail/type_int.hpp \
+		../glm/glm/detail/setup.hpp \
+		../glm/glm/detail/_swizzle.hpp \
+		../glm/glm/detail/_swizzle_func.hpp \
+		../glm/glm/detail/type_vec3.inl \
+		../glm/glm/detail/func_geometric.inl \
+		../glm/glm/detail/func_exponential.hpp \
+		../glm/glm/detail/type_vec1.hpp \
+		../glm/glm/fwd.hpp \
+		../glm/glm/detail/type_float.hpp \
+		../glm/glm/detail/type_mat.hpp \
+		../glm/glm/detail/type_vec1.inl \
+		../glm/glm/detail/type_vec2.hpp \
+		../glm/glm/detail/type_vec2.inl \
+		../glm/glm/detail/type_vec4.hpp \
+		../glm/glm/detail/type_vec4.inl \
+		../glm/glm/detail/type_vec4_sse2.inl \
+		../glm/glm/detail/type_vec4_avx.inl \
+		../glm/glm/detail/type_vec4_avx2.inl \
+		../glm/glm/detail/func_exponential.inl \
+		../glm/glm/detail/func_vector_relational.hpp \
+		../glm/glm/detail/func_vector_relational.inl \
+		../glm/glm/detail/_vectorize.hpp \
+		../glm/glm/detail/func_common.hpp \
+		../glm/glm/detail/_fixes.hpp \
+		../glm/glm/detail/func_common.inl \
 		spring.h \
-		vector3d.h \
 		particle.h \
 		flag.h \
 		window.h
-	C:\Qt\5.4\mingw491_32\bin\moc.exe $(DEFINES) -D__GNUC__ -DWIN32 -IC:/Qt/5.4/mingw491_32/mkspecs/win32-g++ -IC:/Users/laura/Documents/CSC499/ClothAnimation/my_flag -IC:/Qt/5.4/mingw491_32/include -IC:/Qt/5.4/mingw491_32/include/QtOpenGL -IC:/Qt/5.4/mingw491_32/include/QtWidgets -IC:/Qt/5.4/mingw491_32/include/QtGui -IC:/Qt/5.4/mingw491_32/include/QtCore window.h -o debug\moc_window.cpp
+	'C:\Qt\5.4\mingw491_32\bin\moc.exe' $(DEFINES) -D__GNUC__ -DWIN32 -IC:/Qt/5.4/mingw491_32/mkspecs/win32-g++ -I'C:/Users/Carter Grondahl/Documents/5thYear/CSC499/Project/ClothAnimation/my_flag' -IC:/Qt/5.4/mingw491_32/include -IC:/Qt/5.4/mingw491_32/include/QtOpenGL -IC:/Qt/5.4/mingw491_32/include/QtWidgets -IC:/Qt/5.4/mingw491_32/include/QtGui -IC:/Qt/5.4/mingw491_32/include/QtCore window.h -o debug/moc_window.cpp
 
 debug/moc_openglwidget.cpp: C:/Qt/5.4/mingw491_32/include/QtOpenGL/QGLWidget \
 		C:/Qt/5.4/mingw491_32/include/QtOpenGL/qgl.h \
@@ -449,13 +473,43 @@ debug/moc_openglwidget.cpp: C:/Qt/5.4/mingw491_32/include/QtOpenGL/QGLWidget \
 		C:/Qt/5.4/mingw491_32/include/QtCore/QObject \
 		C:/Qt/5.4/mingw491_32/include/QtCore/QScopedPointer \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qopenglversionfunctions.h \
+		../glm/glm/geometric.hpp \
+		../glm/glm/detail/func_geometric.hpp \
+		../glm/glm/detail/type_vec3.hpp \
+		../glm/glm/detail/type_vec.hpp \
+		../glm/glm/detail/precision.hpp \
+		../glm/glm/detail/type_int.hpp \
+		../glm/glm/detail/setup.hpp \
+		../glm/glm/detail/_swizzle.hpp \
+		../glm/glm/detail/_swizzle_func.hpp \
+		../glm/glm/detail/type_vec3.inl \
+		../glm/glm/detail/func_geometric.inl \
+		../glm/glm/detail/func_exponential.hpp \
+		../glm/glm/detail/type_vec1.hpp \
+		../glm/glm/fwd.hpp \
+		../glm/glm/detail/type_float.hpp \
+		../glm/glm/detail/type_mat.hpp \
+		../glm/glm/detail/type_vec1.inl \
+		../glm/glm/detail/type_vec2.hpp \
+		../glm/glm/detail/type_vec2.inl \
+		../glm/glm/detail/type_vec4.hpp \
+		../glm/glm/detail/type_vec4.inl \
+		../glm/glm/detail/type_vec4_sse2.inl \
+		../glm/glm/detail/type_vec4_avx.inl \
+		../glm/glm/detail/type_vec4_avx2.inl \
+		../glm/glm/detail/func_exponential.inl \
+		../glm/glm/detail/func_vector_relational.hpp \
+		../glm/glm/detail/func_vector_relational.inl \
+		../glm/glm/detail/_vectorize.hpp \
+		../glm/glm/detail/func_common.hpp \
+		../glm/glm/detail/_fixes.hpp \
+		../glm/glm/detail/func_common.inl \
 		spring.h \
 		openglwidget.h \
-		vector3d.h \
 		particle.h \
 		flag.h \
 		openglwidget.h
-	C:\Qt\5.4\mingw491_32\bin\moc.exe $(DEFINES) -D__GNUC__ -DWIN32 -IC:/Qt/5.4/mingw491_32/mkspecs/win32-g++ -IC:/Users/laura/Documents/CSC499/ClothAnimation/my_flag -IC:/Qt/5.4/mingw491_32/include -IC:/Qt/5.4/mingw491_32/include/QtOpenGL -IC:/Qt/5.4/mingw491_32/include/QtWidgets -IC:/Qt/5.4/mingw491_32/include/QtGui -IC:/Qt/5.4/mingw491_32/include/QtCore openglwidget.h -o debug\moc_openglwidget.cpp
+	'C:\Qt\5.4\mingw491_32\bin\moc.exe' $(DEFINES) -D__GNUC__ -DWIN32 -IC:/Qt/5.4/mingw491_32/mkspecs/win32-g++ -I'C:/Users/Carter Grondahl/Documents/5thYear/CSC499/Project/ClothAnimation/my_flag' -IC:/Qt/5.4/mingw491_32/include -IC:/Qt/5.4/mingw491_32/include/QtOpenGL -IC:/Qt/5.4/mingw491_32/include/QtWidgets -IC:/Qt/5.4/mingw491_32/include/QtGui -IC:/Qt/5.4/mingw491_32/include/QtCore openglwidget.h -o debug/moc_openglwidget.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -587,12 +641,42 @@ ui_MainWindow.h: MainWindow.ui \
 		C:/Qt/5.4/mingw491_32/include/QtCore/QObject \
 		C:/Qt/5.4/mingw491_32/include/QtCore/QScopedPointer \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qopenglversionfunctions.h \
+		../glm/glm/geometric.hpp \
+		../glm/glm/detail/func_geometric.hpp \
+		../glm/glm/detail/type_vec3.hpp \
+		../glm/glm/detail/type_vec.hpp \
+		../glm/glm/detail/precision.hpp \
+		../glm/glm/detail/type_int.hpp \
+		../glm/glm/detail/setup.hpp \
+		../glm/glm/detail/_swizzle.hpp \
+		../glm/glm/detail/_swizzle_func.hpp \
+		../glm/glm/detail/type_vec3.inl \
+		../glm/glm/detail/func_geometric.inl \
+		../glm/glm/detail/func_exponential.hpp \
+		../glm/glm/detail/type_vec1.hpp \
+		../glm/glm/fwd.hpp \
+		../glm/glm/detail/type_float.hpp \
+		../glm/glm/detail/type_mat.hpp \
+		../glm/glm/detail/type_vec1.inl \
+		../glm/glm/detail/type_vec2.hpp \
+		../glm/glm/detail/type_vec2.inl \
+		../glm/glm/detail/type_vec4.hpp \
+		../glm/glm/detail/type_vec4.inl \
+		../glm/glm/detail/type_vec4_sse2.inl \
+		../glm/glm/detail/type_vec4_avx.inl \
+		../glm/glm/detail/type_vec4_avx2.inl \
+		../glm/glm/detail/func_exponential.inl \
+		../glm/glm/detail/func_vector_relational.hpp \
+		../glm/glm/detail/func_vector_relational.inl \
+		../glm/glm/detail/_vectorize.hpp \
+		../glm/glm/detail/func_common.hpp \
+		../glm/glm/detail/_fixes.hpp \
+		../glm/glm/detail/func_common.inl \
 		spring.h \
 		openglwidget.h \
-		vector3d.h \
 		particle.h \
 		flag.h
-	C:\Qt\5.4\mingw491_32\bin\uic.exe MainWindow.ui -o ui_MainWindow.h
+	'C:\Qt\5.4\mingw491_32\bin\uic.exe' MainWindow.ui -o ui_MainWindow.h
 
 compiler_yacc_decl_make_all:
 compiler_yacc_decl_clean:
@@ -607,10 +691,10 @@ compiler_clean: compiler_moc_header_clean compiler_uic_clean
 ####### Compile
 
 debug/main.o: main.cpp window.h \
-		C:/Qt/5.4/mingw491_32/include/QtWidgets/QMainWindow \
-		C:/Qt/5.4/mingw491_32/include/QtWidgets/qmainwindow.h \
-		C:/Qt/5.4/mingw491_32/include/QtWidgets/qwidget.h \
-		C:/Qt/5.4/mingw491_32/include/QtGui/qwindowdefs.h \
+		ui_MainWindow.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/QVariant \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qvariant.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qatomic.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qglobal.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qconfig.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qfeatures.h \
@@ -622,7 +706,9 @@ debug/main.o: main.cpp window.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qsysinfo.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qlogging.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qflags.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qatomic.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qglobalstatic.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qmutex.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qnumeric.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qbasicatomic.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qatomic_bootstrap.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qgenericatomic.h \
@@ -636,47 +722,57 @@ debug/main.o: main.cpp window.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qatomic_cxx11.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qatomic_gcc.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qatomic_unix.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qglobalstatic.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qmutex.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qnumeric.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qobjectdefs.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qnamespace.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qobjectdefs_impl.h \
-		C:/Qt/5.4/mingw491_32/include/QtGui/qwindowdefs_win.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qobject.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qstring.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qchar.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qbytearray.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qrefcount.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qnamespace.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qarraydata.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qstring.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qchar.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qstringbuilder.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qlist.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qalgorithms.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qiterator.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qbytearraylist.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qcoreevent.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qscopedpointer.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qmetatype.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qvarlengtharray.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qcontainerfwd.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qisenum.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qobjectdefs.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qobjectdefs_impl.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qmap.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qpair.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qdebug.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qhash.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qtextstream.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qiodevice.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qobject.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qcoreevent.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qscopedpointer.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qobject_impl.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qlocale.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qshareddata.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qvector.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qpoint.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qset.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qcontiguouscache.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qstringlist.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qdatastream.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qregexp.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qstringmatcher.h \
+		C:/Qt/5.4/mingw491_32/include/QtWidgets/QAction \
+		C:/Qt/5.4/mingw491_32/include/QtWidgets/qaction.h \
+		C:/Qt/5.4/mingw491_32/include/QtGui/qkeysequence.h \
+		C:/Qt/5.4/mingw491_32/include/QtWidgets/qwidget.h \
+		C:/Qt/5.4/mingw491_32/include/QtGui/qwindowdefs.h \
+		C:/Qt/5.4/mingw491_32/include/QtGui/qwindowdefs_win.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qmargins.h \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qpaintdevice.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qrect.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qsize.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qpoint.h \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qpalette.h \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qcolor.h \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qrgb.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qstringlist.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qdatastream.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qiodevice.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qpair.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qregexp.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qstringmatcher.h \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qbrush.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qvector.h \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qmatrix.h \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qpolygon.h \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qregion.h \
@@ -687,37 +783,20 @@ debug/main.o: main.cpp window.h \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qpixelformat.h \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qpixmap.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qsharedpointer.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qshareddata.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qhash.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qsharedpointer_impl.h \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qfont.h \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qfontmetrics.h \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qfontinfo.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qsizepolicy.h \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qcursor.h \
-		C:/Qt/5.4/mingw491_32/include/QtGui/qkeysequence.h \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qevent.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qvariant.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qmap.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qdebug.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qtextstream.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qlocale.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qset.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qcontiguouscache.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qurl.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qurlquery.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qfile.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qfiledevice.h \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qvector2d.h \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qtouchdevice.h \
-		C:/Qt/5.4/mingw491_32/include/QtWidgets/qtabwidget.h \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qicon.h \
-		C:/Qt/5.4/mingw491_32/include/QtWidgets/QDialog \
-		C:/Qt/5.4/mingw491_32/include/QtWidgets/qdialog.h \
-		ui_MainWindow.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/QVariant \
-		C:/Qt/5.4/mingw491_32/include/QtWidgets/QAction \
-		C:/Qt/5.4/mingw491_32/include/QtWidgets/qaction.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qactiongroup.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/QApplication \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qapplication.h \
@@ -751,11 +830,14 @@ debug/main.o: main.cpp window.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qabstractslider.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qstyle.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qtabbar.h \
+		C:/Qt/5.4/mingw491_32/include/QtWidgets/qtabwidget.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qrubberband.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/QLCDNumber \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qlcdnumber.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/QLabel \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qlabel.h \
+		C:/Qt/5.4/mingw491_32/include/QtWidgets/QMainWindow \
+		C:/Qt/5.4/mingw491_32/include/QtWidgets/qmainwindow.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/QMenuBar \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qmenubar.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qmenu.h \
@@ -790,11 +872,41 @@ debug/main.o: main.cpp window.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/QObject \
 		C:/Qt/5.4/mingw491_32/include/QtCore/QScopedPointer \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qopenglversionfunctions.h \
+		../glm/glm/geometric.hpp \
+		../glm/glm/detail/func_geometric.hpp \
+		../glm/glm/detail/type_vec3.hpp \
+		../glm/glm/detail/type_vec.hpp \
+		../glm/glm/detail/precision.hpp \
+		../glm/glm/detail/type_int.hpp \
+		../glm/glm/detail/setup.hpp \
+		../glm/glm/detail/_swizzle.hpp \
+		../glm/glm/detail/_swizzle_func.hpp \
+		../glm/glm/detail/type_vec3.inl \
+		../glm/glm/detail/func_geometric.inl \
+		../glm/glm/detail/func_exponential.hpp \
+		../glm/glm/detail/type_vec1.hpp \
+		../glm/glm/fwd.hpp \
+		../glm/glm/detail/type_float.hpp \
+		../glm/glm/detail/type_mat.hpp \
+		../glm/glm/detail/type_vec1.inl \
+		../glm/glm/detail/type_vec2.hpp \
+		../glm/glm/detail/type_vec2.inl \
+		../glm/glm/detail/type_vec4.hpp \
+		../glm/glm/detail/type_vec4.inl \
+		../glm/glm/detail/type_vec4_sse2.inl \
+		../glm/glm/detail/type_vec4_avx.inl \
+		../glm/glm/detail/type_vec4_avx2.inl \
+		../glm/glm/detail/func_exponential.inl \
+		../glm/glm/detail/func_vector_relational.hpp \
+		../glm/glm/detail/func_vector_relational.inl \
+		../glm/glm/detail/_vectorize.hpp \
+		../glm/glm/detail/func_common.hpp \
+		../glm/glm/detail/_fixes.hpp \
+		../glm/glm/detail/func_common.inl \
 		spring.h \
-		vector3d.h \
 		particle.h \
 		flag.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\main.o main.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug/main.o main.cpp
 
 debug/sim.o: sim.cpp sim.h \
 		foundation.h \
@@ -876,6 +988,37 @@ debug/sim.o: sim.cpp sim.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qdatastream.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qregexp.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qstringmatcher.h \
+		../glm/glm/geometric.hpp \
+		../glm/glm/detail/func_geometric.hpp \
+		../glm/glm/detail/type_vec3.hpp \
+		../glm/glm/detail/type_vec.hpp \
+		../glm/glm/detail/precision.hpp \
+		../glm/glm/detail/type_int.hpp \
+		../glm/glm/detail/setup.hpp \
+		../glm/glm/detail/_swizzle.hpp \
+		../glm/glm/detail/_swizzle_func.hpp \
+		../glm/glm/detail/type_vec3.inl \
+		../glm/glm/detail/func_geometric.inl \
+		../glm/glm/detail/func_exponential.hpp \
+		../glm/glm/detail/type_vec1.hpp \
+		../glm/glm/fwd.hpp \
+		../glm/glm/detail/type_float.hpp \
+		../glm/glm/detail/type_mat.hpp \
+		../glm/glm/detail/type_vec1.inl \
+		../glm/glm/detail/type_vec2.hpp \
+		../glm/glm/detail/type_vec2.inl \
+		../glm/glm/detail/type_vec4.hpp \
+		../glm/glm/detail/type_vec4.inl \
+		../glm/glm/detail/type_vec4_sse2.inl \
+		../glm/glm/detail/type_vec4_avx.inl \
+		../glm/glm/detail/type_vec4_avx2.inl \
+		../glm/glm/detail/func_exponential.inl \
+		../glm/glm/detail/func_vector_relational.hpp \
+		../glm/glm/detail/func_vector_relational.inl \
+		../glm/glm/detail/_vectorize.hpp \
+		../glm/glm/detail/func_common.hpp \
+		../glm/glm/detail/_fixes.hpp \
+		../glm/glm/detail/func_common.inl \
 		spring.h \
 		openglwidget.h \
 		C:/Qt/5.4/mingw491_32/include/QtOpenGL/QGLWidget \
@@ -921,16 +1064,15 @@ debug/sim.o: sim.cpp sim.h \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qpen.h \
 		C:/Qt/5.4/mingw491_32/include/QtOpenGL/qglcolormap.h \
 		C:/Qt/5.4/mingw491_32/include/QtOpenGL/qtopenglglobal.h \
-		vector3d.h \
 		particle.h \
 		flag.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\sim.o sim.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug/sim.o sim.cpp
 
 debug/window.o: window.cpp window.h \
-		C:/Qt/5.4/mingw491_32/include/QtWidgets/QMainWindow \
-		C:/Qt/5.4/mingw491_32/include/QtWidgets/qmainwindow.h \
-		C:/Qt/5.4/mingw491_32/include/QtWidgets/qwidget.h \
-		C:/Qt/5.4/mingw491_32/include/QtGui/qwindowdefs.h \
+		ui_MainWindow.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/QVariant \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qvariant.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qatomic.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qglobal.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qconfig.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qfeatures.h \
@@ -942,7 +1084,9 @@ debug/window.o: window.cpp window.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qsysinfo.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qlogging.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qflags.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qatomic.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qglobalstatic.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qmutex.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qnumeric.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qbasicatomic.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qatomic_bootstrap.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qgenericatomic.h \
@@ -956,47 +1100,57 @@ debug/window.o: window.cpp window.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qatomic_cxx11.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qatomic_gcc.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qatomic_unix.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qglobalstatic.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qmutex.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qnumeric.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qobjectdefs.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qnamespace.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qobjectdefs_impl.h \
-		C:/Qt/5.4/mingw491_32/include/QtGui/qwindowdefs_win.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qobject.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qstring.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qchar.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qbytearray.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qrefcount.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qnamespace.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qarraydata.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qstring.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qchar.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qstringbuilder.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qlist.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qalgorithms.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qiterator.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qbytearraylist.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qcoreevent.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qscopedpointer.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qmetatype.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qvarlengtharray.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qcontainerfwd.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qisenum.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qobjectdefs.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qobjectdefs_impl.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qmap.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qpair.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qdebug.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qhash.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qtextstream.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qiodevice.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qobject.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qcoreevent.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qscopedpointer.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qobject_impl.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qlocale.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qshareddata.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qvector.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qpoint.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qset.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qcontiguouscache.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qstringlist.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qdatastream.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qregexp.h \
+		C:/Qt/5.4/mingw491_32/include/QtCore/qstringmatcher.h \
+		C:/Qt/5.4/mingw491_32/include/QtWidgets/QAction \
+		C:/Qt/5.4/mingw491_32/include/QtWidgets/qaction.h \
+		C:/Qt/5.4/mingw491_32/include/QtGui/qkeysequence.h \
+		C:/Qt/5.4/mingw491_32/include/QtWidgets/qwidget.h \
+		C:/Qt/5.4/mingw491_32/include/QtGui/qwindowdefs.h \
+		C:/Qt/5.4/mingw491_32/include/QtGui/qwindowdefs_win.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qmargins.h \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qpaintdevice.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qrect.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qsize.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qpoint.h \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qpalette.h \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qcolor.h \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qrgb.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qstringlist.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qdatastream.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qiodevice.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qpair.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qregexp.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qstringmatcher.h \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qbrush.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qvector.h \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qmatrix.h \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qpolygon.h \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qregion.h \
@@ -1007,37 +1161,20 @@ debug/window.o: window.cpp window.h \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qpixelformat.h \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qpixmap.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qsharedpointer.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qshareddata.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qhash.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qsharedpointer_impl.h \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qfont.h \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qfontmetrics.h \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qfontinfo.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qsizepolicy.h \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qcursor.h \
-		C:/Qt/5.4/mingw491_32/include/QtGui/qkeysequence.h \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qevent.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qvariant.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qmap.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qdebug.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qtextstream.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qlocale.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qset.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qcontiguouscache.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qurl.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qurlquery.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qfile.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qfiledevice.h \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qvector2d.h \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qtouchdevice.h \
-		C:/Qt/5.4/mingw491_32/include/QtWidgets/qtabwidget.h \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qicon.h \
-		C:/Qt/5.4/mingw491_32/include/QtWidgets/QDialog \
-		C:/Qt/5.4/mingw491_32/include/QtWidgets/qdialog.h \
-		ui_MainWindow.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/QVariant \
-		C:/Qt/5.4/mingw491_32/include/QtWidgets/QAction \
-		C:/Qt/5.4/mingw491_32/include/QtWidgets/qaction.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qactiongroup.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/QApplication \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qapplication.h \
@@ -1071,11 +1208,14 @@ debug/window.o: window.cpp window.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qabstractslider.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qstyle.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qtabbar.h \
+		C:/Qt/5.4/mingw491_32/include/QtWidgets/qtabwidget.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qrubberband.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/QLCDNumber \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qlcdnumber.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/QLabel \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qlabel.h \
+		C:/Qt/5.4/mingw491_32/include/QtWidgets/QMainWindow \
+		C:/Qt/5.4/mingw491_32/include/QtWidgets/qmainwindow.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/QMenuBar \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qmenubar.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qmenu.h \
@@ -1110,11 +1250,41 @@ debug/window.o: window.cpp window.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/QObject \
 		C:/Qt/5.4/mingw491_32/include/QtCore/QScopedPointer \
 		C:/Qt/5.4/mingw491_32/include/QtGui/qopenglversionfunctions.h \
+		../glm/glm/geometric.hpp \
+		../glm/glm/detail/func_geometric.hpp \
+		../glm/glm/detail/type_vec3.hpp \
+		../glm/glm/detail/type_vec.hpp \
+		../glm/glm/detail/precision.hpp \
+		../glm/glm/detail/type_int.hpp \
+		../glm/glm/detail/setup.hpp \
+		../glm/glm/detail/_swizzle.hpp \
+		../glm/glm/detail/_swizzle_func.hpp \
+		../glm/glm/detail/type_vec3.inl \
+		../glm/glm/detail/func_geometric.inl \
+		../glm/glm/detail/func_exponential.hpp \
+		../glm/glm/detail/type_vec1.hpp \
+		../glm/glm/fwd.hpp \
+		../glm/glm/detail/type_float.hpp \
+		../glm/glm/detail/type_mat.hpp \
+		../glm/glm/detail/type_vec1.inl \
+		../glm/glm/detail/type_vec2.hpp \
+		../glm/glm/detail/type_vec2.inl \
+		../glm/glm/detail/type_vec4.hpp \
+		../glm/glm/detail/type_vec4.inl \
+		../glm/glm/detail/type_vec4_sse2.inl \
+		../glm/glm/detail/type_vec4_avx.inl \
+		../glm/glm/detail/type_vec4_avx2.inl \
+		../glm/glm/detail/func_exponential.inl \
+		../glm/glm/detail/func_vector_relational.hpp \
+		../glm/glm/detail/func_vector_relational.inl \
+		../glm/glm/detail/_vectorize.hpp \
+		../glm/glm/detail/func_common.hpp \
+		../glm/glm/detail/_fixes.hpp \
+		../glm/glm/detail/func_common.inl \
 		spring.h \
-		vector3d.h \
 		particle.h \
 		flag.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\window.o window.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug/window.o window.cpp
 
 debug/openglwidget.o: openglwidget.cpp C:/Qt/5.4/mingw491_32/include/QtOpenGL/QtOpenGL \
 		C:/Qt/5.4/mingw491_32/include/QtOpenGL/QtOpenGLDepends \
@@ -1582,13 +1752,41 @@ debug/openglwidget.o: openglwidget.cpp C:/Qt/5.4/mingw491_32/include/QtOpenGL/Qt
 		sim.h \
 		foundation.h \
 		C:/Qt/5.4/mingw491_32/include/QtGui/QOpenGLFunctions \
+		../glm/glm/geometric.hpp \
+		../glm/glm/detail/func_geometric.hpp \
+		../glm/glm/detail/type_vec3.hpp \
+		../glm/glm/detail/type_vec.hpp \
+		../glm/glm/detail/precision.hpp \
+		../glm/glm/detail/type_int.hpp \
+		../glm/glm/detail/setup.hpp \
+		../glm/glm/detail/_swizzle.hpp \
+		../glm/glm/detail/_swizzle_func.hpp \
+		../glm/glm/detail/type_vec3.inl \
+		../glm/glm/detail/func_geometric.inl \
+		../glm/glm/detail/func_exponential.hpp \
+		../glm/glm/detail/type_vec1.hpp \
+		../glm/glm/fwd.hpp \
+		../glm/glm/detail/type_float.hpp \
+		../glm/glm/detail/type_mat.hpp \
+		../glm/glm/detail/type_vec1.inl \
+		../glm/glm/detail/type_vec2.hpp \
+		../glm/glm/detail/type_vec2.inl \
+		../glm/glm/detail/type_vec4.hpp \
+		../glm/glm/detail/type_vec4.inl \
+		../glm/glm/detail/type_vec4_sse2.inl \
+		../glm/glm/detail/type_vec4_avx.inl \
+		../glm/glm/detail/type_vec4_avx2.inl \
+		../glm/glm/detail/func_exponential.inl \
+		../glm/glm/detail/func_vector_relational.hpp \
+		../glm/glm/detail/func_vector_relational.inl \
+		../glm/glm/detail/_vectorize.hpp \
+		../glm/glm/detail/func_common.hpp \
+		../glm/glm/detail/_fixes.hpp \
+		../glm/glm/detail/func_common.inl \
 		spring.h \
-		vector3d.h \
 		particle.h \
 		flag.h \
 		window.h \
-		C:/Qt/5.4/mingw491_32/include/QtWidgets/QMainWindow \
-		C:/Qt/5.4/mingw491_32/include/QtWidgets/QDialog \
 		ui_MainWindow.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/QAction \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/QApplication \
@@ -1598,11 +1796,12 @@ debug/openglwidget.o: openglwidget.cpp C:/Qt/5.4/mingw491_32/include/QtOpenGL/Qt
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/QHeaderView \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/QLCDNumber \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/QLabel \
+		C:/Qt/5.4/mingw491_32/include/QtWidgets/QMainWindow \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/QMenuBar \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/QPushButton \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/QStatusBar \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/QToolBar
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\openglwidget.o openglwidget.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug/openglwidget.o openglwidget.cpp
 
 debug/spring.o: spring.cpp spring.h \
 		foundation.h \
@@ -1684,6 +1883,37 @@ debug/spring.o: spring.cpp spring.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qdatastream.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qregexp.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qstringmatcher.h \
+		../glm/glm/geometric.hpp \
+		../glm/glm/detail/func_geometric.hpp \
+		../glm/glm/detail/type_vec3.hpp \
+		../glm/glm/detail/type_vec.hpp \
+		../glm/glm/detail/precision.hpp \
+		../glm/glm/detail/type_int.hpp \
+		../glm/glm/detail/setup.hpp \
+		../glm/glm/detail/_swizzle.hpp \
+		../glm/glm/detail/_swizzle_func.hpp \
+		../glm/glm/detail/type_vec3.inl \
+		../glm/glm/detail/func_geometric.inl \
+		../glm/glm/detail/func_exponential.hpp \
+		../glm/glm/detail/type_vec1.hpp \
+		../glm/glm/fwd.hpp \
+		../glm/glm/detail/type_float.hpp \
+		../glm/glm/detail/type_mat.hpp \
+		../glm/glm/detail/type_vec1.inl \
+		../glm/glm/detail/type_vec2.hpp \
+		../glm/glm/detail/type_vec2.inl \
+		../glm/glm/detail/type_vec4.hpp \
+		../glm/glm/detail/type_vec4.inl \
+		../glm/glm/detail/type_vec4_sse2.inl \
+		../glm/glm/detail/type_vec4_avx.inl \
+		../glm/glm/detail/type_vec4_avx2.inl \
+		../glm/glm/detail/func_exponential.inl \
+		../glm/glm/detail/func_vector_relational.hpp \
+		../glm/glm/detail/func_vector_relational.inl \
+		../glm/glm/detail/_vectorize.hpp \
+		../glm/glm/detail/func_common.hpp \
+		../glm/glm/detail/_fixes.hpp \
+		../glm/glm/detail/func_common.inl \
 		openglwidget.h \
 		C:/Qt/5.4/mingw491_32/include/QtOpenGL/QGLWidget \
 		C:/Qt/5.4/mingw491_32/include/QtOpenGL/qgl.h \
@@ -1730,9 +1960,8 @@ debug/spring.o: spring.cpp spring.h \
 		C:/Qt/5.4/mingw491_32/include/QtOpenGL/qtopenglglobal.h \
 		sim.h \
 		particle.h \
-		vector3d.h \
 		flag.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\spring.o spring.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug/spring.o spring.cpp
 
 debug/flag.o: flag.cpp flag.h \
 		spring.h \
@@ -1815,6 +2044,37 @@ debug/flag.o: flag.cpp flag.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qdatastream.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qregexp.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qstringmatcher.h \
+		../glm/glm/geometric.hpp \
+		../glm/glm/detail/func_geometric.hpp \
+		../glm/glm/detail/type_vec3.hpp \
+		../glm/glm/detail/type_vec.hpp \
+		../glm/glm/detail/precision.hpp \
+		../glm/glm/detail/type_int.hpp \
+		../glm/glm/detail/setup.hpp \
+		../glm/glm/detail/_swizzle.hpp \
+		../glm/glm/detail/_swizzle_func.hpp \
+		../glm/glm/detail/type_vec3.inl \
+		../glm/glm/detail/func_geometric.inl \
+		../glm/glm/detail/func_exponential.hpp \
+		../glm/glm/detail/type_vec1.hpp \
+		../glm/glm/fwd.hpp \
+		../glm/glm/detail/type_float.hpp \
+		../glm/glm/detail/type_mat.hpp \
+		../glm/glm/detail/type_vec1.inl \
+		../glm/glm/detail/type_vec2.hpp \
+		../glm/glm/detail/type_vec2.inl \
+		../glm/glm/detail/type_vec4.hpp \
+		../glm/glm/detail/type_vec4.inl \
+		../glm/glm/detail/type_vec4_sse2.inl \
+		../glm/glm/detail/type_vec4_avx.inl \
+		../glm/glm/detail/type_vec4_avx2.inl \
+		../glm/glm/detail/func_exponential.inl \
+		../glm/glm/detail/func_vector_relational.hpp \
+		../glm/glm/detail/func_vector_relational.inl \
+		../glm/glm/detail/_vectorize.hpp \
+		../glm/glm/detail/func_common.hpp \
+		../glm/glm/detail/_fixes.hpp \
+		../glm/glm/detail/func_common.inl \
 		openglwidget.h \
 		C:/Qt/5.4/mingw491_32/include/QtOpenGL/QGLWidget \
 		C:/Qt/5.4/mingw491_32/include/QtOpenGL/qgl.h \
@@ -1860,91 +2120,8 @@ debug/flag.o: flag.cpp flag.h \
 		C:/Qt/5.4/mingw491_32/include/QtOpenGL/qglcolormap.h \
 		C:/Qt/5.4/mingw491_32/include/QtOpenGL/qtopenglglobal.h \
 		sim.h \
-		particle.h \
-		vector3d.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\flag.o flag.cpp
-
-debug/vector3d.o: vector3d.cpp vector3d.h \
-		foundation.h \
-		C:/Qt/5.4/mingw491_32/include/QtGui/QOpenGLFunctions \
-		C:/Qt/5.4/mingw491_32/include/QtGui/qopenglfunctions.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qglobal.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qconfig.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qfeatures.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qsystemdetection.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qprocessordetection.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qcompilerdetection.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qtypeinfo.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qtypetraits.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qsysinfo.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qlogging.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qflags.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qatomic.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qbasicatomic.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qatomic_bootstrap.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qgenericatomic.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qatomic_msvc.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qatomic_armv7.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qatomic_armv6.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qatomic_armv5.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qatomic_ia64.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qatomic_mips.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qatomic_x86.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qatomic_cxx11.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qatomic_gcc.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qatomic_unix.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qglobalstatic.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qmutex.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qnumeric.h \
-		C:/Qt/5.4/mingw491_32/include/QtGui/qopengl.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qt_windows.h \
-		C:/Qt/5.4/mingw491_32/include/QtGui/qopengles2ext.h \
-		C:/Qt/5.4/mingw491_32/include/QtGui/qopenglext.h \
-		C:/Qt/5.4/mingw491_32/include/QtGui/qopenglcontext.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qnamespace.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/QObject \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qobject.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qobjectdefs.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qobjectdefs_impl.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qstring.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qchar.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qbytearray.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qrefcount.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qarraydata.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qstringbuilder.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qlist.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qalgorithms.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qiterator.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qbytearraylist.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qcoreevent.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qscopedpointer.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qmetatype.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qvarlengtharray.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qcontainerfwd.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qisenum.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qobject_impl.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/QScopedPointer \
-		C:/Qt/5.4/mingw491_32/include/QtGui/QSurfaceFormat \
-		C:/Qt/5.4/mingw491_32/include/QtGui/qsurfaceformat.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qpair.h \
-		C:/Qt/5.4/mingw491_32/include/QtGui/qopenglversionfunctions.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qhash.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qvariant.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qmap.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qdebug.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qtextstream.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qiodevice.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qlocale.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qshareddata.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qvector.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qpoint.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qset.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qcontiguouscache.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qstringlist.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qdatastream.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qregexp.h \
-		C:/Qt/5.4/mingw491_32/include/QtCore/qstringmatcher.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\vector3d.o vector3d.cpp
+		particle.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug/flag.o flag.cpp
 
 debug/particle.o: particle.cpp particle.h \
 		foundation.h \
@@ -2026,14 +2203,44 @@ debug/particle.o: particle.cpp particle.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qdatastream.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qregexp.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qstringmatcher.h \
-		vector3d.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\particle.o particle.cpp
+		../glm/glm/geometric.hpp \
+		../glm/glm/detail/func_geometric.hpp \
+		../glm/glm/detail/type_vec3.hpp \
+		../glm/glm/detail/type_vec.hpp \
+		../glm/glm/detail/precision.hpp \
+		../glm/glm/detail/type_int.hpp \
+		../glm/glm/detail/setup.hpp \
+		../glm/glm/detail/_swizzle.hpp \
+		../glm/glm/detail/_swizzle_func.hpp \
+		../glm/glm/detail/type_vec3.inl \
+		../glm/glm/detail/func_geometric.inl \
+		../glm/glm/detail/func_exponential.hpp \
+		../glm/glm/detail/type_vec1.hpp \
+		../glm/glm/fwd.hpp \
+		../glm/glm/detail/type_float.hpp \
+		../glm/glm/detail/type_mat.hpp \
+		../glm/glm/detail/type_vec1.inl \
+		../glm/glm/detail/type_vec2.hpp \
+		../glm/glm/detail/type_vec2.inl \
+		../glm/glm/detail/type_vec4.hpp \
+		../glm/glm/detail/type_vec4.inl \
+		../glm/glm/detail/type_vec4_sse2.inl \
+		../glm/glm/detail/type_vec4_avx.inl \
+		../glm/glm/detail/type_vec4_avx2.inl \
+		../glm/glm/detail/func_exponential.inl \
+		../glm/glm/detail/func_vector_relational.hpp \
+		../glm/glm/detail/func_vector_relational.inl \
+		../glm/glm/detail/_vectorize.hpp \
+		../glm/glm/detail/func_common.hpp \
+		../glm/glm/detail/_fixes.hpp \
+		../glm/glm/detail/func_common.inl
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug/particle.o particle.cpp
 
 debug/moc_window.o: debug/moc_window.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\moc_window.o debug\moc_window.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug/moc_window.o debug/moc_window.cpp
 
 debug/moc_openglwidget.o: debug/moc_openglwidget.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\moc_openglwidget.o debug\moc_openglwidget.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug/moc_openglwidget.o debug/moc_openglwidget.cpp
 
 ####### Install
 

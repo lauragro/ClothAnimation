@@ -18,9 +18,7 @@ SOURCES += main.cpp\
     openglwidget.cpp \
     spring.cpp \
     flag.cpp \
-    vector3d.cpp \
-    particle.cpp \
-    ball.cpp
+    particle.cpp
 
 HEADERS  += \
     sim.h \
@@ -30,9 +28,7 @@ HEADERS  += \
     openglwidget.h \
     spring.h \
     flag.h \
-    vector3d.h \
-    particle.h \
-    ball.h
+    particle.h
 
 FORMS    += \
     MainWindow.ui
@@ -40,4 +36,4 @@ FORMS    += \
 # Libraries
 win32: LIBS += -lglu32
 win32: LIBS += -lopengl32
-win32: LIBS += -lglut
+#win32: LIBS += -lglut

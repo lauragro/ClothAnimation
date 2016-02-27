@@ -63,10 +63,10 @@ static const uint qt_meta_data_MainWindow[] = {
        6,    1,   43,    2, 0x0a /* Public */,
 
  // slots: parameters
-    QMetaType::Void, QMetaType::Double,    3,
-    QMetaType::Void, QMetaType::Double,    3,
-    QMetaType::Void, QMetaType::Double,    3,
-    QMetaType::Void, QMetaType::Double,    3,
+    QMetaType::Void, QMetaType::Float,    3,
+    QMetaType::Void, QMetaType::Float,    3,
+    QMetaType::Void, QMetaType::Float,    3,
+    QMetaType::Void, QMetaType::Float,    3,
 
        0        // eod
 };
@@ -76,10 +76,10 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
     if (_c == QMetaObject::InvokeMetaMethod) {
         MainWindow *_t = static_cast<MainWindow *>(_o);
         switch (_id) {
-        case 0: _t->box_dampingConstant((*reinterpret_cast< double(*)>(_a[1]))); break;
-        case 1: _t->box_restLength((*reinterpret_cast< double(*)>(_a[1]))); break;
-        case 2: _t->box_mass((*reinterpret_cast< double(*)>(_a[1]))); break;
-        case 3: _t->box_springConstant((*reinterpret_cast< double(*)>(_a[1]))); break;
+        case 0: _t->box_dampingConstant((*reinterpret_cast< float(*)>(_a[1]))); break;
+        case 1: _t->box_restLength((*reinterpret_cast< float(*)>(_a[1]))); break;
+        case 2: _t->box_mass((*reinterpret_cast< float(*)>(_a[1]))); break;
+        case 3: _t->box_springConstant((*reinterpret_cast< float(*)>(_a[1]))); break;
         default: ;
         }
     }

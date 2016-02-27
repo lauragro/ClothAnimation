@@ -3,40 +3,26 @@
 // default constructor
 Particle::Particle()
 {
-    mass = 1.0;
-    position = new Vector3D();
-    velocity = new Vector3D();
-    acceleration = new Vector3D();
-    force = new Vector3D();
-    externalForce = new Vector3D();
-    springForce = new Vector3D();
-    gravityForce = new Vector3D(0,9.81,0);
+    mass = 1.0f;
+    gravityForce = vec3(0.0f,9.81f,0.0f);
 }
 
 // position constructor
-Particle::Particle(double x, double y, double z)
+Particle::Particle(float x, float y, float z)
 {
-    mass = 1.0;
-    position = new Vector3D(x, y, z);
-    velocity = new Vector3D();
-    acceleration = new Vector3D();
-    force = new Vector3D();
-    externalForce = new Vector3D();
-    springForce = new Vector3D();
-    gravityForce = new Vector3D(0,9.81,0);
+    mass = 1.0f;
+    position = vec3(x, y, z);
+    gravityForce = vec3(0.0f,9.81f,0.0f);
 }
 
 // total state constructor
-Particle::Particle(Vector3D *position, Vector3D *velocity, Vector3D *acceleration)
+Particle::Particle(vec3 position, vec3 velocity, vec3 acceleration)
 {
-    mass = 1.0;
+    mass = 1.0f;
     this->position = position;
     this->velocity = velocity;
     this->acceleration = acceleration;
-    force = new Vector3D();
-    externalForce = new Vector3D();
-    springForce = new Vector3D();
-    gravityForce = new Vector3D(0,9.81,0);
+    gravityForce = vec3(0.0f,9.81f,0.0f);
 }
 
 // destructor
@@ -49,13 +35,13 @@ Particle::~Particle()
 void Particle::draw()
 {
     // get the coordinates and radius
-    double x = position->x;
-    double y = position->y;
-    double radius = 5.0;
-    double resolution = 20;
+    float x = position.x;
+    float y = position.y;
+    float radius = 5.0f;
+    float resolution = 20.0f;
 
     // Compute angle of each triangle in fan
-    double theta = 2.0 * PI / resolution;
+    float theta = 2.0f * PI / resolution;
 
     glColor3f(0,0.4,0.6);
     glBegin(GL_TRIANGLE_FAN);

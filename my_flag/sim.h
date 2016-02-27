@@ -10,7 +10,7 @@
 
 class Flag;
 class Spring;
-class Vector3D;
+class vec3;
 
 class Sim
 {
@@ -24,10 +24,10 @@ class Sim
 
         // Progesses the simulation forward
         void simStep();
-        void rightStep(double dt);
-        void eulerStep(double dt);
-        void rungeKuttaStep(double dt);
-        double acceleration(Particle *thisParticle);
+        void rightStep(float dt);
+        void eulerStep(float dt);
+        void rungeKuttaStep(float dt);
+        float acceleration(Particle *thisParticle);
         void updateForces();
 
         // The spring objects belonging to this simulation
