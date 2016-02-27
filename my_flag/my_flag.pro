@@ -18,7 +18,9 @@ SOURCES += main.cpp\
     openglwidget.cpp \
     spring.cpp \
     flag.cpp \
-    particle.cpp
+    particle.cpp \
+    camera.cpp \
+    ball.cpp
 
 HEADERS  += \
     sim.h \
@@ -28,7 +30,9 @@ HEADERS  += \
     openglwidget.h \
     spring.h \
     flag.h \
-    particle.h
+    particle.h \
+    camera.h \
+    ball.h
 
 FORMS    += \
     MainWindow.ui

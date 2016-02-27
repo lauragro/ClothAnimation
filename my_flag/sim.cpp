@@ -8,6 +8,8 @@ Sim::Sim()
 
     myFlag = new Flag();
 
+    myBall = new Ball();
+
 }
 
 // Destructor
@@ -35,9 +37,8 @@ void Sim::draw()
         myFlag->springs[i]->draw();
     }
 
-
-    //cout << "x coord = " << myFlag->springs[0]->xCoord << endl;
-    //cout << "y coord = " << myFlag->springs[0]->yCoord << endl;
+    // Draw ball
+    myBall->draw();
 
 }
 
@@ -99,29 +100,36 @@ void Sim::eulerStep(float dt)
 
                 continue;   // skip euler for this particle
             }
+
+            // check for collision with ball
+            else if( collidesWithBall(myFlag->particles[i][j]) )
+            {
+                // set velocity to zero
+                myFlag->particles[i][j]->velocity.x=0.0;
+                myFlag->particles[i][j]->velocity.y=0.0;
+                myFlag->particles[i][j]->velocity.z=0.0;
+
+                continue;   // skip euler for this particle
+            }
+
             // update all other particles
             else
             {
-                // a F/m where m=1
-                //a = a->scaleDown(myFlag->particles[i][j]->force, myFlag->particles[i][j]->mass);
+                // calculate acceleration: a = F/m where m=1
                 a = myFlag->particles[i][j]->force;
 
                 // get velocity of spring
                 v = myFlag->particles[i][j]->velocity;
 
-                // v = v + a*dt
-                //v = v->add(v, v->scaleUp(a,dt));
+                // update velocity
                 v = v + dt*a;
-
                 myFlag->particles[i][j]->velocity = v;
 
                 // get position of spring
                 x = myFlag->particles[i][j]->position;
 
-                // x = x + v * dt;
-                //x = x->add(x, x->scaleUp(v, dt));
+                // update position
                 x = x + v*dt;
-
                 myFlag->particles[i][j]->position = x;
             }
         }
@@ -217,8 +225,6 @@ void Sim::updateForces()
         force = myFlag->springs[i]->force();
 
         // add current spring force to end particles
-        /*myFlag->springs[i]->particle1->springForce = v->add(myFlag->springs[i]->particle1->springForce, force);
-        myFlag->springs[i]->particle2->springForce = v->subtract(myFlag->springs[i]->particle2->springForce,force);*/
         myFlag->springs[i]->particle1->springForce += force;
         myFlag->springs[i]->particle2->springForce -= force;
 
@@ -230,8 +236,24 @@ void Sim::updateForces()
         for( j=0; j<myFlag->particlesWide; j++ )
         {
             // F = Fext + Fspring
-            //myFlag->particles[i][j]->force = v->add(myFlag->particles[i][j]->gravityForce, myFlag->particles[i][j]->springForce);
             myFlag->particles[i][j]->force = myFlag->particles[i][j]->externalForce + myFlag->particles[i][j]->springForce;
         }
     }
+}
+
+// Check for collision of one particle with ball
+bool Sim::collidesWithBall(Particle * thisParticle)
+{
+    // find distance from ball's origin
+    glm::vec3 distanceVector = thisParticle->position - myBall->origin;
+    float distance = length(distanceVector);
+
+    if( distance < myBall->radius )
+    {
+        // collision detected
+        return true;
+    }
+
+    // no collision detected
+    return false;
 }

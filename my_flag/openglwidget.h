@@ -29,7 +29,6 @@ protected:
     // Resizing
     void resizeGL(int width, int height);
 
-
 public:
     Sim * mySim;
     bool simMode;

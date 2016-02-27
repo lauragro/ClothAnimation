@@ -1,7 +1,7 @@
 #ifndef BALL_H
 #define BALL_H
 
-#include "vector3d.h"
+#include "foundation.h"
 
 class Ball
 {
@@ -9,8 +9,10 @@ public:
     Ball();
     ~Ball();
 
-    double radius;      // radius of ball
-    Vector3D origin;    // (x,y,z) coordinates of ball
+    float radius;
+    vec3 origin;
+
+    void draw();
 };
 
 #endif // BALL_H

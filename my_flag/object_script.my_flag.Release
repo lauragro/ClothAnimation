@@ -5,8 +5,9 @@ INPUT(
 ./release/openglwidget.o
 ./release/spring.o
 ./release/flag.o
-./release/vec3.o
 ./release/particle.o
+./release/camera.o
+./release/ball.o
 ./release/moc_window.o
 ./release/moc_openglwidget.o
 );

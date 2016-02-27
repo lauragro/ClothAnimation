@@ -5,8 +5,9 @@ INPUT(
 ./debug/openglwidget.o
 ./debug/spring.o
 ./debug/flag.o
-./debug/vec3.o
 ./debug/particle.o
+./debug/camera.o
+./debug/ball.o
 ./debug/moc_window.o
 ./debug/moc_openglwidget.o
 );

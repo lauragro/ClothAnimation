@@ -7,6 +7,7 @@
 #include "spring.h"
 #include "particle.h"
 #include "flag.h"
+#include "ball.h"
 
 class Flag;
 class Spring;
@@ -30,8 +31,12 @@ class Sim
         float acceleration(Particle *thisParticle);
         void updateForces();
 
-        // The spring objects belonging to this simulation
+        // Check for collision of one particle with ball
+        bool collidesWithBall(Particle * thisParticle);
+
+        // The flag and ball belonging to this simulation
         Flag * myFlag;
+        Ball * myBall;
 };
 
 #endif // SIM_H
