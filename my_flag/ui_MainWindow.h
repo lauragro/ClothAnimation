@@ -13,7 +13,6 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
-#include <QtWidgets/QDoubleSpinBox>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLCDNumber>
@@ -37,20 +36,16 @@ public:
     QGridLayout *gridLayout;
     QLabel *label_2;
     QLCDNumber *lcd_mass;
-    QLabel *label_9;
-    QLabel *label_6;
-    QLabel *label_7;
     QLCDNumber *lcd_spring_constant;
     QLabel *label_4;
-    QLCDNumber *lcd_rest_length;
+    QLabel *label_6;
+    QLabel *label_7;
+    QLabel *label_9;
     QLabel *label_3;
-    QLabel *label_5;
     QLabel *label_8;
     QLCDNumber *lcd_damping_constant;
-    QDoubleSpinBox *box1;
-    QDoubleSpinBox *box3;
-    QDoubleSpinBox *box2;
-    QDoubleSpinBox *box4;
+    QLabel *label_5;
+    QLCDNumber *lcd_rest_length;
     QLabel *label;
     QWidget *gridLayoutWidget_2;
     QGridLayout *gridLayout_2;
@@ -76,7 +71,7 @@ public:
         openGLWidget->setFont(font);
         gridLayoutWidget = new QWidget(centralWidget);
         gridLayoutWidget->setObjectName(QStringLiteral("gridLayoutWidget"));
-        gridLayoutWidget->setGeometry(QRect(850, 70, 251, 421));
+        gridLayoutWidget->setGeometry(QRect(850, 70, 258, 421));
         gridLayout = new QGridLayout(gridLayoutWidget);
         gridLayout->setSpacing(6);
         gridLayout->setContentsMargins(11, 11, 11, 11);
@@ -95,25 +90,7 @@ public:
         lcd_mass->setDigitCount(4);
         lcd_mass->setSegmentStyle(QLCDNumber::Flat);
 
-        gridLayout->addWidget(lcd_mass, 3, 3, 1, 1);
-
-        label_9 = new QLabel(gridLayoutWidget);
-        label_9->setObjectName(QStringLiteral("label_9"));
-        label_9->setFont(font);
-
-        gridLayout->addWidget(label_9, 4, 4, 1, 1);
-
-        label_6 = new QLabel(gridLayoutWidget);
-        label_6->setObjectName(QStringLiteral("label_6"));
-        label_6->setFont(font);
-
-        gridLayout->addWidget(label_6, 1, 4, 1, 1);
-
-        label_7 = new QLabel(gridLayoutWidget);
-        label_7->setObjectName(QStringLiteral("label_7"));
-        label_7->setFont(font);
-
-        gridLayout->addWidget(label_7, 2, 4, 1, 1);
+        gridLayout->addWidget(lcd_mass, 3, 2, 1, 1);
 
         lcd_spring_constant = new QLCDNumber(gridLayoutWidget);
         lcd_spring_constant->setObjectName(QStringLiteral("lcd_spring_constant"));
@@ -121,7 +98,7 @@ public:
         lcd_spring_constant->setDigitCount(4);
         lcd_spring_constant->setSegmentStyle(QLCDNumber::Flat);
 
-        gridLayout->addWidget(lcd_spring_constant, 4, 3, 1, 1);
+        gridLayout->addWidget(lcd_spring_constant, 4, 2, 1, 1);
 
         label_4 = new QLabel(gridLayoutWidget);
         label_4->setObjectName(QStringLiteral("label_4"));
@@ -130,14 +107,23 @@ public:
 
         gridLayout->addWidget(label_4, 2, 1, 1, 1);
 
-        lcd_rest_length = new QLCDNumber(gridLayoutWidget);
-        lcd_rest_length->setObjectName(QStringLiteral("lcd_rest_length"));
-        lcd_rest_length->setFrameShape(QFrame::NoFrame);
-        lcd_rest_length->setSmallDecimalPoint(false);
-        lcd_rest_length->setDigitCount(4);
-        lcd_rest_length->setSegmentStyle(QLCDNumber::Flat);
+        label_6 = new QLabel(gridLayoutWidget);
+        label_6->setObjectName(QStringLiteral("label_6"));
+        label_6->setFont(font);
 
-        gridLayout->addWidget(lcd_rest_length, 2, 3, 1, 1);
+        gridLayout->addWidget(label_6, 1, 3, 1, 1);
+
+        label_7 = new QLabel(gridLayoutWidget);
+        label_7->setObjectName(QStringLiteral("label_7"));
+        label_7->setFont(font);
+
+        gridLayout->addWidget(label_7, 2, 3, 1, 1);
+
+        label_9 = new QLabel(gridLayoutWidget);
+        label_9->setObjectName(QStringLiteral("label_9"));
+        label_9->setFont(font);
+
+        gridLayout->addWidget(label_9, 4, 3, 1, 1);
 
         label_3 = new QLabel(gridLayoutWidget);
         label_3->setObjectName(QStringLiteral("label_3"));
@@ -146,18 +132,11 @@ public:
 
         gridLayout->addWidget(label_3, 3, 1, 1, 1);
 
-        label_5 = new QLabel(gridLayoutWidget);
-        label_5->setObjectName(QStringLiteral("label_5"));
-        label_5->setFont(font);
-        label_5->setWordWrap(true);
-
-        gridLayout->addWidget(label_5, 1, 1, 1, 1);
-
         label_8 = new QLabel(gridLayoutWidget);
         label_8->setObjectName(QStringLiteral("label_8"));
         label_8->setFont(font);
 
-        gridLayout->addWidget(label_8, 3, 4, 1, 1);
+        gridLayout->addWidget(label_8, 3, 3, 1, 1);
 
         lcd_damping_constant = new QLCDNumber(gridLayoutWidget);
         lcd_damping_constant->setObjectName(QStringLiteral("lcd_damping_constant"));
@@ -165,27 +144,23 @@ public:
         lcd_damping_constant->setDigitCount(4);
         lcd_damping_constant->setSegmentStyle(QLCDNumber::Flat);
 
-        gridLayout->addWidget(lcd_damping_constant, 1, 3, 1, 1);
+        gridLayout->addWidget(lcd_damping_constant, 1, 2, 1, 1);
 
-        box1 = new QDoubleSpinBox(gridLayoutWidget);
-        box1->setObjectName(QStringLiteral("box1"));
+        label_5 = new QLabel(gridLayoutWidget);
+        label_5->setObjectName(QStringLiteral("label_5"));
+        label_5->setFont(font);
+        label_5->setWordWrap(true);
 
-        gridLayout->addWidget(box1, 1, 2, 1, 1);
+        gridLayout->addWidget(label_5, 1, 1, 1, 1);
 
-        box3 = new QDoubleSpinBox(gridLayoutWidget);
-        box3->setObjectName(QStringLiteral("box3"));
+        lcd_rest_length = new QLCDNumber(gridLayoutWidget);
+        lcd_rest_length->setObjectName(QStringLiteral("lcd_rest_length"));
+        lcd_rest_length->setFrameShape(QFrame::NoFrame);
+        lcd_rest_length->setSmallDecimalPoint(false);
+        lcd_rest_length->setDigitCount(4);
+        lcd_rest_length->setSegmentStyle(QLCDNumber::Flat);
 
-        gridLayout->addWidget(box3, 3, 2, 1, 1);
-
-        box2 = new QDoubleSpinBox(gridLayoutWidget);
-        box2->setObjectName(QStringLiteral("box2"));
-
-        gridLayout->addWidget(box2, 2, 2, 1, 1);
-
-        box4 = new QDoubleSpinBox(gridLayoutWidget);
-        box4->setObjectName(QStringLiteral("box4"));
-
-        gridLayout->addWidget(box4, 4, 2, 1, 1);
+        gridLayout->addWidget(lcd_rest_length, 2, 2, 1, 1);
 
         label = new QLabel(centralWidget);
         label->setObjectName(QStringLiteral("label"));
@@ -235,10 +210,6 @@ public:
         QObject::connect(button1, SIGNAL(clicked()), openGLWidget, SLOT(button_go()));
         QObject::connect(button2, SIGNAL(clicked()), openGLWidget, SLOT(button_stop()));
         QObject::connect(button3, SIGNAL(clicked()), openGLWidget, SLOT(button_reset()));
-        QObject::connect(box1, SIGNAL(valueChanged(double)), MainWindow, SLOT(box_dampingConstant(double)));
-        QObject::connect(box2, SIGNAL(valueChanged(double)), MainWindow, SLOT(box_restLength(double)));
-        QObject::connect(box3, SIGNAL(valueChanged(double)), MainWindow, SLOT(box_mass(double)));
-        QObject::connect(box4, SIGNAL(valueChanged(double)), MainWindow, SLOT(box_springConstant(double)));
 
         QMetaObject::connectSlotsByName(MainWindow);
     } // setupUi
@@ -247,13 +218,13 @@ public:
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Simple Spring-Mass System", 0));
         label_2->setText(QApplication::translate("MainWindow", "Spring constant", 0));
-        label_9->setText(QApplication::translate("MainWindow", "N/m", 0));
+        label_4->setText(QApplication::translate("MainWindow", "Rest length", 0));
         label_6->setText(QApplication::translate("MainWindow", "N/m", 0));
         label_7->setText(QApplication::translate("MainWindow", "m", 0));
-        label_4->setText(QApplication::translate("MainWindow", "Rest length", 0));
+        label_9->setText(QApplication::translate("MainWindow", "N/m", 0));
         label_3->setText(QApplication::translate("MainWindow", "Mass", 0));
-        label_5->setText(QApplication::translate("MainWindow", "Damping constant", 0));
         label_8->setText(QApplication::translate("MainWindow", "kg", 0));
+        label_5->setText(QApplication::translate("MainWindow", "Damping constant", 0));
         label->setText(QApplication::translate("MainWindow", "Spring details", 0));
         button1->setText(QApplication::translate("MainWindow", "Go", 0));
         button2->setText(QApplication::translate("MainWindow", "Stop", 0));

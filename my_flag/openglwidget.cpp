@@ -11,6 +11,7 @@ static int timer_interval = 10;
 OpenGLWidget::OpenGLWidget(QWidget *parent) : QGLWidget(parent)
 {
     mySim = new Sim();
+    myCamera = new Camera();
     startup();
 }
 
@@ -19,6 +20,7 @@ OpenGLWidget::~OpenGLWidget()
 {
     cout << "widget deconstruction" << endl;
     delete mySim;
+    delete myCamera;
 }
 
 // Connect to signals
@@ -50,6 +52,9 @@ void OpenGLWidget::initializeGL()
     glLoadIdentity();
     glOrtho(0, this->width(), this->height(), 0, -1, 1);
     glMatrixMode(GL_MODELVIEW);
+
+    // initialize camera settings
+    myCamera->startup();
 }
 
 // Painting things
@@ -61,11 +66,31 @@ void OpenGLWidget::paintGL()
     // white background
     glClearColor(1, 1, 1, 1);
 
-    // setup viewing
+    // setup viewing ***************************/
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glOrtho(0, this->width(), this->height(), 0, -1, 1);
+
+    // point the camera
+    /*gluLookAt(myCamera->CameraPos.x,    // eye x
+       myCamera->CameraPos.y,           // eye y
+       myCamera->CameraPos.z,           // eye z
+              200,        // centre x
+              200,       // centre y
+              0,                        // centre z
+              0.0, 1.0, 0.0);           // up xyz
+
+    // rotate the camera
+    glRotatef( myCamera->xangle, 1.0, 0.0, 0.0 );
+    glRotatef( myCamera->yangle, 0.0, 1.0, 0.0 );
+    glRotatef( myCamera->zangle, 0.0, 0.0, 1.0 );
+
+    // zoom the camera
+    glScalef( myCamera->scale, myCamera->scale, myCamera->scale );*/
+
     glMatrixMode(GL_MODELVIEW);
+    /**********************************************/
+
 
     // Draw the scene
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -148,4 +173,22 @@ void OpenGLWidget::resizeGL( int winw, int winh )
     glMatrixMode(GL_MODELVIEW);*/
 
    // if (mySim != NULL) mySim->setSize(winw, winh );
+}
+
+void OpenGLWidget::mousePressEvent(QMouseEvent *e)
+{
+    myCamera->mousePressEvent(e);
+    updateGL();
+}
+
+void OpenGLWidget::mouseReleaseEvent(QMouseEvent *e)
+{
+    myCamera->mouseReleaseEvent(e);
+    updateGL();
+}
+
+void OpenGLWidget::mouseMoveEvent(QMouseEvent *e)
+{
+    myCamera->mouseMoveEvent(e);
+    updateGL();
 }

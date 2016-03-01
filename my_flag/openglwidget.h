@@ -2,7 +2,9 @@
 #define OPENGLWIDGET_H
 
 #include <QGLWidget>
+#include "camera.h"
 #include "sim.h"
+class Camera;
 class Sim;
 
 class OpenGLWidget : public QGLWidget
@@ -31,6 +33,7 @@ protected:
 
 public:
     Sim * mySim;
+    Camera * myCamera;
     bool simMode;
     QTimer * timer;
     QTimer * frameTimer;
@@ -39,6 +42,7 @@ public:
 
 public:
     Sim * getMySim(){return mySim;}
+    Camera * getMyCamera(){return myCamera;}
 
 public slots:
     void button_go();
@@ -48,6 +52,13 @@ public slots:
     void advanceTime(void);
     void advanceFrame(void);
     void endit(){exit(0);}
+
+protected:
+    //==============Mouse Event Handling =============================
+        void mousePressEvent(QMouseEvent *e);
+        void mouseReleaseEvent(QMouseEvent *e);
+        void mouseMoveEvent(QMouseEvent *e);
+    //================================================================
 
 };
 #endif // OPENGLWIDGET_H

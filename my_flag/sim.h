@@ -11,7 +11,7 @@
 
 class Flag;
 class Spring;
-class vec3;
+//class vec3;
 
 class Sim
 {

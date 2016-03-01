@@ -40,4 +40,4 @@ FORMS    += \
 # Libraries
 win32: LIBS += -lglu32
 win32: LIBS += -lopengl32
-#win32: LIBS += -lglut
+win32: LIBS += -lglut
