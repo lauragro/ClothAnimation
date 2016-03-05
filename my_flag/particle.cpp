@@ -37,6 +37,7 @@ void Particle::draw()
     // get the coordinates and radius
     float x = position.x;
     float y = position.y;
+    float z = position.z;
     float radius = 5.0f;
     float resolution = 20.0f;
 
@@ -46,13 +47,14 @@ void Particle::draw()
     glColor3f(0,0.4,0.6);
     glBegin(GL_TRIANGLE_FAN);
 
-        glVertex2f(x, y);  // centre point
+        glVertex3f(x, y, z);  // centre point
         for( int i=0; i<=resolution; i++ )
         {
             // Apply the Pythagorean Theorem to get next point
-            glVertex2f(
+            glVertex3f(
                 x + radius * sin( i * theta ),
-                y + radius * cos( i * theta )
+                y + radius * cos( i * theta ),
+                        z
             );
         }
     glEnd();

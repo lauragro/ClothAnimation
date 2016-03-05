@@ -37,6 +37,9 @@ class Sim
         // The flag and ball belonging to this simulation
         Flag * myFlag;
         Ball * myBall;
+
+        // Time of sim
+        float t;
 };
 
 #endif // SIM_H

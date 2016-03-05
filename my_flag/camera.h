@@ -38,8 +38,8 @@ public:
         void setxFrom(int a);
         void setyFrom(int a);
         void setzFrom(int a);
-        void RotateY(glm::vec3 pVec, float rad);
-        void RotateZ(glm::vec3 pVec, float rad);
+        void RotateY(float rad);
+        void RotateZ(float rad);
         void DoRotate(QPoint desc, QPoint orig);
         void DoScale(QPoint desc, QPoint orig);
    //=====================================================================

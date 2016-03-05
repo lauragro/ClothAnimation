@@ -21,7 +21,9 @@ void Camera::startup()
     winh=this->height();
     xangle= yangle= zangle=0.0;
     scale = 1.0;
-    CameraPos.x = CameraPos.y = CameraPos.z = 0.0;
+    CameraPos.x = winw/2;
+    CameraPos.y = winh/2;
+    CameraPos.z = 100.0;
     Rotating = false;
     Scaling = false;
 }
@@ -48,9 +50,6 @@ void Camera::mousePressEvent(QMouseEvent *e)
         lastMousePoint = e->pos();
         Scaling = true;
     }
-
-    // Update the view
-    //parent->updateGL();
 }
 
 // Handle the mouse being released
@@ -70,8 +69,6 @@ void Camera::mouseReleaseEvent(QMouseEvent *e)
         Scaling = false;
     }
 
-    // Update the view
-    //updateGL();
 }
 
 // Handle the mouse being moved
@@ -91,12 +88,10 @@ void Camera::mouseMoveEvent(QMouseEvent *e)
         lastMousePoint = e->pos();
     }
 
-    // Update the view
-    //updateGL();
 }
 
 // Rotate camera in y
-void Camera::RotateY(glm::vec3 pVec, float rad)
+void Camera::RotateY(float rad)
 {
     // compute trig
     float cosPhi = (float)cos(rad);
@@ -115,18 +110,17 @@ void Camera::RotateY(glm::vec3 pVec, float rad)
 
 
     // put values in a matrix
-    vec3 col1 = vec3(m11,m12,m13);
-    vec3 col2 = vec3(m21,m22,m23);
-    vec3 col3 = vec3(m31,m32,m33);
+    vec3 col1 = vec3(m11,m21,m31);
+    vec3 col2 = vec3(m12,m22,m32);
+    vec3 col3 = vec3(m13,m23,m33);
     mat3 matrix = mat3(col1, col2, col3);
 
-    // perform rotation
-    pVec = matrix * pVec;
+    CameraPos = matrix * CameraPos;
 
 }
 
 // Rotate camera in z
-void Camera::RotateZ(glm::vec3 pVec, float rad)
+void Camera::RotateZ(float rad)
 {
     // compute trig
     float cosPhi = (float)cos(rad);
@@ -144,13 +138,12 @@ void Camera::RotateZ(glm::vec3 pVec, float rad)
     m33 = 1.0f;     //m33
 
     // put values in a matrix
-    vec3 col1 = vec3(m11,m12,m13);
-    vec3 col2 = vec3(m21,m22,m23);
-    vec3 col3 = vec3(m31,m32,m33);
+    vec3 col1 = vec3(m11,m21,m31);
+    vec3 col2 = vec3(m12,m22,m32);
+    vec3 col3 = vec3(m13,m23,m33);
     mat3 matrix = mat3(col1, col2, col3);
 
-    // perform rotation
-    pVec = matrix * pVec;
+    CameraPos = matrix * CameraPos;
 
 }
 
@@ -160,8 +153,8 @@ void Camera::DoRotate(QPoint desc, QPoint orig)
     float YRot = (desc.x() - orig.x()) * RadPerPixel;
     float ZRot = (desc.y() - orig.y()) * RadPerPixel;
 
-    RotateY(CameraPos, YRot);
-    RotateZ(CameraPos, ZRot);
+    RotateY(YRot);
+    RotateZ(ZRot);
 }
 
 // Update x coordinate of camera position

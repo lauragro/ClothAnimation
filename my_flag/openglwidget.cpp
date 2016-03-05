@@ -31,6 +31,9 @@ void OpenGLWidget::startup()
     connect( timer, SIGNAL(timeout()), this, SLOT(advanceTime( )) );
     connect( frameTimer, SIGNAL(timeout()), this, SLOT(advanceFrame()) );
 
+    // initialize camera settings
+    myCamera->startup();
+
     // TESTING
     /*simMode = true;
     timer->start( timer_interval );
@@ -53,8 +56,6 @@ void OpenGLWidget::initializeGL()
     glOrtho(0, this->width(), this->height(), 0, -1, 1);
     glMatrixMode(GL_MODELVIEW);
 
-    // initialize camera settings
-    myCamera->startup();
 }
 
 // Painting things
@@ -72,21 +73,28 @@ void OpenGLWidget::paintGL()
     glOrtho(0, this->width(), this->height(), 0, -1, 1);
 
     // point the camera
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
     /*gluLookAt(myCamera->CameraPos.x,    // eye x
        myCamera->CameraPos.y,           // eye y
        myCamera->CameraPos.z,           // eye z
-              200,        // centre x
-              200,       // centre y
-              0,                        // centre z
+              mySim->myBall->origin.x,        // centre x
+              mySim->myBall->origin.y,       // centre y
+              mySim->myBall->origin.z,        // centre z
               0.0, 1.0, 0.0);           // up xyz
 
     // rotate the camera
-    glRotatef( myCamera->xangle, 1.0, 0.0, 0.0 );
+    /*glRotatef( myCamera->xangle, 1.0, 0.0, 0.0 );
     glRotatef( myCamera->yangle, 0.0, 1.0, 0.0 );
     glRotatef( myCamera->zangle, 0.0, 0.0, 1.0 );
 
     // zoom the camera
     glScalef( myCamera->scale, myCamera->scale, myCamera->scale );*/
+
+    // testing
+    /*glTranslatef(myCamera->CameraPos.x,    // eye x
+                 myCamera->CameraPos.y,           // eye y
+                 myCamera->CameraPos.z  );*/
 
     glMatrixMode(GL_MODELVIEW);
     /**********************************************/

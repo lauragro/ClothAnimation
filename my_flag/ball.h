@@ -13,6 +13,8 @@ public:
     vec3 origin;
 
     void draw();
+
+    void solidSphere(GLdouble radius, GLint slices, GLint stacks);
 };
 
 #endif // BALL_H

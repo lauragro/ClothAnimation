@@ -10,7 +10,7 @@ Flag::Flag()
     dampingConstant = 1.0f;
 
     float x,y,z;
-    z=0.0;
+    z=-1.0; // camera points in -z direction
 
     // positions of corners
     int top = 0;

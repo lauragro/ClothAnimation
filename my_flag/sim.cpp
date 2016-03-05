@@ -10,6 +10,8 @@ Sim::Sim()
 
     myBall = new Ball();
 
+    t = 0;
+
 }
 
 // Destructor
@@ -27,7 +29,7 @@ void Sim::draw()
     {
         for(int j=0; j<myFlag->particlesWide; j++)
         {
-            myFlag->particles[i][j]->draw();
+            //myFlag->particles[i][j]->draw();
         }
     }
 
@@ -46,7 +48,8 @@ void Sim::draw()
 void Sim::simStep()
 {
     int type = 1;
-    float dt = 0.1f;
+    float dt = 0.2f;
+    t += dt;
 
     switch (type)
     {
@@ -81,6 +84,9 @@ void Sim::eulerStep(float dt)
 {
     int i,j;
     glm::vec3 x, v, a;
+
+    // move the ball a bit
+    myBall->origin += vec3(5*sin(t/6), 0, 0);
 
     // update forces on particles
     updateForces();
@@ -127,6 +133,14 @@ void Sim::eulerStep(float dt)
 
                 // get position of spring
                 x = myFlag->particles[i][j]->position;
+
+                // check for collisision with ball
+                /*if( collidesWithBall(myFlag->particles[i][j]) )
+                {
+                    //x = ;   // bump particle back to ball's circumference
+                    //myFlag->particles[i][j]->position = x;
+                    continue;   // skip remaining updates
+                }*/
 
                 // update position
                 x = x + v*dt;
@@ -214,7 +228,10 @@ void Sim::updateForces()
 
             // add dampening force externally
             v = myFlag->particles[i][j]->velocity;
-            myFlag->particles[i][j]->externalForce = myFlag->particles[i][j]->gravityForce - v * myFlag->dampingConstant;
+            myFlag->particles[i][j]->externalForce = myFlag->particles[i][j]->gravityForce - v * myFlag->dampingConstant
+                    //+ 0.1f*vec3(myFlag->particles[i][j]->position.x*abs(sin(t/10)), 0, 0);   // wind for flag
+                    + vec3(5*abs(sin(t/6)), 0, 0);
+
         }
     }
 
@@ -245,11 +262,15 @@ void Sim::updateForces()
 bool Sim::collidesWithBall(Particle * thisParticle)
 {
     // find distance from ball's origin
-    glm::vec3 distanceVector = thisParticle->position - myBall->origin;
+    vec3 distanceVector = thisParticle->position - myBall->origin;
     float distance = length(distanceVector);
 
-    if( distance < myBall->radius )
+    if( distance < myBall->radius * 1.1f )
     {
+        // push particle back to ball's circumference
+        vec3 x = myBall->origin + normalize(distanceVector) * myBall->radius * 1.1f;
+        thisParticle->position = x;
+
         // collision detected
         return true;
     }
