@@ -6,8 +6,8 @@ INPUT(
 ./release/spring.o
 ./release/flag.o
 ./release/particle.o
-./release/camera.o
 ./release/ball.o
+./release/camera.o
 ./release/moc_window.o
 ./release/moc_openglwidget.o
 );

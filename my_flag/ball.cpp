@@ -6,7 +6,7 @@
 Ball::Ball()
 {
     radius = 100.0f;
-    origin = vec3(300.0f, 405.0f, -10.0f);
+    origin = vec3(-2.0f*radius, 405.0f, 0.0f);
 }
 
 // Destructor
@@ -21,6 +21,7 @@ void Ball::draw()
     // get the coordinates and radius
     float x = origin.x;
     float y = origin.y;
+    float z = origin.z;
     float resolution = 20.0f;
 
     // Compute angle of each triangle in fan
@@ -29,13 +30,14 @@ void Ball::draw()
     glColor3f(0.1,0.3,0.6);
     glBegin(GL_TRIANGLE_FAN);
 
-        glVertex2f(x, y);  // centre point
+        glVertex3f(x, y, z);  // centre point
         for( int i=0; i<=resolution; i++ )
         {
             // Apply the Pythagorean Theorem to get next point
-            glVertex2f(
+            glVertex3f(
                 x + radius * sin( i * theta ),
-                y + radius * cos( i * theta )
+                y + radius * cos( i * theta ),
+                        z
             );
         }
     glEnd();
@@ -44,14 +46,16 @@ void Ball::draw()
     int numSlices = 32;
     int numStacks = 8;
 
-    /*GLUquadricObj* pQuadric = gluNewQuadric();  // make the quadric
-    assert(pQuadric!=NULL); // make sure the quadric exists*/
+    //GLUquadricObj* pQuadric = gluNewQuadric();  // make the quadric
+    //assert(pQuadric!=NULL); // make sure the quadric exists*/
     //glPushMatrix(); // draw and place Sphere
     //glTranslatef(origin.x, origin.y, origin.z); // move sphere to ball's origin
-    //glutSolidSphere(pQuadric,radius,numSlices,numStacks); // draw the spphere
+    //glutSolidSphere(radius,numSlices,numStacks); // draw the spphere
 
+    /*glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();*/
     //solidSphere(radius,numSlices,numStacks);
-
+    //glutSolidSphere(radius,numSlices,numStacks);
     //glPopMatrix();
     //glutSwapBuffers();
 
@@ -71,13 +75,20 @@ void Ball::draw()
 // draw a solid sphere
 void Ball::solidSphere(GLdouble radius, GLint slices, GLint stacks)
 {
+    glPushMatrix(); // remember current matrix
+    glTranslatef(origin.x, origin.y, origin.z); // move to ball's origin
+
     glBegin(GL_LINE_LOOP);
         GLUquadricObj* quadric = gluNewQuadric();
         assert(quadric!=NULL); // make sure the quadric exists
         gluQuadricDrawStyle(quadric, GLU_FILL);
-        glTranslatef(origin.x, origin.y, origin.z); // move sphere to ball's origin
         gluSphere(quadric, radius, slices, stacks);
-        glTranslatef(-origin.x, -origin.y, -origin.z); // move drawer back to where it was
         gluDeleteQuadric(quadric);
     glEnd();
+
+    glPopMatrix();  // restore old matrix
 }
+
+
+// tetrahedron
+//tetrahedron

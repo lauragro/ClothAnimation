@@ -19,8 +19,8 @@ SOURCES += main.cpp\
     spring.cpp \
     flag.cpp \
     particle.cpp \
-    camera.cpp \
-    ball.cpp
+    ball.cpp \
+    camera.cpp
 
 HEADERS  += \
     sim.h \
@@ -31,8 +31,8 @@ HEADERS  += \
     spring.h \
     flag.h \
     particle.h \
-    camera.h \
-    ball.h
+    ball.h \
+    camera.h
 
 FORMS    += \
     MainWindow.ui

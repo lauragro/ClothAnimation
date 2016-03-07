@@ -6,8 +6,8 @@ INPUT(
 ./debug/spring.o
 ./debug/flag.o
 ./debug/particle.o
-./debug/camera.o
 ./debug/ball.o
+./debug/camera.o
 ./debug/moc_window.o
 ./debug/moc_openglwidget.o
 );

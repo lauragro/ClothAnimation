@@ -24,14 +24,15 @@ Sim::~Sim()
 // Draw everything on screen
 void Sim::draw()
 {
+
     // Draw blue circles
-    for( int i=0; i<myFlag->particlesHigh; i++ )
+    /*for( int i=0; i<myFlag->particlesHigh; i++ )
     {
         for(int j=0; j<myFlag->particlesWide; j++)
         {
-            //myFlag->particles[i][j]->draw();
+            myFlag->particles[i][j]->draw();
         }
-    }
+    }*/
 
     // Draw connecting lines
     for( int i=0; i<myFlag->implementedSprings; i++ )
@@ -86,7 +87,7 @@ void Sim::eulerStep(float dt)
     glm::vec3 x, v, a;
 
     // move the ball a bit
-    myBall->origin += vec3(5*sin(t/6), 0, 0);
+    myBall->origin += vec3(10*sin(t/12), 0, 0);
 
     // update forces on particles
     updateForces();
@@ -265,10 +266,10 @@ bool Sim::collidesWithBall(Particle * thisParticle)
     vec3 distanceVector = thisParticle->position - myBall->origin;
     float distance = length(distanceVector);
 
-    if( distance < myBall->radius * 1.1f )
+    if( distance < myBall->radius * 1.01f )
     {
         // push particle back to ball's circumference
-        vec3 x = myBall->origin + normalize(distanceVector) * myBall->radius * 1.1f;
+        vec3 x = myBall->origin + normalize(distanceVector) * myBall->radius * 1.01f;
         thisParticle->position = x;
 
         // collision detected

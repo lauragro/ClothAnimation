@@ -40,13 +40,14 @@
 #include <QOpenGLFunctions>
 
 #include <math.h>
-#include "../glm/glm/glm.hpp"
+#include "../glm/glm/glm.hpp"               // GLM
 #include "../glm/glm/geometric.hpp"
 #include <QEvent>
 #include <QPainter>
 #include <QtGui>
 #include <QtOpenGL>
-#include <GL/glu.h>
+#include <GL/glu.h>                         // GLU
+#include "../glut-3.7/include/GL/glut.h"    // GLUT
 
 #define PI 3.14159265358979f
 #define EPSILON 1.192092896e-07f

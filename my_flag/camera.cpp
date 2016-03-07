@@ -21,9 +21,9 @@ void Camera::startup()
     winh=this->height();
     xangle= yangle= zangle=0.0;
     scale = 1.0;
-    CameraPos.x = winw/2;
-    CameraPos.y = winh/2;
-    CameraPos.z = 100.0;
+    CameraPos.x = 1;
+    CameraPos.y = 1;
+    CameraPos.z = 100;
     Rotating = false;
     Scaling = false;
 }
@@ -186,5 +186,22 @@ void Camera::DoScale(QPoint desc, QPoint orig)
         CameraPos.x = CameraPos.x * ratio;
         CameraPos.y = CameraPos.y * ratio;
         CameraPos.z = CameraPos.z * ratio;
+
+        scale = ratio;
     }
+}
+
+/* Individual rotations */
+void Camera::rotx(int a)
+{
+        xangle =  (double)a;
+}
+void Camera::roty(int a)
+{
+        yangle =  (double)a;
+}
+
+void Camera::rotz(int a)
+{
+        zangle =  (double)a;
 }
