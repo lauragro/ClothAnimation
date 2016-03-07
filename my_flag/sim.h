@@ -8,6 +8,7 @@
 #include "particle.h"
 #include "flag.h"
 #include "ball.h"
+#include "ground.h"
 
 class Flag;
 class Spring;
@@ -34,9 +35,10 @@ class Sim
         // Check for collision of one particle with ball
         bool collidesWithBall(Particle * thisParticle);
 
-        // The flag and ball belonging to this simulation
+        // The components belonging to this simulation
         Flag * myFlag;
         Ball * myBall;
+        Ground * myGround;
 
         // Time of sim
         float t;

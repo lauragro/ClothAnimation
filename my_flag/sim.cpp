@@ -10,6 +10,8 @@ Sim::Sim()
 
     myBall = new Ball();
 
+    myGround = new Ground(500);
+
     t = 0;
 
 }
@@ -24,6 +26,9 @@ Sim::~Sim()
 // Draw everything on screen
 void Sim::draw()
 {
+    // Draw ground
+    myGround->draw();
+
 
     // Draw blue circles
     /*for( int i=0; i<myFlag->particlesHigh; i++ )
@@ -42,6 +47,8 @@ void Sim::draw()
 
     // Draw ball
     myBall->draw();
+
+
 
 }
 

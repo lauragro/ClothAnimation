@@ -8,6 +8,7 @@ INPUT(
 ./debug\particle.o
 ./debug\ball.o
 ./debug\camera.o
+./debug\ground.o
 ./debug\moc_window.o
 ./debug\moc_openglwidget.o
 );

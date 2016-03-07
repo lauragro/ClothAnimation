@@ -1,6 +1,6 @@
 #include "ball.h"
 
-#include "foundation.h"
+//#include "foundation.h"
 
 // Constructor
 Ball::Ball()

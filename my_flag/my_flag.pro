@@ -20,7 +20,8 @@ SOURCES += main.cpp\
     flag.cpp \
     particle.cpp \
     ball.cpp \
-    camera.cpp
+    camera.cpp \
+    ground.cpp
 
 HEADERS  += \
     sim.h \
@@ -32,7 +33,8 @@ HEADERS  += \
     flag.h \
     particle.h \
     ball.h \
-    camera.h
+    camera.h \
+    ground.h
 
 FORMS    += \
     MainWindow.ui
