@@ -28,7 +28,7 @@ void Ball::draw()
     float theta = 2.0f * PI / resolution;
 
     glColor3f(0.1,0.3,0.6);
-    glBegin(GL_TRIANGLE_FAN);
+    /*glBegin(GL_TRIANGLE_FAN);
 
         glVertex3f(x, y, z);  // centre point
         for( int i=0; i<=resolution; i++ )
@@ -46,11 +46,11 @@ void Ball::draw()
     int numSlices = 32;
     int numStacks = 8;
 
-    //GLUquadricObj* pQuadric = gluNewQuadric();  // make the quadric
-    //assert(pQuadric!=NULL); // make sure the quadric exists*/
+    GLUquadricObj* pQuadric = gluNewQuadric();  // make the quadric
+    assert(pQuadric!=NULL); // make sure the quadric exists*/
     //glPushMatrix(); // draw and place Sphere
-    //glTranslatef(origin.x, origin.y, origin.z); // move sphere to ball's origin
-    //glutSolidSphere(radius,numSlices,numStacks); // draw the spphere
+    glTranslatef(origin.x, origin.y, origin.z); // move sphere to ball's origin
+    gluSphere(pQuadric,radius,numSlices,numStacks); // draw the spphere
 
     /*glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();*/

@@ -62,8 +62,8 @@ void Spring::draw()
     }
 
     glBegin(GL_LINE_STRIP);
-        glVertex2f(particle1->position.x, particle1->position.y);
-        glVertex2f(particle2->position.x, particle2->position.y);
+        glVertex3f(particle1->position.x, particle1->position.y, particle1->position.z);
+        glVertex3f(particle2->position.x, particle2->position.y, particle2->position.z);
     glEnd();
 }
 

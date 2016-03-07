@@ -15,10 +15,14 @@ Camera::~Camera()
     cout << "camera destruction" << endl;
 }
 
-void Camera::startup()
+void Camera::startup(float winw, float winh)
 {
-    winw=this->width();  // width returns width of window
-    winh=this->height();
+    //winw=parent->width();  // width returns width of window
+    //winh=parent->height();
+
+    this->winw = winw;  // capture properties passed in from widget
+    this->winh = winh;
+
     xangle= yangle= zangle=0.0;
     scale = 1.0;
     CameraPos.x = 1;
@@ -26,6 +30,10 @@ void Camera::startup()
     CameraPos.z = 100;
     Rotating = false;
     Scaling = false;
+
+    /* Testing */
+    cout << "camera thinks width is " << winw << endl;
+    cout << "camera thinks height is " << winh << endl;
 }
 
 // Handle the mouse being pressed
@@ -115,10 +123,11 @@ void Camera::RotateY(float rad)
     vec3 col3 = vec3(m13,m23,m33);
     mat3 matrix = mat3(col1, col2, col3);
 
-    CameraPos = matrix * CameraPos;
+    CameraPos = matrix * CameraPos;   // comment out for testing
 
 }
 
+/* ACTUALLY ROTATE X - SHOULD CHANGE NAME */
 // Rotate camera in z
 void Camera::RotateZ(float rad)
 {
@@ -126,7 +135,7 @@ void Camera::RotateZ(float rad)
     float cosPhi = (float)cos(rad);
     float sinPhi = (float)sin(rad);
 
-    // define all values of matrix
+    // define all values of Matrix Z
     m11 = cosPhi;   //m11
     m12 = - sinPhi; //m12
     m13 = 0.0f;     //m13
@@ -137,13 +146,25 @@ void Camera::RotateZ(float rad)
     m32 = 0.0f;     //m32
     m33 = 1.0f;     //m33
 
+    // Matrix X
+    /*m11 = 0.0;
+    m12 = cosPhi;
+    m13 = -sinPhi;
+    m21 = 0.0;
+    m22 = sinPhi;
+    m23 = cosPhi;
+    m31 = 1.0;
+    m32 = 0.0;
+    m33 = 0.0;*/
+
     // put values in a matrix
     vec3 col1 = vec3(m11,m21,m31);
     vec3 col2 = vec3(m12,m22,m32);
     vec3 col3 = vec3(m13,m23,m33);
     mat3 matrix = mat3(col1, col2, col3);
 
-    CameraPos = matrix * CameraPos;
+    CameraPos = matrix * CameraPos;   // comment out for testing
+
 
 }
 
@@ -155,6 +176,10 @@ void Camera::DoRotate(QPoint desc, QPoint orig)
 
     RotateY(YRot);
     RotateZ(ZRot);
+
+    // update xangle and yangle NOT WORKING YET!
+    rotx(floor(YRot));
+    roty(floor(ZRot));
 }
 
 // Update x coordinate of camera position

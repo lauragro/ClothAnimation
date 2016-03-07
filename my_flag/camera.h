@@ -14,7 +14,7 @@ public:
     Camera();
     ~Camera();
 
-    void startup();
+    void startup(float winw, float winh);
 
     // Constants for camera motion
     const double lim=0.5;
