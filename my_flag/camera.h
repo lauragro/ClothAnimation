@@ -50,9 +50,31 @@ public:
         void mouseReleaseEvent(QMouseEvent *e);
         void mouseMoveEvent(QMouseEvent *e);
     //================================================================
-/*signals:
 
-public slots:*/
+    //===========Camera stuff from Lucky and 305 assignment===========
+        unsigned int width;
+        unsigned int height;
+        const float linelength = 0.02f;
+        float vppos_x;
+        float vppos_y;
+
+        float camera_phi;
+        float camera_phi_speed;
+        float camera_theta;
+        float camera_theta_speed;
+
+        float camera_radius;
+        double lastX, lastY;
+        bool left_pressed;
+        bool right_pressed;
+
+        mat4 M_orth, M_persp, M_cam;
+
+        void MouseMove(double x, double y);
+        void MouseButton(QMouseEvent *e, bool press);
+
+        void updatePos();
+    //================================================================
 };
 
 #endif // CAMERA_H

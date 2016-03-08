@@ -4,6 +4,9 @@
 #include "spring.h"
 #include "particle.h"
 
+#define SHEET "sheet"
+#define BLANKET "blanket"
+
 class Spring;
 class Particle;
 
@@ -11,8 +14,12 @@ class Flag
 {
 public:
     // constructor/destructor
-    Flag();
+    Flag(int zCentre);
     ~Flag();
+
+    // type of flag to make
+    //char * type = SHEET;
+    char * type = BLANKET;
 
     // constants
     static const int particlesHigh = 12;
@@ -37,6 +44,11 @@ public:
 
     // array containing all spring pointers
     Spring *springs[numSprings];
+
+
+private:
+    void createSheet(int zCentre);
+    void createBlanket(int zCentre);
 
 
 };

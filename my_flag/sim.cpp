@@ -6,9 +6,9 @@ Sim::Sim()
 {
     cout << "Simulator Initialization\n";
 
-    myFlag = new Flag();
+    myFlag = new Flag(0);
 
-    myBall = new Ball();
+    myBall = new Ball(0);
 
     myGround = new Ground(500);
 
@@ -94,7 +94,7 @@ void Sim::eulerStep(float dt)
     glm::vec3 x, v, a;
 
     // move the ball a bit
-    myBall->origin += vec3(10*sin(t/12), 0, 0);
+    // myBall->origin += vec3(10*sin(t/12), 0, 0);
 
     // update forces on particles
     updateForces();

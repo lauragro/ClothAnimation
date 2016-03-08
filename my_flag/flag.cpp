@@ -1,6 +1,6 @@
 #include "flag.h"
 
-Flag::Flag()
+Flag::Flag(int zCentre)
 {
     // Attributes
     height = 300.0;
@@ -9,11 +9,16 @@ Flag::Flag()
     //springConstant = 100.0;
     dampingConstant = 1.0f;
 
-    float x,y,z;
-    z=-1.0; // camera points in -z direction
+    if(type == SHEET)
+    {
+        createSheet(zCentre);
+    } else if(type == BLANKET)
+    {
+        createBlanket(zCentre);
+    }
 
     // positions of corners
-    int top = 0;
+    /*int top = 0;
     int bottom = particlesHigh-1;
     int left = 1;
     int right = particlesWide-2;
@@ -39,7 +44,7 @@ Flag::Flag()
 
     // Pin the corners
     particles[top][left]->pinned = true;
-    particles[top][right]->pinned = true;
+    particles[top][right]->pinned = true;*/
 
     // Springs
     int springIndex=0;
@@ -118,4 +123,69 @@ Flag::~Flag()
         {
             delete particles[i][j];
         }
+}
+
+
+/* Construct all particles for a vertically hanging sheet */
+void Flag::createSheet(int zCentre)
+{
+    float x,y,z;
+    z=zCentre; // camera points in -z direction
+
+    // positions of corners
+    int top = 0;
+    int bottom = particlesHigh-1;
+    int left = 1;
+    int right = particlesWide-2;
+
+
+    // Particles
+    for(int i=0; i<particlesHigh; i++)
+    {
+        // y coord
+        y = height/particlesHigh*(i+1);
+
+        for(int j=0; j<particlesWide; j++)
+        {
+            // x coord
+            x = width/particlesWide*(j+1);
+
+            // create particle
+            particles[i][j] = new Particle(x,y,z);
+
+        }
+
+    }
+
+    // Pin the corners
+    particles[top][left]->pinned = true;
+    particles[top][right]->pinned = true;
+}
+
+
+/* Construct all particles for a horizontally lying blanket */
+void Flag::createBlanket(int zCentre)
+{
+    float x,y,z;
+    y = -200.0;   // just a bit below the top of the screen
+
+    // Particles
+    for(int i=0; i<particlesHigh; i++)
+    //for(int i=-particlesHigh/2; i<particlesHigh/2-1; i++)
+    {
+        // z coord
+        z = -height/particlesHigh*(i+1);
+
+        for(int j=0; j<particlesWide; j++)
+        //for(int j=-particlesWide/2; j<particlesWide/2-1; j++)
+        {
+            // x coord
+            x = width/particlesWide*(j+1);
+
+            // create particle
+            particles[i][j] = new Particle(x,y,z);
+        }
+    }
+
+    // don't pin anything yet
 }

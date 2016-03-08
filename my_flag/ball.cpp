@@ -3,10 +3,12 @@
 //#include "foundation.h"
 
 // Constructor
-Ball::Ball()
+Ball::Ball(int zCentre)
 {
     radius = 100.0f;
-    origin = vec3(-2.0f*radius, 405.0f, 0.0f);
+    //origin = vec3(-2.0f*radius, 405.0f, -50.0f);
+    //origin = vec3(2.0f*radius, 405.0f, zCentre);
+    origin = vec3(0,0,0);
 }
 
 // Destructor

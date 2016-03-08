@@ -6,7 +6,7 @@
 class Ball
 {
 public:
-    Ball();
+    Ball(int zCentre);
     ~Ball();
 
     float radius;

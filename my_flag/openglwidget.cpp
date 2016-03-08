@@ -31,8 +31,10 @@ void OpenGLWidget::startup()
 {
     timer = new QTimer( this );
     frameTimer = new QTimer( this);
-    connect( timer, SIGNAL(timeout()), this, SLOT(advanceTime( )) );
+    connect( timer, SIGNAL(timeout()), this, SLOT(advanceTime()) );
     connect( frameTimer, SIGNAL(timeout()), this, SLOT(advanceFrame()) );
+
+
 
     // initialize camera settings
     myCamera->startup(this->width(), this->height());
@@ -71,9 +73,11 @@ void OpenGLWidget::initializeGL()
     /* setup viewing *******************************/
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glOrtho(0, this->width(),   // min/max x
-            this->height(), 0,  // min/max y
-            0, this->width());  // min/max depth
+
+    // make centre of screen (0,0,0)
+    glOrtho(-this->width(), this->width(),   // min/max x
+            this->height(), -this->height(),  // min/max y
+            -this->width(), this->width());  // min/max depth
 
     glMatrixMode(GL_MODELVIEW);
 
@@ -96,47 +100,26 @@ void OpenGLWidget::initializeGL()
     GLfloat global_ambient[] = {0.1,0.1,0.1,1.0};
     glLightModelfv(GL_LIGHT_MODEL_AMBIENT, global_ambient);
 
+    timer->start(); // timer should run always, not tied to animation
+    // frame timer is controlled by go and stop buttons
+
 }
 
 // Painting things
 void OpenGLWidget::paintGL()
 {
-    // Camera operations===========================
+    //====Camera stuff from Lucky and 305 assignemnt===============
+    myCamera->updatePos();
+    //=============================================================
+
+    //==================Camera operations===========================
     // Set the modelview matrix.
-        glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();
-        //glTranslatef(0.0, 0.0, 10.0);
-        gluLookAt(myCamera->CameraPos.x, myCamera->CameraPos.y, myCamera->CameraPos.z,  // camera xyz
-                  0, 0, 0, // target xyz
-                  0, 1, 0);      // up xyz
-
-        // rotate about centre of window
-        /*glTranslatef(this->width()/2,0,0);
-        glRotatef(myCamera->yangle, 1, 0, 0);
-        glTranslatef(-this->width()/2,this->height()/2,0);
-        glRotatef(myCamera->xangle, 0, 1, 0);
-
-        // Set the background to a pale gray.
-        /*float rgb = 161.0f / 255.0f;
-        glClearColor(rgb, rgb, rgb, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        // Preserve the current matrix.
-        glPushMatrix();
-
-        // Apply camera transforms.
-        glMultMatrixf(&m_CurrentTranslate[0][0]);
-        glMultMatrixf(&m_CurrentRotation[0][0]);
-        glMultMatrixf(&m_CurrentScale[0][0]);*/
-
-        // Draw the stuff
-        /*glPushMatrix();
-
-        if (mySim != NULL) mySim->draw();
-
-        // Restore the matrix.
-        glPopMatrix();*/
-        //=========================================
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    gluLookAt(myCamera->CameraPos.x, myCamera->CameraPos.y, myCamera->CameraPos.z,  // camera xyz
+              0, 0, 0,       // target xyz
+              0, 1, 0);      // up xyz
+    //=============================================================
 
     // Draw the scene
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -160,15 +143,8 @@ void OpenGLWidget::paintGL()
 
 /* Slots */
 
-// Advance frame logic
+// Advance frame logic (animation stuff)
 void OpenGLWidget::advanceFrame()
-{
-    updateGL();
-
-}
-
-// Advance time logic
-void OpenGLWidget::advanceTime()
 {
     // if a simulation is present, advance it
     if (mySim != NULL) {
@@ -177,9 +153,49 @@ void OpenGLWidget::advanceTime()
 
     // if the sim should be stopped, stop it
     if (simMode == false) {
-        timer->stop();
+        //timer->stop();// timer should run always, not tied to animation
+        frameTimer->stop();
         cerr << "Simulation stopped \n";
     }
+
+    updateGL();
+
+}
+
+// Advance time logic (camera stuff)
+void OpenGLWidget::advanceTime()
+{
+    // if a simulation is present, advance it
+    /*if (mySim != NULL) {
+        mySim->simStep();
+    }
+
+    // if the sim should be stopped, stop it
+    if (simMode == false) {
+        //timer->stop();// timer should run always, not tied to animation
+        frameTimer->stop();
+        cerr << "Simulation stopped \n";
+    }*/
+
+    //====Camera stuff from Lucky and 305 assignment====
+    myCamera->camera_phi += myCamera->camera_phi_speed;
+    myCamera->camera_phi_speed *= 0.8;
+
+    if (abs(myCamera->camera_phi_speed) < 1e-3)
+    {
+        myCamera->camera_phi_speed = 0;
+    }
+
+    myCamera->camera_theta += myCamera->camera_theta_speed;
+    myCamera->camera_theta_speed *= 0.8;
+
+    if (abs(myCamera->camera_theta_speed) < 1e-3)
+    {
+        myCamera->camera_theta_speed = 0;
+    }
+    //==================================================
+
+    updateGL();
 
 }
 
@@ -187,7 +203,7 @@ void OpenGLWidget::advanceTime()
 void OpenGLWidget::button_go()
 {
     simMode = true;
-    timer->start( timer_interval );
+    //timer->start( timer_interval ); // timer should run always, not tied to animation
     frameTimer->start( timer_interval );
 
     cerr << "Button GO" << endl;
@@ -197,7 +213,7 @@ void OpenGLWidget::button_go()
 void OpenGLWidget::button_stop()
 {
     simMode = false;
-    timer->stop();
+    //timer->stop();    // timer should run always, not tied to animation
     frameTimer->stop();
 
     cerr << "Button STOP" << endl;
@@ -237,18 +253,22 @@ void OpenGLWidget::resizeGL( int winw, int winh )
 
 void OpenGLWidget::mousePressEvent(QMouseEvent *e)
 {
-    myCamera->mousePressEvent(e);
+    //myCamera->mousePressEvent(e);
+
+    myCamera->MouseButton(e, true); // Lucky's way
     updateGL();
 }
 
 void OpenGLWidget::mouseReleaseEvent(QMouseEvent *e)
 {
-    myCamera->mouseReleaseEvent(e);
+    //myCamera->mouseReleaseEvent(e);   // no implementation yet?
     updateGL();
 }
 
 void OpenGLWidget::mouseMoveEvent(QMouseEvent *e)
 {
-    myCamera->mouseMoveEvent(e);
+    //myCamera->mouseMoveEvent(e);
+
+    myCamera->MouseMove(e->x(), e->y());    // Lucky's way
     updateGL();
 }
