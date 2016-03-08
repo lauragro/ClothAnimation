@@ -18,8 +18,8 @@ public:
     ~Flag();
 
     // type of flag to make
-    //char * type = SHEET;
-    char * type = BLANKET;
+    char * type = SHEET;
+    //char * type = BLANKET;
 
     // constants
     static const int particlesHigh = 12;

@@ -14,32 +14,32 @@ CXX           = g++
 DEFINES       = -DUNICODE -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_NEEDS_QMAIN
 CFLAGS        = -pipe -fno-keep-inline-dllexport -O2 -Wall -Wextra $(DEFINES)
 CXXFLAGS      = -pipe -fno-keep-inline-dllexport -O2 -frtti -Wall -Wextra -fexceptions -mthreads $(DEFINES)
-INCPATH       = -I"." -I"C:\Qt\5.4\mingw491_32\include" -I"C:\Qt\5.4\mingw491_32\include\QtOpenGL" -I"C:\Qt\5.4\mingw491_32\include\QtWidgets" -I"C:\Qt\5.4\mingw491_32\include\QtGui" -I"C:\Qt\5.4\mingw491_32\include\QtCore" -I"release" -I"." -I"C:\Qt\5.4\mingw491_32\mkspecs\win32-g++" 
+INCPATH       = -I'.' -I'C:/Qt/5.4/mingw491_32/include' -I'C:/Qt/5.4/mingw491_32/include/QtOpenGL' -I'C:/Qt/5.4/mingw491_32/include/QtWidgets' -I'C:/Qt/5.4/mingw491_32/include/QtGui' -I'C:/Qt/5.4/mingw491_32/include/QtCore' -I'release' -I'.' -I'C:/Qt/5.4/mingw491_32/mkspecs/win32-g++' 
 LINKER      =        g++
 LFLAGS        =        -Wl,-s -Wl,-subsystem,windows -mthreads
 LIBS        =        -lgdi32 -luser32 -lmingw32 -LC:/Qt/5.4/mingw491_32/lib -lqtmain -LC:\mingw491\mingw32\lib -LC:\Utils\icu32_53_1_mingw482\lib -LC:\utils\postgresql\pgsql\lib -LC:\utils\mysql\mysql\lib -LC:\opensll\lib -lshell32 -LC:\Qt\5.4\mingw491_32/lib -lglu32 -lopengl32 -lglut -lQt5OpenGL -lQt5Widgets -lQt5Gui -lQt5Core 
-QMAKE         = C:\Qt\5.4\mingw491_32\bin\qmake.exe
+QMAKE         = C:/Qt/5.4/mingw491_32/bin/qmake.exe
 IDC           = idc
 IDL           = midl
-ZIP           = zip -r -9
+ZIP           = 
 DEF_FILE      = 
 RES_FILE      = 
-COPY          = copy /y
-SED           = $(QMAKE) -install sed
-COPY_FILE     = $(COPY)
-COPY_DIR      = xcopy /s /q /y /i
-DEL_FILE      = del
+COPY          = cp -f
+SED           = sed
+COPY_FILE     = cp -f
+COPY_DIR      = cp -f -R
+DEL_FILE      = rm -f
 DEL_DIR       = rmdir
-MOVE          = move
-CHK_DIR_EXISTS= if not exist
-MKDIR         = mkdir
-INSTALL_FILE    = $(COPY_FILE)
-INSTALL_PROGRAM = $(COPY_FILE)
+MOVE          = mv -f
+CHK_DIR_EXISTS= test -d
+MKDIR         = mkdir -p
+INSTALL_FILE    = cp -f
+INSTALL_PROGRAM = cp -f
 INSTALL_DIR     = $(COPY_DIR)
 
 ####### Output directory
 
-OBJECTS_DIR   = release
+OBJECTS_DIR   = release/
 
 ####### Files
 
@@ -52,8 +52,8 @@ SOURCES       = main.cpp \
 		particle.cpp \
 		ball.cpp \
 		camera.cpp \
-		ground.cpp release\moc_window.cpp \
-		release\moc_openglwidget.cpp
+		ground.cpp release/moc_window.cpp \
+		release/moc_openglwidget.cpp
 OBJECTS       = release/main.o \
 		release/sim.o \
 		release/window.o \
@@ -88,9 +88,9 @@ DIST          =  sim.h \
 		camera.cpp \
 		ground.cpp
 QMAKE_TARGET  = my_flag
-DESTDIR        = release\ #avoid trailing-slash linebreak
+DESTDIR        = release/ #avoid trailing-slash linebreak
 TARGET         = my_flag.exe
-DESTDIR_TARGET = release\my_flag.exe
+DESTDIR_TARGET = release/my_flag.exe
 
 ####### Implicit rules
 
@@ -122,10 +122,10 @@ qmake: FORCE
 qmake_all: FORCE
 
 dist:
-	$(ZIP) my_flag.zip $(SOURCES) $(DIST) my_flag.pro C:\Qt\5.4\mingw491_32\mkspecs\features\spec_pre.prf C:\Qt\5.4\mingw491_32\mkspecs\qdevice.pri C:\Qt\5.4\mingw491_32\mkspecs\features\device_config.prf C:\Qt\5.4\mingw491_32\mkspecs\common\shell-win32.conf C:\Qt\5.4\mingw491_32\mkspecs\qconfig.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_axbase.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_axbase_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_axcontainer.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_axcontainer_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_axserver.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_axserver_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_bluetooth.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_bluetooth_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_bootstrap_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_clucene_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_concurrent.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_concurrent_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_core.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_core_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_dbus.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_dbus_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_declarative.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_declarative_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_designer.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_designer_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_designercomponents_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_enginio.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_enginio_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_gui.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_gui_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_help.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_help_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_location.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_location_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_multimedia.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_multimedia_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_multimediawidgets.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_multimediawidgets_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_network.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_network_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_nfc.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_nfc_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_opengl.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_opengl_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_openglextensions.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_openglextensions_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_platformsupport_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_positioning.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_positioning_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_printsupport.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_printsupport_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_qml.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_qml_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_qmldevtools_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_qmltest.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_qmltest_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_qtmultimediaquicktools_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_quick.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_quick_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_quickparticles_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_quickwidgets.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_quickwidgets_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_script.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_script_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_scripttools.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_scripttools_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_sensors.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_sensors_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_serialport.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_serialport_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_sql.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_sql_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_svg.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_svg_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_testlib.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_testlib_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_uitools.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_uitools_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_webchannel.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_webchannel_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_webkit.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_webkit_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_webkitwidgets.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_webkitwidgets_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_websockets.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_websockets_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_webview.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_webview_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_widgets.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_widgets_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_winextras.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_winextras_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_xml.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_xml_private.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_xmlpatterns.pri C:\Qt\5.4\mingw491_32\mkspecs\modules\qt_lib_xmlpatterns_private.pri C:\Qt\5.4\mingw491_32\mkspecs\features\qt_functions.prf C:\Qt\5.4\mingw491_32\mkspecs\features\qt_config.prf C:\Qt\5.4\mingw491_32\mkspecs\features\win32\qt_config.prf C:\Qt\5.4\mingw491_32\mkspecs\win32-g++\qmake.conf C:\Qt\5.4\mingw491_32\mkspecs\features\spec_post.prf C:\Qt\5.4\mingw491_32\mkspecs\features\exclusive_builds.prf C:\Qt\5.4\mingw491_32\mkspecs\features\default_pre.prf C:\Qt\5.4\mingw491_32\mkspecs\features\win32\default_pre.prf C:\Qt\5.4\mingw491_32\mkspecs\features\resolve_config.prf C:\Qt\5.4\mingw491_32\mkspecs\features\exclusive_builds_post.prf C:\Qt\5.4\mingw491_32\mkspecs\features\default_post.prf C:\Qt\5.4\mingw491_32\mkspecs\features\build_pass.prf C:\Qt\5.4\mingw491_32\mkspecs\features\win32\rtti.prf C:\Qt\5.4\mingw491_32\mkspecs\features\precompile_header.prf C:\Qt\5.4\mingw491_32\mkspecs\features\warn_on.prf C:\Qt\5.4\mingw491_32\mkspecs\features\qt.prf C:\Qt\5.4\mingw491_32\mkspecs\features\resources.prf C:\Qt\5.4\mingw491_32\mkspecs\features\moc.prf C:\Qt\5.4\mingw491_32\mkspecs\features\win32\opengl.prf C:\Qt\5.4\mingw491_32\mkspecs\features\uic.prf C:\Qt\5.4\mingw491_32\mkspecs\features\win32\windows.prf C:\Qt\5.4\mingw491_32\mkspecs\features\testcase_targets.prf C:\Qt\5.4\mingw491_32\mkspecs\features\exceptions.prf C:\Qt\5.4\mingw491_32\mkspecs\features\yacc.prf C:\Qt\5.4\mingw491_32\mkspecs\features\lex.prf my_flag.pro C:/Qt/5.4/mingw491_32/lib/qtmain.prl C:/Qt/5.4/mingw491_32/lib/Qt5Core.prl C:/Qt/5.4/mingw491_32/lib/Qt5OpenGL.prl C:/Qt/5.4/mingw491_32/lib/Qt5Widgets.prl C:/Qt/5.4/mingw491_32/lib/Qt5Gui.prl  NO_PCH_SOURCES RESOURCES HEADERS SOURCES OBJECTIVE_SOURCES FORMS YACCSOURCES YACCSOURCES LEXSOURCES 
+	$(ZIP) my_flag.zip $(SOURCES) $(DIST) my_flag.pro C:/Qt/5.4/mingw491_32/mkspecs/features/spec_pre.prf C:/Qt/5.4/mingw491_32/mkspecs/qdevice.pri C:/Qt/5.4/mingw491_32/mkspecs/features/device_config.prf C:/Qt/5.4/mingw491_32/mkspecs/common/shell-unix.conf C:/Qt/5.4/mingw491_32/mkspecs/qconfig.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_axbase.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_axbase_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_axcontainer.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_axcontainer_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_axserver.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_axserver_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_bluetooth.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_bluetooth_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_bootstrap_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_clucene_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_concurrent.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_concurrent_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_core.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_core_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_dbus.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_dbus_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_declarative.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_declarative_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_designer.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_designer_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_designercomponents_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_enginio.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_enginio_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_gui.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_gui_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_help.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_help_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_location.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_location_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_multimedia.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_multimedia_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_multimediawidgets.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_multimediawidgets_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_network.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_network_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_nfc.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_nfc_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_opengl.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_opengl_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_openglextensions.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_openglextensions_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_platformsupport_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_positioning.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_positioning_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_printsupport.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_printsupport_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_qml.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_qml_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_qmldevtools_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_qmltest.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_qmltest_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_qtmultimediaquicktools_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_quick.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_quick_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_quickparticles_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_quickwidgets.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_quickwidgets_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_script.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_script_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_scripttools.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_scripttools_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_sensors.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_sensors_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_serialport.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_serialport_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_sql.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_sql_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_svg.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_svg_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_testlib.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_testlib_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_uitools.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_uitools_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_webchannel.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_webchannel_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_webkit.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_webkit_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_webkitwidgets.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_webkitwidgets_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_websockets.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_websockets_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_webview.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_webview_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_widgets.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_widgets_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_winextras.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_winextras_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_xml.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_xml_private.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_xmlpatterns.pri C:/Qt/5.4/mingw491_32/mkspecs/modules/qt_lib_xmlpatterns_private.pri C:/Qt/5.4/mingw491_32/mkspecs/features/qt_functions.prf C:/Qt/5.4/mingw491_32/mkspecs/features/qt_config.prf C:/Qt/5.4/mingw491_32/mkspecs/features/win32/qt_config.prf C:/Qt/5.4/mingw491_32/mkspecs/win32-g++/qmake.conf C:/Qt/5.4/mingw491_32/mkspecs/features/spec_post.prf C:/Qt/5.4/mingw491_32/mkspecs/features/exclusive_builds.prf C:/Qt/5.4/mingw491_32/mkspecs/features/default_pre.prf C:/Qt/5.4/mingw491_32/mkspecs/features/win32/default_pre.prf C:/Qt/5.4/mingw491_32/mkspecs/features/resolve_config.prf C:/Qt/5.4/mingw491_32/mkspecs/features/exclusive_builds_post.prf C:/Qt/5.4/mingw491_32/mkspecs/features/default_post.prf C:/Qt/5.4/mingw491_32/mkspecs/features/build_pass.prf C:/Qt/5.4/mingw491_32/mkspecs/features/win32/rtti.prf C:/Qt/5.4/mingw491_32/mkspecs/features/precompile_header.prf C:/Qt/5.4/mingw491_32/mkspecs/features/warn_on.prf C:/Qt/5.4/mingw491_32/mkspecs/features/qt.prf C:/Qt/5.4/mingw491_32/mkspecs/features/resources.prf C:/Qt/5.4/mingw491_32/mkspecs/features/moc.prf C:/Qt/5.4/mingw491_32/mkspecs/features/win32/opengl.prf C:/Qt/5.4/mingw491_32/mkspecs/features/uic.prf C:/Qt/5.4/mingw491_32/mkspecs/features/win32/windows.prf C:/Qt/5.4/mingw491_32/mkspecs/features/testcase_targets.prf C:/Qt/5.4/mingw491_32/mkspecs/features/exceptions.prf C:/Qt/5.4/mingw491_32/mkspecs/features/yacc.prf C:/Qt/5.4/mingw491_32/mkspecs/features/lex.prf my_flag.pro C:/Qt/5.4/mingw491_32/lib/qtmain.prl C:/Qt/5.4/mingw491_32/lib/Qt5Core.prl C:/Qt/5.4/mingw491_32/lib/Qt5OpenGL.prl C:/Qt/5.4/mingw491_32/lib/Qt5Widgets.prl C:/Qt/5.4/mingw491_32/lib/Qt5Gui.prl  NO_PCH_SOURCES RESOURCES HEADERS SOURCES OBJECTIVE_SOURCES FORMS YACCSOURCES YACCSOURCES LEXSOURCES 
 
 clean: compiler_clean 
-	-$(DEL_FILE) release\main.o release\sim.o release\window.o release\openglwidget.o release\spring.o release\flag.o release\particle.o release\ball.o release\camera.o release\ground.o release\moc_window.o release\moc_openglwidget.o
+	-$(DEL_FILE) release/main.o release/sim.o release/window.o release/openglwidget.o release/spring.o release/flag.o release/particle.o release/ball.o release/camera.o release/ground.o release/moc_window.o release/moc_openglwidget.o
 
 distclean: clean 
 	-$(DEL_FILE) $(DESTDIR_TARGET)
@@ -143,7 +143,7 @@ compiler_rcc_make_all:
 compiler_rcc_clean:
 compiler_moc_header_make_all: release/moc_window.cpp release/moc_openglwidget.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) release\moc_window.cpp release\moc_openglwidget.cpp
+	-$(DEL_FILE) release/moc_window.cpp release/moc_openglwidget.cpp
 release/moc_window.cpp: ui_MainWindow.h \
 		C:/Qt/5.4/mingw491_32/include/QtCore/QVariant \
 		C:/Qt/5.4/mingw491_32/include/QtCore/qvariant.h \
@@ -711,8 +711,9 @@ release/moc_window.cpp: ui_MainWindow.h \
 		particle.h \
 		flag.h \
 		ball.h \
+		ground.h \
 		window.h
-	C:\Qt\5.4\mingw491_32\bin\moc.exe $(DEFINES) -D__GNUC__ -DWIN32 -IC:/Qt/5.4/mingw491_32/mkspecs/win32-g++ -IC:/Users/laura/Documents/CSC499/ClothAnimation/my_flag -IC:/Qt/5.4/mingw491_32/include -IC:/Qt/5.4/mingw491_32/include/QtOpenGL -IC:/Qt/5.4/mingw491_32/include/QtWidgets -IC:/Qt/5.4/mingw491_32/include/QtGui -IC:/Qt/5.4/mingw491_32/include/QtCore window.h -o release\moc_window.cpp
+	'C:\Qt\5.4\mingw491_32\bin\moc.exe' $(DEFINES) -D__GNUC__ -DWIN32 -IC:/Qt/5.4/mingw491_32/mkspecs/win32-g++ -I'C:/Users/Carter Grondahl/Documents/5thYear/CSC499/Project/ClothAnimation/my_flag' -IC:/Qt/5.4/mingw491_32/include -IC:/Qt/5.4/mingw491_32/include/QtOpenGL -IC:/Qt/5.4/mingw491_32/include/QtWidgets -IC:/Qt/5.4/mingw491_32/include/QtGui -IC:/Qt/5.4/mingw491_32/include/QtCore window.h -o release/moc_window.cpp
 
 release/moc_openglwidget.cpp: C:/Qt/5.4/mingw491_32/include/QtOpenGL/QGLWidget \
 		C:/Qt/5.4/mingw491_32/include/QtOpenGL/qgl.h \
@@ -1268,8 +1269,9 @@ release/moc_openglwidget.cpp: C:/Qt/5.4/mingw491_32/include/QtOpenGL/QGLWidget \
 		particle.h \
 		flag.h \
 		ball.h \
+		ground.h \
 		openglwidget.h
-	C:\Qt\5.4\mingw491_32\bin\moc.exe $(DEFINES) -D__GNUC__ -DWIN32 -IC:/Qt/5.4/mingw491_32/mkspecs/win32-g++ -IC:/Users/laura/Documents/CSC499/ClothAnimation/my_flag -IC:/Qt/5.4/mingw491_32/include -IC:/Qt/5.4/mingw491_32/include/QtOpenGL -IC:/Qt/5.4/mingw491_32/include/QtWidgets -IC:/Qt/5.4/mingw491_32/include/QtGui -IC:/Qt/5.4/mingw491_32/include/QtCore openglwidget.h -o release\moc_openglwidget.cpp
+	'C:\Qt\5.4\mingw491_32\bin\moc.exe' $(DEFINES) -D__GNUC__ -DWIN32 -IC:/Qt/5.4/mingw491_32/mkspecs/win32-g++ -I'C:/Users/Carter Grondahl/Documents/5thYear/CSC499/Project/ClothAnimation/my_flag' -IC:/Qt/5.4/mingw491_32/include -IC:/Qt/5.4/mingw491_32/include/QtOpenGL -IC:/Qt/5.4/mingw491_32/include/QtWidgets -IC:/Qt/5.4/mingw491_32/include/QtGui -IC:/Qt/5.4/mingw491_32/include/QtCore openglwidget.h -o release/moc_openglwidget.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -1831,8 +1833,9 @@ ui_MainWindow.h: MainWindow.ui \
 		spring.h \
 		particle.h \
 		flag.h \
-		ball.h
-	C:\Qt\5.4\mingw491_32\bin\uic.exe MainWindow.ui -o ui_MainWindow.h
+		ball.h \
+		ground.h
+	'C:\Qt\5.4\mingw491_32\bin\uic.exe' MainWindow.ui -o ui_MainWindow.h
 
 compiler_yacc_decl_make_all:
 compiler_yacc_decl_clean:
@@ -2413,8 +2416,9 @@ release/main.o: main.cpp window.h \
 		spring.h \
 		particle.h \
 		flag.h \
-		ball.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\main.o main.cpp
+		ball.h \
+		ground.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/main.o main.cpp
 
 release/sim.o: sim.cpp sim.h \
 		foundation.h \
@@ -2969,8 +2973,9 @@ release/sim.o: sim.cpp sim.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/QGraphicsView \
 		particle.h \
 		flag.h \
-		ball.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\sim.o sim.cpp
+		ball.h \
+		ground.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/sim.o sim.cpp
 
 release/window.o: window.cpp window.h \
 		ui_MainWindow.h \
@@ -3539,8 +3544,9 @@ release/window.o: window.cpp window.h \
 		spring.h \
 		particle.h \
 		flag.h \
-		ball.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\window.o window.cpp
+		ball.h \
+		ground.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/window.o window.cpp
 
 release/openglwidget.o: openglwidget.cpp C:/Qt/5.4/mingw491_32/include/QtOpenGL/QtOpenGL \
 		C:/Qt/5.4/mingw491_32/include/QtOpenGL/QtOpenGLDepends \
@@ -4096,6 +4102,7 @@ release/openglwidget.o: openglwidget.cpp C:/Qt/5.4/mingw491_32/include/QtOpenGL/
 		particle.h \
 		flag.h \
 		ball.h \
+		ground.h \
 		window.h \
 		ui_MainWindow.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/QAction \
@@ -4110,7 +4117,7 @@ release/openglwidget.o: openglwidget.cpp C:/Qt/5.4/mingw491_32/include/QtOpenGL/
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/QPushButton \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/QStatusBar \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/QToolBar
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\openglwidget.o openglwidget.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/openglwidget.o openglwidget.cpp
 
 release/spring.o: spring.cpp spring.h \
 		foundation.h \
@@ -4665,8 +4672,9 @@ release/spring.o: spring.cpp spring.h \
 		sim.h \
 		particle.h \
 		flag.h \
-		ball.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\spring.o spring.cpp
+		ball.h \
+		ground.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/spring.o spring.cpp
 
 release/flag.o: flag.cpp flag.h \
 		spring.h \
@@ -5221,8 +5229,9 @@ release/flag.o: flag.cpp flag.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/QGraphicsView \
 		sim.h \
 		particle.h \
-		ball.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\flag.o flag.cpp
+		ball.h \
+		ground.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/flag.o flag.cpp
 
 release/particle.o: particle.cpp particle.h \
 		foundation.h \
@@ -5769,7 +5778,7 @@ release/particle.o: particle.cpp particle.h \
 		C:/Qt/5.4/mingw491_32/include/QtOpenGL/qglshaderprogram.h \
 		C:/Qt/5.4/mingw491_32/include/QtOpenGL/qtopenglversion.h \
 		../glut-3.7/include/GL/glut.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\particle.o particle.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/particle.o particle.cpp
 
 release/ball.o: ball.cpp ball.h \
 		foundation.h \
@@ -6316,7 +6325,7 @@ release/ball.o: ball.cpp ball.h \
 		C:/Qt/5.4/mingw491_32/include/QtOpenGL/qglshaderprogram.h \
 		C:/Qt/5.4/mingw491_32/include/QtOpenGL/qtopenglversion.h \
 		../glut-3.7/include/GL/glut.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\ball.o ball.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/ball.o ball.cpp
 
 release/camera.o: camera.cpp camera.h \
 		C:/Qt/5.4/mingw491_32/include/QtGui/QMouseEvent \
@@ -6871,8 +6880,9 @@ release/camera.o: camera.cpp camera.h \
 		spring.h \
 		particle.h \
 		flag.h \
-		ball.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\camera.o camera.cpp
+		ball.h \
+		ground.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/camera.o camera.cpp
 
 release/ground.o: ground.cpp ground.h \
 		foundation.h \
@@ -7419,13 +7429,13 @@ release/ground.o: ground.cpp ground.h \
 		C:/Qt/5.4/mingw491_32/include/QtOpenGL/qglshaderprogram.h \
 		C:/Qt/5.4/mingw491_32/include/QtOpenGL/qtopenglversion.h \
 		../glut-3.7/include/GL/glut.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\ground.o ground.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/ground.o ground.cpp
 
 release/moc_window.o: release/moc_window.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\moc_window.o release\moc_window.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/moc_window.o release/moc_window.cpp
 
 release/moc_openglwidget.o: release/moc_openglwidget.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\moc_openglwidget.o release\moc_openglwidget.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/moc_openglwidget.o release/moc_openglwidget.cpp
 
 ####### Install
 

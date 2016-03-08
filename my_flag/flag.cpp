@@ -139,16 +139,21 @@ void Flag::createSheet(int zCentre)
     int right = particlesWide-2;
 
 
+    y = 0;
+    x = 0;
+
     // Particles
     for(int i=0; i<particlesHigh; i++)
     {
         // y coord
-        y = height/particlesHigh*(i+1);
+        y = height/particlesHigh*(i+1) - height*1.4;
+        //y += height/particlesHigh;
 
         for(int j=0; j<particlesWide; j++)
         {
             // x coord
-            x = width/particlesWide*(j+1);
+            x = width/particlesWide*(j+1) - width/2;
+            //x += width/particlesWide;
 
             // create particle
             particles[i][j] = new Particle(x,y,z);
