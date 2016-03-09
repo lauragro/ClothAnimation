@@ -271,6 +271,10 @@ void Camera::MouseMove(double x, double y)
       camera_radius += (y - lastY) * 0.1f;
       if (camera_radius < 1) camera_radius = 1;
       if (camera_radius > 10) camera_radius = 10;
+
+      // dolley
+      CameraPos.z *= camera_radius;
+
    }
 
    lastX = x;

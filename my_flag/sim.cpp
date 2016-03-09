@@ -94,7 +94,7 @@ void Sim::eulerStep(float dt)
     glm::vec3 x, v, a;
 
     // move the ball a bit
-    // myBall->origin += vec3(10*sin(t/12), 0, 0);
+    myBall->origin += vec3(10*sin(t/12), 0, 0);
 
     // update forces on particles
     updateForces();
