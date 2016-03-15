@@ -103,4 +103,10 @@ void Ground::testTextures()
             glTexCoord2f(1.0f, 1.0f); glVertex3f(256.0f, y, 256.0f);   // vertex 4
         glEnd();
         glDisable(GL_TEXTURE_2D);
+
+        // testing now - will use above later
+        xmin = -256.0f;
+        zmin = xmin;
+        xmax = 256.0f;
+        zmax = xmax;
 }

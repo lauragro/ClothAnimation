@@ -39,14 +39,16 @@ void Sim::draw()
         }
     }*/
 
+    // Draw ball
+    myBall->draw();
+
     // Draw connecting lines
     for( int i=0; i<myFlag->implementedSprings; i++ )
     {
         myFlag->springs[i]->draw();
     }
 
-    // Draw ball
-    myBall->draw();
+
 
 
 
@@ -296,7 +298,11 @@ bool Sim::collidesWithBall(Particle * thisParticle)
 // Check for collision of one particle with ground
 bool Sim::collidesWithGround(Particle * thisParticle)
 {
-    if( thisParticle->position.y >= myGround->y )
+    if( thisParticle->position.y >= myGround->y
+            && thisParticle->position.x >= myGround->xmin
+            && thisParticle->position.x <= myGround->xmax
+            && thisParticle->position.z >= myGround->zmin
+            && thisParticle->position.z <= myGround->zmax   )
     {
         // collision detected
         return true;

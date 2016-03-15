@@ -75,7 +75,7 @@ void OpenGLWidget::initializeGL()
     mySim->myGround->initializeShader();
 
     /* Setup lighting ******************************/
-    GLfloat light0_pos[] = {0.0,0.0,10.0,1.0};
+    /*GLfloat light0_pos[] = {0.0,0.0,10.0,1.0};
     GLfloat light0_dir[] = {0.0,0.0,0.0,0.0};
     GLfloat diffuse0[] = {0.0,0.0,1.0,1.0};
     GLfloat ambient0[] = {0.0,0.0,1.0,1.0};
@@ -91,7 +91,7 @@ void OpenGLWidget::initializeGL()
 
     // add a small amount of white light everywhere
     //GLfloat global_ambient[] = {0.5,0.5,0.5,1.0};
-    //glLightModelfv(GL_LIGHT_MODEL_AMBIENT, global_ambient);
+    //glLightModelfv(GL_LIGHT_MODEL_AMBIENT, global_ambient);*/
 
     timer->start(); // timer should run always, not tied to animation
     // frame timer is controlled by go and stop buttons

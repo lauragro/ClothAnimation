@@ -13,8 +13,12 @@ public:
 
     void initializeShader();
 
-    // height of ground
-    float y;
+    // parameters for collision detection
+    float y;    // Height
+    float xmin;
+    float xmax;
+    float zmin;
+    float zmax;
 
 private:
     static const int width = 256;  // length of a side of the square ground

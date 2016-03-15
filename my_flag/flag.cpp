@@ -3,8 +3,8 @@
 Flag::Flag(int zCentre)
 {
     // Attributes
-    height = 300.0;
-    width = 450.0;
+    height = 600.0;//300.0;
+    width = 900.0;//450.0;
     particleMass = 1.0;
     //springConstant = 100.0;
     dampingConstant = 1.0f;
