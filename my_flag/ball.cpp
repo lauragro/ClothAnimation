@@ -1,7 +1,5 @@
 #include "ball.h"
 
-//#include "foundation.h"
-
 // Constructor
 Ball::Ball(int zCentre)
 {
@@ -20,6 +18,9 @@ Ball::~Ball()
 // Draw function
 void Ball::draw()
 {
+
+    glMatrixMode(GL_MODELVIEW);
+
     // get the coordinates and radius
     float x = origin.x;
     float y = origin.y;
@@ -30,19 +31,6 @@ void Ball::draw()
     float theta = 2.0f * PI / resolution;
 
     glColor3f(0.1,0.3,0.6);
-    /*glBegin(GL_TRIANGLE_FAN);
-
-        glVertex3f(x, y, z);  // centre point
-        for( int i=0; i<=resolution; i++ )
-        {
-            // Apply the Pythagorean Theorem to get next point
-            glVertex3f(
-                x + radius * sin( i * theta ),
-                y + radius * cos( i * theta ),
-                        z
-            );
-        }
-    glEnd();
 
     /* draw 3d sphere */
     int numSlices = 32;
@@ -50,16 +38,8 @@ void Ball::draw()
 
     GLUquadricObj* pQuadric = gluNewQuadric();  // make the quadric
     assert(pQuadric!=NULL); // make sure the quadric exists*/
-    //glPushMatrix(); // draw and place Sphere
     glTranslatef(origin.x, origin.y, origin.z); // move sphere to ball's origin
     gluSphere(pQuadric,radius,numSlices,numStacks); // draw the spphere
-
-    /*glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();*/
-    //solidSphere(radius,numSlices,numStacks);
-    //glutSolidSphere(radius,numSlices,numStacks);
-    //glPopMatrix();
-    //glutSwapBuffers();
 
     /* Add lighting */
     vec4 fColor = vec4(0.2, 0.2, 1, 1);
@@ -90,7 +70,3 @@ void Ball::solidSphere(GLdouble radius, GLint slices, GLint stacks)
 
     glPopMatrix();  // restore old matrix
 }
-
-
-// tetrahedron
-//tetrahedron

@@ -34,6 +34,8 @@ Particle::~Particle()
 // Draw function
 void Particle::draw()
 {
+    glMatrixMode(GL_MODELVIEW);
+
     // get the coordinates and radius
     float x = position.x;
     float y = position.y;

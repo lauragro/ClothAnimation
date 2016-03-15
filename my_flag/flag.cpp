@@ -17,35 +17,6 @@ Flag::Flag(int zCentre)
         createBlanket(zCentre);
     }
 
-    // positions of corners
-    /*int top = 0;
-    int bottom = particlesHigh-1;
-    int left = 1;
-    int right = particlesWide-2;
-
-
-    // Particles
-    for(int i=0; i<particlesHigh; i++)
-    {
-        // y coord
-        y = height/particlesHigh*(i+1);
-
-        for(int j=0; j<particlesWide; j++)
-        {
-            // x coord
-            x = width/particlesWide*(j+1);
-
-            // create particle
-            particles[i][j] = new Particle(x,y,z);
-
-        }
-
-    }
-
-    // Pin the corners
-    particles[top][left]->pinned = true;
-    particles[top][right]->pinned = true;*/
-
     // Springs
     int springIndex=0;
     for( int i=0; i<particlesHigh; i++ )
@@ -174,18 +145,19 @@ void Flag::createBlanket(int zCentre)
     float x,y,z;
     y = -200.0;   // just a bit below the top of the screen
 
+    float halfWidth = (float)width/2.0f;
+    float halfHeight = (float)height/2.0f;
+
     // Particles
     for(int i=0; i<particlesHigh; i++)
-    //for(int i=-particlesHigh/2; i<particlesHigh/2-1; i++)
     {
         // z coord
-        z = -height/particlesHigh*(i+1);
+        z = -height/particlesHigh*(i+1) + halfHeight;
 
         for(int j=0; j<particlesWide; j++)
-        //for(int j=-particlesWide/2; j<particlesWide/2-1; j++)
         {
             // x coord
-            x = width/particlesWide*(j+1);
+            x = width/particlesWide*(j+1) - halfWidth;
 
             // create particle
             particles[i][j] = new Particle(x,y,z);

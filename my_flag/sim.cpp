@@ -93,8 +93,11 @@ void Sim::eulerStep(float dt)
     int i,j;
     glm::vec3 x, v, a;
 
-    // move the ball a bit
-    myBall->origin += vec3(10*sin(t/12), 0, 0);
+    // move ball when cloth is in sheet mode
+    if( myFlag->type == SHEET )
+    {
+        myBall->origin += vec3(10*sin(t/12), 0, 0);
+    }
 
     // update forces on particles
     updateForces();
@@ -115,8 +118,8 @@ void Sim::eulerStep(float dt)
                 continue;   // skip euler for this particle
             }
 
-            // check for collision with ball
-            else if( collidesWithBall(myFlag->particles[i][j]) )
+            // check for collision with ball or ground
+            else if( collidesWithBall(myFlag->particles[i][j]) || collidesWithGround(myFlag->particles[i][j]))
             {
                 // set velocity to zero
                 myFlag->particles[i][j]->velocity.x=0.0;
@@ -141,14 +144,6 @@ void Sim::eulerStep(float dt)
 
                 // get position of spring
                 x = myFlag->particles[i][j]->position;
-
-                // check for collisision with ball
-                /*if( collidesWithBall(myFlag->particles[i][j]) )
-                {
-                    //x = ;   // bump particle back to ball's circumference
-                    //myFlag->particles[i][j]->position = x;
-                    continue;   // skip remaining updates
-                }*/
 
                 // update position
                 x = x + v*dt;
@@ -236,9 +231,20 @@ void Sim::updateForces()
 
             // add dampening force externally
             v = myFlag->particles[i][j]->velocity;
-            myFlag->particles[i][j]->externalForce = myFlag->particles[i][j]->gravityForce - v * myFlag->dampingConstant
+
+            // Commented out because comparison with constant strings is failing
+            // add wind and damping if in sheet mode
+            /*if(myFlag->type == SHEET)
+            {
+                myFlag->particles[i][j]->externalForce = myFlag->particles[i][j]->gravityForce - v * myFlag->dampingConstant
                     //+ 0.1f*vec3(myFlag->particles[i][j]->position.x*abs(sin(t/10)), 0, 0);   // wind for flag
                     + vec3(5*abs(sin(t/6)), 0, 0);
+            }
+            // add damping without wind if in blanket mode
+            else //(myFlag->type == BLANKET)
+            {*/
+                myFlag->particles[i][j]->externalForce = myFlag->particles[i][j]->gravityForce - v * myFlag->dampingConstant;
+            //}
 
         }
     }
@@ -273,12 +279,25 @@ bool Sim::collidesWithBall(Particle * thisParticle)
     vec3 distanceVector = thisParticle->position - myBall->origin;
     float distance = length(distanceVector);
 
-    if( distance < myBall->radius * 1.01f )
+    if( distance <= myBall->radius * 1.01f )
     {
         // push particle back to ball's circumference
         vec3 x = myBall->origin + normalize(distanceVector) * myBall->radius * 1.01f;
         thisParticle->position = x;
 
+        // collision detected
+        return true;
+    }
+
+    // no collision detected
+    return false;
+}
+
+// Check for collision of one particle with ground
+bool Sim::collidesWithGround(Particle * thisParticle)
+{
+    if( thisParticle->position.y >= myGround->y )
+    {
         // collision detected
         return true;
     }

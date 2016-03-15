@@ -67,7 +67,7 @@ OBJECTS       = release/main.o \
 		release/moc_window.o \
 		release/moc_openglwidget.o
 
-DIST          =  sim.h \
+DIST          = ../grass.bmp sim.h \
 		foundation.h \
 		window.h \
 		ui_MainWindow.h \

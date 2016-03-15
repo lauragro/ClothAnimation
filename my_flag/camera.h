@@ -17,22 +17,22 @@ public:
     void startup(float winw, float winh);
 
     // Constants for camera motion
-    const double lim=0.5;
+    /*const double lim=0.5;
     const double RadPerPixel = - 0.01;
     const double MovePerPixel = - 0.1;
-
+*/
     // matrix place holders so we don't keep creating variables
     //glm::mat3 matrix(float);
-    float m11,m12,m13,m21,m22,m23,m31,m32,m33;
+    //float m11,m12,m13,m21,m22,m23,m31,m32,m33;
 
     //variables
-    float winw, winh, xangle, yangle, zangle, scale;
+    //float winw, winh, xangle, yangle, zangle, scale;
     glm::vec3 CameraPos;
-    QPoint lastMousePoint;
-    bool Rotating, Scaling;
+    //QPoint lastMousePoint;
+    //bool Rotating, Scaling;
 
     //==============Camera movement mouse events functions ===============
-        void rotx(int);
+        /*void rotx(int);
         void roty(int);
         void rotz(int);
         void setxFrom(int a);
@@ -41,14 +41,14 @@ public:
         void RotateY(float rad);
         void RotateZ(float rad);
         void DoRotate(QPoint desc, QPoint orig);
-        void DoScale(QPoint desc, QPoint orig);
+        void DoScale(QPoint desc, QPoint orig);*/
    //=====================================================================
 
 public:
     //==============Mouse Event Handling =============================
-        void mousePressEvent(QMouseEvent *e);
+        /*void mousePressEvent(QMouseEvent *e);
         void mouseReleaseEvent(QMouseEvent *e);
-        void mouseMoveEvent(QMouseEvent *e);
+        void mouseMoveEvent(QMouseEvent *e);*/
     //================================================================
 
     //===========Camera stuff from Lucky and 305 assignment===========
@@ -63,7 +63,8 @@ public:
         float camera_theta;
         float camera_theta_speed;
 
-        float camera_radius;
+        //float camera_radius;
+        float dolly_factor;
         double lastX, lastY;
         bool left_pressed;
         bool right_pressed;

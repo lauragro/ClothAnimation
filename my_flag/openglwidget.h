@@ -60,6 +60,17 @@ protected:
         void mouseMoveEvent(QMouseEvent *e);
     //================================================================
 
+public:
+
+        //=====Shader Stuff===================
+        /*GLuint texBufferID;
+        GLuint texCoordID, texID;
+
+        /*void LoadGLTextures(const char * name);
+        void initializeShader();
+        void testTextures();*/
+        //====================================
+
 private:
         //=======Camera Stuff=================
 //        Camera* m_Camera; /**< The camera object.*/

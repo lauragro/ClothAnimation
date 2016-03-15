@@ -67,7 +67,7 @@ OBJECTS       = debug/main.o \
 		debug/moc_window.o \
 		debug/moc_openglwidget.o
 
-DIST          =  sim.h \
+DIST          = ../grass.bmp sim.h \
 		foundation.h \
 		window.h \
 		ui_MainWindow.h \

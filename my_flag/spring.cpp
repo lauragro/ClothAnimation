@@ -42,6 +42,8 @@ Spring::~Spring()
 // draw the spring
 void Spring::draw()
 {
+    glMatrixMode(GL_MODELVIEW);
+
     glPointSize(5.0);
     glLineWidth(2.0);
 

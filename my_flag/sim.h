@@ -32,8 +32,9 @@ class Sim
         float acceleration(Particle *thisParticle);
         void updateForces();
 
-        // Check for collision of one particle with ball
+        // Check for collisions of one particle
         bool collidesWithBall(Particle * thisParticle);
+        bool collidesWithGround(Particle * thisParticle);
 
         // The components belonging to this simulation
         Flag * myFlag;
