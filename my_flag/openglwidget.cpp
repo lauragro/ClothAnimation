@@ -47,26 +47,36 @@ void OpenGLWidget::startup()
 // Initialize all graphics
 void OpenGLWidget::initializeGL()
 {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
     // avoid the squashed look
-    glViewport(0, 0, this->width(), this->height());
+    //glViewport(0, 0, this->width(), this->height());
 
     // white background
-    glClearColor(1, 1, 1, 1);
+    //glClearColor(1, 1, 1, 1);
 
     /* setup viewing *******************************/
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 
+    glFrustum(-1,1,-1,1,1,1000);
+
     // make centre of screen (0,0,0)
-    glOrtho(-this->width(), this->width(),   // min/max x
-            this->height(), -this->height(),  // min/max y
-            -this->width(), this->width());  // min/max depth
+    //glOrtho(-this->width(), this->width(),   // min/max x
+    //        this->height(), -this->height(),  // min/max y
+    //        -this->width(), this->width());  // min/max depth
 
     /*glBindBuffer(GL_UNIFORM_BUFFER, globalMatricesUBO);
         glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(projectionMatrix));
         glBindBuffer(GL_UNIFORM_BUFFER, 0);*/
 
     glMatrixMode(GL_MODELVIEW);
+
+    // avoid the squashed look
+    glViewport(0, 0, this->width(), this->height());
+
+    // white background
+    glClearColor(1, 1, 1, 1);
 
     /* setup shader ********************************/
     //initializeShader();
@@ -108,14 +118,17 @@ void OpenGLWidget::paintGL()
     glMatrixMode(GL_MODELVIEW);
     //glLoadMatrixf(myCamera->M_cam);
     glLoadIdentity();
+
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
     //glTranslatef(0,0,myCamera->dolly_factor);
     gluLookAt(myCamera->CameraPos.x, myCamera->CameraPos.y, myCamera->CameraPos.z,  // camera xyz
               0, 0, 0,       // target xyz
-              0, 1, 0);      // up xyz*/
+              0, -1, 0);      // up xyz*/
     //glTranslatef(-myCamera->dolly_factor, -myCamera->dolly_factor, -myCamera->dolly_factor);
     //=============================================================
 
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // Textures
     //testTextures();
