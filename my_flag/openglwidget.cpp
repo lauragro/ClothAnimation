@@ -214,6 +214,7 @@ void OpenGLWidget::button_reset()
 {
     button_stop();      // end current simulation
     mySim = new Sim();  // create new simulation
+    mySim->myGround->initializeShader();    //reset grass
     startup();          // start timers
     advanceFrame();     // draw starting position
 
