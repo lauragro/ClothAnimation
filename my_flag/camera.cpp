@@ -81,13 +81,23 @@ void Camera::MouseButton(QMouseEvent *e, bool press)
 {
     if (e->button() == Qt::LeftButton)
     {
-        if (press == true) left_pressed = true;
+        if (press == true)
+        {
+            lastX = e->x();
+            lastY = e->y();
+            left_pressed = true;
+        }
         else left_pressed = false;
     };
 
     if (e->button() == Qt::RightButton)
     {
-        if (press == true) right_pressed = true;
+        if (press == true)
+        {
+            lastX = e->x();
+            lastY = e->y();
+            right_pressed = true;
+        }
         else right_pressed = false;
     };
 }
