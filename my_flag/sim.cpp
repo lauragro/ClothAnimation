@@ -6,11 +6,9 @@ Sim::Sim()
 {
     cout << "Simulator Initialization\n";
 
-    myFlag = new Flag(0);
-
     myBall = new Ball(0);
-
-    myGround = new Ground(500);
+    myFlag = new Flag(myBall->origin.z);
+    myGround = new Ground(myBall->origin.y + myBall->radius);
 
     t = 0;
 

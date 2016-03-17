@@ -1,9 +1,9 @@
 #include "ground.h"
 
 // Constructor
-Ground::Ground(int width)
+Ground::Ground(int height)
 {
-    y = 100.0;
+    y = float(height);
 }
 
 // Destructor

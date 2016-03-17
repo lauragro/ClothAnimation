@@ -3,7 +3,7 @@
 Flag::Flag(int zCentre)
 {
     // Attributes
-    height = 600.0;//300.0;
+    height = 900.0;//600.0;//300.0;
     width = 900.0;//450.0;
     particleMass = 1.0;
     //springConstant = 100.0;
@@ -152,7 +152,7 @@ void Flag::createBlanket(int zCentre)
     for(int i=0; i<particlesHigh; i++)
     {
         // z coord
-        z = -height/particlesHigh*(i+1) + halfHeight;
+        z = zCentre - height/particlesHigh*(i+1) + halfHeight;
 
         for(int j=0; j<particlesWide; j++)
         {

@@ -22,7 +22,7 @@ public:
     char * type = BLANKET;
 
     // constants
-    static const int particlesHigh = 12;
+    static const int particlesHigh = 18; //12;
     static const int particlesWide = 18;
 
     // 12 spring method

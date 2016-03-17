@@ -6,7 +6,7 @@
 class Ground
 {
 public:
-    Ground(int width);
+    Ground(int height);
     ~Ground();
 
     draw();

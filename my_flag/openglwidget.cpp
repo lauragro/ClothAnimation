@@ -34,8 +34,6 @@ void OpenGLWidget::startup()
     connect( timer, SIGNAL(timeout()), this, SLOT(advanceTime()) );
     connect( frameTimer, SIGNAL(timeout()), this, SLOT(advanceFrame()) );
 
-
-
     // initialize camera settings
     myCamera->startup(this->width(), this->height());
 
@@ -148,12 +146,14 @@ void OpenGLWidget::paintGL()
 void OpenGLWidget::advanceFrame()
 {
     // if a simulation is present, advance it
-    if (mySim != NULL) {
+    if (mySim != NULL)
+    {
         mySim->simStep();
     }
 
     // if the sim should be stopped, stop it
-    if (simMode == false) {
+    if (simMode == false)
+    {
         //timer->stop();// timer should run always, not tied to animation
         frameTimer->stop();
         cerr << "Simulation stopped \n";
