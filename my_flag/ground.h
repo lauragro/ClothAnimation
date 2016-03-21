@@ -19,6 +19,8 @@ public:
     float xmax;
     float zmin;
     float zmax;
+    float ymax;
+    float ymin;
 
 private:
     static const int width = 256;  // length of a side of the square ground

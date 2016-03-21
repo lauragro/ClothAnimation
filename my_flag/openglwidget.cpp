@@ -267,12 +267,19 @@ void OpenGLWidget::LoadSphereGLTexture( const char * name, const int texID )
     QImage t = QGLWidget::convertToGLFormat(img);
 
     glGenTextures(1, &textures[texID]);
-    glBindTexture(GL_SPHERE_MAP, textures[texID]);  // THIS TEXTURE APPEARS WHEN GL_TEXTURE_2D IS USED INSTEAD
-        glTexImage2D(GL_SPHERE_MAP, 0, 3, t.width(), t.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, t.bits());
+    glBindTexture(GL_TEXTURE_2D, textures[texID]);  // THIS TEXTURE APPEARS WHEN GL_TEXTURE_2D IS USED INSTEAD
+        glTexImage2D(GL_TEXTURE_2D, 0, 3, t.width(), t.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, t.bits());
+        glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+        glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 
-        glTexParameteri( GL_SPHERE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-        glTexParameteri( GL_SPHERE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-    glDisable(GL_SPHERE_MAP);
+        /*GLfloat planes[] = {0.5, 0.0, 0.0, 0.5}; // s = x/2 + 1/2
+        GLfloat planet[] = {0.0, 0.5, 0.0, 0.5}; // t = y/2 + 1/2
+        glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);
+        glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);
+        glTexGenfv(GL_S, GL_SPHERE_MAP, planes);
+        glTexGenfv(GL_T, GL_SPHERE_MAP, planet);*/
+
+    glDisable(GL_TEXTURE_2D);
 }
 
 void OpenGLWidget::initializeShader()
