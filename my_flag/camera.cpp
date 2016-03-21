@@ -20,10 +20,10 @@ void Camera::startup(float winw, float winh)
 
     xangle= yangle= zangle=0.0;*/
     //scale = 1.0;
-    dolly_factor = 1.0;
+    dolly_factor = 1000.0;
     CameraPos.x = 1;
     CameraPos.y = 1;
-    CameraPos.z = 100;
+    CameraPos.z = 10;
     /*Rotating = false;
     Scaling = false;*/
 
@@ -40,7 +40,7 @@ void Camera::startup(float winw, float winh)
         camera_theta = 0;
         camera_theta_speed = 0;
 
-        dolly_factor = 5;
+        //dolly_factor = 5;
         left_pressed = false;
         right_pressed = false;
     //================================================================
@@ -63,8 +63,8 @@ void Camera::MouseMove(double x, double y)
 
    if (right_pressed)
    {
-      dolly_factor += (y - lastY);// * 0.1f;
-      if (dolly_factor < 1) dolly_factor = 1;
+      dolly_factor += (lastY - y);// * 0.1f;
+      if (dolly_factor < 100) dolly_factor = 100;
       //if (dolly_factor < -100) dolly_factor = -100;
       if (dolly_factor > 1000) dolly_factor = 1000;
 

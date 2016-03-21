@@ -9,7 +9,7 @@ public:
     Ground(int height);
     ~Ground();
 
-    draw();
+    draw(GLuint texture);
 
     void initializeShader();
 
@@ -23,22 +23,12 @@ public:
 private:
     static const int width = 256;  // length of a side of the square ground
 
-    //=====Texture mapping======================
-    /*GLuint texBufferID;
-    GLuint texCoordID, texID;
-
-    GLubyte image[width][width][3];
-    GLfloat * uvs;*/
-
     //=====Shader Stuff===================
-    GLuint texBufferID;
-    GLuint texCoordID, texID;
-
-    void LoadGLTextures(const char * name);
-
-    void testTextures();
+    void drawTextures(GLuint texture);
     //====================================
 
+    // todo: fix this
+    //void drawFixedGround(int width, float y);
     //==========================================
 };
 

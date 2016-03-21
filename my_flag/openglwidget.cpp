@@ -49,38 +49,21 @@ void OpenGLWidget::initializeGL()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    // avoid the squashed look
-    //glViewport(0, 0, this->width(), this->height());
-
     // white background
     //glClearColor(1, 1, 1, 1);
 
     /* setup viewing *******************************/
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-
-    glFrustum(-1,1,-1,1,1,1000);
-
-    // make centre of screen (0,0,0)
-    //glOrtho(-this->width(), this->width(),   // min/max x
-    //        this->height(), -this->height(),  // min/max y
-    //        -this->width(), this->width());  // min/max depth
-
-    /*glBindBuffer(GL_UNIFORM_BUFFER, globalMatricesUBO);
-        glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(projectionMatrix));
-        glBindBuffer(GL_UNIFORM_BUFFER, 0);*/
+    glFrustum(-1,1,-0.75f,0.75f,1,5000);    // hard coding the view box ratio here!
 
     glMatrixMode(GL_MODELVIEW);
-
-    // avoid the squashed look
-    glViewport(0, 0, this->width(), this->height());
 
     // white background
     glClearColor(1, 1, 1, 1);
 
-    /* setup shader ********************************/
-    //initializeShader();
-    mySim->myGround->initializeShader();
+    /* setup shaders ********************************/
+    initializeShader();
 
     /* Setup lighting ******************************/
     /*GLfloat light0_pos[] = {0.0,0.0,10.0,1.0};
@@ -116,39 +99,18 @@ void OpenGLWidget::paintGL()
     //==================Camera operations===========================
     // Set the modelview matrix.
     glMatrixMode(GL_MODELVIEW);
-    //glLoadMatrixf(myCamera->M_cam);
     glLoadIdentity();
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    //glTranslatef(0,0,myCamera->dolly_factor);
     gluLookAt(myCamera->CameraPos.x, myCamera->CameraPos.y, myCamera->CameraPos.z,  // camera xyz
               0, 0, 0,       // target xyz
               0, -1, 0);      // up xyz*/
-    //glTranslatef(-myCamera->dolly_factor, -myCamera->dolly_factor, -myCamera->dolly_factor);
     //=============================================================
-
-    //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    // Textures
-    //testTextures();
-
-    // Draw the scene
 
 
     // if a simulation is present, draw it
-    if (mySim != NULL) mySim->draw();
-
-    /* Add lighting */    // DOESN'T WORK YET
-    /*vec4 fColor = vec4(0.2, 0.2, 1, 1);
-    //vec3 fpoint = (vec3)fColor;   // eye position
-    vec3 fpoint = vec3(this->width()/2, this->height()/2, 0);
-    //lighting
-    vec3 L = vec3(100,100,1); //lightsource
-    float intensity = 1.0;
-
-    float light = intensity*glm::max(0.0f, dot(normalize(fpoint), normalize(L)));
-    fColor += light;*/
+    if (mySim != NULL) mySim->draw(textures);
 
 }
 
@@ -227,7 +189,7 @@ void OpenGLWidget::button_reset()
 {
     button_stop();      // end current simulation
     mySim = new Sim();  // create new simulation
-    mySim->myGround->initializeShader();    //reset grass
+    initializeShader();    //reset grass etc.
     startup();          // start timers
     advanceFrame();     // draw starting position
 
@@ -254,6 +216,7 @@ void OpenGLWidget::resizeGL( int winw, int winh )
    // if (mySim != NULL) mySim->setSize(winw, winh );
 }
 
+/********** React to mouse buttons ***********/
 void OpenGLWidget::mousePressEvent(QMouseEvent *e)
 {
     myCamera->MouseButton(e, true);
@@ -274,7 +237,7 @@ void OpenGLWidget::mouseMoveEvent(QMouseEvent *e)
 
 
 //========TEXTURES================================================
-/*void OpenGLWidget::LoadGLTextures( const char * name )
+void OpenGLWidget::Load2DGLTexture( const char * name, const int texID )
 {
     QImage img;
 
@@ -284,16 +247,33 @@ void OpenGLWidget::mouseMoveEvent(QMouseEvent *e)
 
     QImage t = QGLWidget::convertToGLFormat(img);
 
-    glGenTextures(1, &texBufferID);
-    glBindTexture(GL_TEXTURE_2D, texBufferID);
-    glTexImage2D(GL_TEXTURE_2D, 0, 3, t.width(), t.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, t.bits());
+    glGenTextures(1, &textures[texID]);
+    glBindTexture(GL_TEXTURE_2D, textures[texID]);
+        glTexImage2D(GL_TEXTURE_2D, 0, 3, t.width(), t.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, t.bits());
 
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-    glBindTexture( GL_TEXTURE_2D, 0 );
+        glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+        glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+    glDisable(GL_TEXTURE_2D);
 }
 
+void OpenGLWidget::LoadSphereGLTexture( const char * name, const int texID )
+{
+    QImage img;
 
+    if(!img.load(name)){
+        std::cerr << "ERROR in loading image" << std::endl;
+    }
+
+    QImage t = QGLWidget::convertToGLFormat(img);
+
+    glGenTextures(1, &textures[texID]);
+    glBindTexture(GL_SPHERE_MAP, textures[texID]);  // THIS TEXTURE APPEARS WHEN GL_TEXTURE_2D IS USED INSTEAD
+        glTexImage2D(GL_SPHERE_MAP, 0, 3, t.width(), t.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, t.bits());
+
+        glTexParameteri( GL_SPHERE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+        glTexParameteri( GL_SPHERE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+    glDisable(GL_SPHERE_MAP);
+}
 
 void OpenGLWidget::initializeShader()
 {
@@ -301,25 +281,7 @@ void OpenGLWidget::initializeShader()
     glShadeModel(GL_SMOOTH);
     glEnable(GL_MULTISAMPLE);
     glEnable(GL_TEXTURE_2D);
-    LoadGLTextures("../grass.bmp");
+    Load2DGLTexture("../grass.bmp",0);
+    LoadSphereGLTexture("../volleyball.jpg",1);
 
 }
-
-// testing, this should probably go in paintGL
-void OpenGLWidget::testTextures()
-{
-    float y = 100.0;
-
-    glShadeModel( GL_FLAT );
-        glEnable(GL_TEXTURE_2D);
-        glColor3f(0.5, 0.5, 0);
-        glBindTexture(GL_TEXTURE_2D, texBufferID);
-
-        glBegin(GL_QUADS);
-            glTexCoord2f(0.0f, 1.0f); glVertex3f(-500.0f, y, 500.0f);  // vertex 1
-            glTexCoord2f(0.0f, 0.0f); glVertex3f(-500.0f, y, -500.0f); // vertex 2
-            glTexCoord2f(1.0f, 0.0f); glVertex3f(500.0f, y, -500.0f); // vertex 3
-            glTexCoord2f(1.0f, 1.0f); glVertex3f(500.0f, y, 500.0f); // vertex 4
-        glEnd();
-        glDisable(GL_TEXTURE_2D);
-}*/

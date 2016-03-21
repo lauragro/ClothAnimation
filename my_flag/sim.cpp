@@ -22,10 +22,10 @@ Sim::~Sim()
 }
 
 // Draw everything on screen
-void Sim::draw()
+void Sim::draw(GLuint * textures)
 {
     // Draw ground
-    myGround->draw();
+    myGround->draw(textures[0]);
 
 
     // Draw blue circles
@@ -38,7 +38,7 @@ void Sim::draw()
     }*/
 
     // Draw ball
-    myBall->draw();
+    myBall->draw(textures[1]);
 
     // Draw connecting lines
     for( int i=0; i<myFlag->implementedSprings; i++ )

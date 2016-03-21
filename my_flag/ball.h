@@ -9,12 +9,20 @@ public:
     Ball(int zCentre);
     ~Ball();
 
+    void initializeShader();
+
     float radius;
     vec3 origin;
 
-    void draw();
+    void draw(GLuint texture);
 
     void solidSphere(GLdouble radius, GLint slices, GLint stacks);
+
+private:
+    //=====Shader Stuff===================
+    void drawTextures(GLuint texture);
+    //====================================
+
 };
 
 #endif // BALL_H

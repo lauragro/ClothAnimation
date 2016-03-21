@@ -60,36 +60,14 @@ protected:
         void mouseMoveEvent(QMouseEvent *e);
     //================================================================
 
-public:
-
-        //=====Shader Stuff===================
-        /*GLuint texBufferID;
-        GLuint texCoordID, texID;
-
-        /*void LoadGLTextures(const char * name);
-        void initializeShader();
-        void testTextures();*/
-        //====================================
-
 private:
-        //=======Camera Stuff=================
-//        Camera* m_Camera; /**< The camera object.*/
-//
-  //      glm::mat4 m_LastRotation; /**< Holds the previous arcball rotation.*/
-    //    glm::mat4 m_CurrentRotation; /**< Holds the current arcball rotation.*/
-//
-  //      glm::mat4 m_LastScale; /**< Holds the last dolly transform.*/
-    //    glm::mat4 m_CurrentScale; /**< Holds the current dolly transform.*/
-//
-  //      glm::mat4 m_LastTranslate; /**< Holds the last track transform.*/
-    //    glm::mat4 m_CurrentTranslate; /**< Holds the current track transform.*/
-//
-  //      int m_IsDrag; /**< If the mouse is dragging true, false otherwise.*/
-    //    int m_DrawGrid; /**< If set it draws the ground grid.*/
-      //  int m_Play; /**< If set we update the objects.*/
-//
-  //      double m_LastTime; /**< The previous tick.*/
-        //========================================
+        //=====Shader Stuff===================
+        GLuint textures[2];
+
+        void initializeShader();
+        void Load2DGLTexture(const char * name, const int texID);
+        void LoadSphereGLTexture( const char * name, const int texID );
+        //====================================
 
 };
 #endif // OPENGLWIDGET_H

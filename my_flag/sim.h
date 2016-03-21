@@ -22,7 +22,7 @@ class Sim
         ~Sim();
 
         // Draws all graphics
-        void draw();
+        void draw(GLuint * textures);
 
         // Progesses the simulation forward
         void simStep();
