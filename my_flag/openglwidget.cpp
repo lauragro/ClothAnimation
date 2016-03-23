@@ -66,23 +66,23 @@ void OpenGLWidget::initializeGL()
     initializeShader();
 
     /* Setup lighting ******************************/
-    /*GLfloat light0_pos[] = {0.0,0.0,10.0,1.0};
+    GLfloat light0_pos[] = {0.0,0.0,10.0,1.0};
     GLfloat light0_dir[] = {0.0,0.0,0.0,0.0};
     GLfloat diffuse0[] = {0.0,0.0,1.0,1.0};
-    GLfloat ambient0[] = {0.0,0.0,1.0,1.0};
+    GLfloat ambient0[] = {1.0,1.0,1.0,1.0};
     GLfloat specular0[] = {1.0,1.0,1.0,1.0};
 
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
 
     glLightfv(GL_LIGHT0, GL_POSITION, light0_pos);
-    //glLightfv(GL_LIGHT0, GL_AMBIENT, ambient0);
+    glLightfv(GL_LIGHT0, GL_AMBIENT, ambient0);
     //glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse0);
     glLightfv(GL_LIGHT0, GL_SPECULAR, specular0);
 
     // add a small amount of white light everywhere
-    //GLfloat global_ambient[] = {0.5,0.5,0.5,1.0};
-    //glLightModelfv(GL_LIGHT_MODEL_AMBIENT, global_ambient);*/
+    GLfloat global_ambient[] = {0.5,0.5,0.5,1.0};
+    glLightModelfv(GL_LIGHT_MODEL_AMBIENT, global_ambient);
 
     timer->start(); // timer should run always, not tied to animation
     // frame timer is controlled by go and stop buttons

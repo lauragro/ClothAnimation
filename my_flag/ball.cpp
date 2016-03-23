@@ -74,30 +74,30 @@ void Ball::drawTextures(GLuint texture)
 
     GLfloat zPlane[] = { 0.0f, 0.0f, 1.0f, 0.0f };
 
-    glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
-    glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
-    glTexGeni(GL_R, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);    // ?
-    glTexGenfv(GL_S, GL_OBJECT_PLANE, planes);
-    glTexGenfv(GL_T, GL_OBJECT_PLANE, planet);
-    glTexGenfv(GL_R, GL_OBJECT_PLANE, zPlane);
+    glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);
+    glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);
+    glTexGeni(GL_R, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);    // ?
+    glTexGenfv(GL_S, GL_SPHERE_MAP, planes);
+    glTexGenfv(GL_T, GL_SPHERE_MAP, planet);
+    glTexGenfv(GL_R, GL_SPHERE_MAP, zPlane);
     glEnable(GL_TEXTURE_GEN_S);
     glEnable(GL_TEXTURE_GEN_T);
-    glEnable(GL_TEXTURE_GEN_R);*/
+    glEnable(GL_TEXTURE_GEN_R);
 
-
+    glMatrixMode(GL_MODELVIEW);*/
     glShadeModel( GL_SMOOTH );
-        glEnable(GL_TEXTURE_2D);
+        //glEnable(GL_TEXTURE_2D);
         glColor3f(1, 1, 1);
-        glBindTexture(GL_TEXTURE_2D, texture);
+        //glBindTexture(GL_TEXTURE_2D, texture);
 
-        glBegin(GL_QUADS);
+        glBegin(GL_TRIANGLES);
             /*glTexCoord2f(0.0f, 1.0f); glVertex3f(-200, 100, 0);  // vertex 1
             glTexCoord2f(0.0f, 0.0f); glVertex3f(-200, 100, -200); // vertex 2
             glTexCoord2f(1.0f, 0.0f); glVertex3f(0, 100, -200);  // vertex 3
             glTexCoord2f(1.0f, 1.0f); glVertex3f(0, 100, 0);   // vertex 4*/
 
             int numSlices = 32;
-            int numStacks = 16;
+            int numStacks = 32;
 
             GLUquadricObj* pQuadric = gluNewQuadric();  // make the quadric
             assert(pQuadric!=NULL); // make sure the quadric exists
@@ -106,7 +106,7 @@ void Ball::drawTextures(GLuint texture)
 
 
         glEnd();
-        glDisable(GL_TEXTURE_2D);
+        //glDisable(GL_TEXTURE_2D);
 
     //glLoadIdentity();
     //glMatrixMode(GL_MODELVIEW);

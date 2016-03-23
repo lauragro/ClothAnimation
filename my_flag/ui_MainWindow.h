@@ -15,8 +15,6 @@
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHeaderView>
-#include <QtWidgets/QLCDNumber>
-#include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
@@ -34,21 +32,6 @@ public:
     OpenGLWidget *openGLWidget;
     QWidget *gridLayoutWidget;
     QGridLayout *gridLayout;
-    QLabel *label_2;
-    QLCDNumber *lcd_mass;
-    QLCDNumber *lcd_spring_constant;
-    QLabel *label_4;
-    QLabel *label_6;
-    QLabel *label_7;
-    QLabel *label_9;
-    QLabel *label_3;
-    QLabel *label_8;
-    QLCDNumber *lcd_damping_constant;
-    QLabel *label_5;
-    QLCDNumber *lcd_rest_length;
-    QLabel *label;
-    QWidget *gridLayoutWidget_2;
-    QGridLayout *gridLayout_2;
     QPushButton *button1;
     QPushButton *button2;
     QPushButton *button3;
@@ -71,128 +54,29 @@ public:
         openGLWidget->setFont(font);
         gridLayoutWidget = new QWidget(centralWidget);
         gridLayoutWidget->setObjectName(QStringLiteral("gridLayoutWidget"));
-        gridLayoutWidget->setGeometry(QRect(850, 70, 258, 421));
+        gridLayoutWidget->setGeometry(QRect(880, 400, 171, 201));
         gridLayout = new QGridLayout(gridLayoutWidget);
         gridLayout->setSpacing(6);
         gridLayout->setContentsMargins(11, 11, 11, 11);
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
         gridLayout->setContentsMargins(0, 0, 0, 0);
-        label_2 = new QLabel(gridLayoutWidget);
-        label_2->setObjectName(QStringLiteral("label_2"));
-        label_2->setFont(font);
-        label_2->setWordWrap(true);
-
-        gridLayout->addWidget(label_2, 4, 1, 1, 1);
-
-        lcd_mass = new QLCDNumber(gridLayoutWidget);
-        lcd_mass->setObjectName(QStringLiteral("lcd_mass"));
-        lcd_mass->setFrameShape(QFrame::NoFrame);
-        lcd_mass->setDigitCount(4);
-        lcd_mass->setSegmentStyle(QLCDNumber::Flat);
-
-        gridLayout->addWidget(lcd_mass, 3, 2, 1, 1);
-
-        lcd_spring_constant = new QLCDNumber(gridLayoutWidget);
-        lcd_spring_constant->setObjectName(QStringLiteral("lcd_spring_constant"));
-        lcd_spring_constant->setFrameShape(QFrame::NoFrame);
-        lcd_spring_constant->setDigitCount(4);
-        lcd_spring_constant->setSegmentStyle(QLCDNumber::Flat);
-
-        gridLayout->addWidget(lcd_spring_constant, 4, 2, 1, 1);
-
-        label_4 = new QLabel(gridLayoutWidget);
-        label_4->setObjectName(QStringLiteral("label_4"));
-        label_4->setFont(font);
-        label_4->setWordWrap(true);
-
-        gridLayout->addWidget(label_4, 2, 1, 1, 1);
-
-        label_6 = new QLabel(gridLayoutWidget);
-        label_6->setObjectName(QStringLiteral("label_6"));
-        label_6->setFont(font);
-
-        gridLayout->addWidget(label_6, 1, 3, 1, 1);
-
-        label_7 = new QLabel(gridLayoutWidget);
-        label_7->setObjectName(QStringLiteral("label_7"));
-        label_7->setFont(font);
-
-        gridLayout->addWidget(label_7, 2, 3, 1, 1);
-
-        label_9 = new QLabel(gridLayoutWidget);
-        label_9->setObjectName(QStringLiteral("label_9"));
-        label_9->setFont(font);
-
-        gridLayout->addWidget(label_9, 4, 3, 1, 1);
-
-        label_3 = new QLabel(gridLayoutWidget);
-        label_3->setObjectName(QStringLiteral("label_3"));
-        label_3->setFont(font);
-        label_3->setWordWrap(true);
-
-        gridLayout->addWidget(label_3, 3, 1, 1, 1);
-
-        label_8 = new QLabel(gridLayoutWidget);
-        label_8->setObjectName(QStringLiteral("label_8"));
-        label_8->setFont(font);
-
-        gridLayout->addWidget(label_8, 3, 3, 1, 1);
-
-        lcd_damping_constant = new QLCDNumber(gridLayoutWidget);
-        lcd_damping_constant->setObjectName(QStringLiteral("lcd_damping_constant"));
-        lcd_damping_constant->setFrameShape(QFrame::NoFrame);
-        lcd_damping_constant->setDigitCount(4);
-        lcd_damping_constant->setSegmentStyle(QLCDNumber::Flat);
-
-        gridLayout->addWidget(lcd_damping_constant, 1, 2, 1, 1);
-
-        label_5 = new QLabel(gridLayoutWidget);
-        label_5->setObjectName(QStringLiteral("label_5"));
-        label_5->setFont(font);
-        label_5->setWordWrap(true);
-
-        gridLayout->addWidget(label_5, 1, 1, 1, 1);
-
-        lcd_rest_length = new QLCDNumber(gridLayoutWidget);
-        lcd_rest_length->setObjectName(QStringLiteral("lcd_rest_length"));
-        lcd_rest_length->setFrameShape(QFrame::NoFrame);
-        lcd_rest_length->setSmallDecimalPoint(false);
-        lcd_rest_length->setDigitCount(4);
-        lcd_rest_length->setSegmentStyle(QLCDNumber::Flat);
-
-        gridLayout->addWidget(lcd_rest_length, 2, 2, 1, 1);
-
-        label = new QLabel(centralWidget);
-        label->setObjectName(QStringLiteral("label"));
-        label->setGeometry(QRect(880, 20, 201, 61));
-        QFont font1;
-        font1.setPointSize(24);
-        label->setFont(font1);
-        gridLayoutWidget_2 = new QWidget(centralWidget);
-        gridLayoutWidget_2->setObjectName(QStringLiteral("gridLayoutWidget_2"));
-        gridLayoutWidget_2->setGeometry(QRect(880, 530, 201, 91));
-        gridLayout_2 = new QGridLayout(gridLayoutWidget_2);
-        gridLayout_2->setSpacing(6);
-        gridLayout_2->setContentsMargins(11, 11, 11, 11);
-        gridLayout_2->setObjectName(QStringLiteral("gridLayout_2"));
-        gridLayout_2->setContentsMargins(0, 0, 0, 0);
-        button1 = new QPushButton(gridLayoutWidget_2);
+        button1 = new QPushButton(gridLayoutWidget);
         button1->setObjectName(QStringLiteral("button1"));
         button1->setFont(font);
 
-        gridLayout_2->addWidget(button1, 0, 0, 1, 1);
+        gridLayout->addWidget(button1, 1, 0, 1, 1);
 
-        button2 = new QPushButton(gridLayoutWidget_2);
+        button2 = new QPushButton(gridLayoutWidget);
         button2->setObjectName(QStringLiteral("button2"));
         button2->setFont(font);
 
-        gridLayout_2->addWidget(button2, 0, 1, 1, 1);
+        gridLayout->addWidget(button2, 3, 0, 1, 1);
 
-        button3 = new QPushButton(gridLayoutWidget_2);
+        button3 = new QPushButton(gridLayoutWidget);
         button3->setObjectName(QStringLiteral("button3"));
         button3->setFont(font);
 
-        gridLayout_2->addWidget(button3, 1, 0, 1, 1);
+        gridLayout->addWidget(button3, 2, 0, 1, 1);
 
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
@@ -216,16 +100,7 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Simple Spring-Mass System", 0));
-        label_2->setText(QApplication::translate("MainWindow", "Spring constant", 0));
-        label_4->setText(QApplication::translate("MainWindow", "Rest length", 0));
-        label_6->setText(QApplication::translate("MainWindow", "N/m", 0));
-        label_7->setText(QApplication::translate("MainWindow", "m", 0));
-        label_9->setText(QApplication::translate("MainWindow", "N/m", 0));
-        label_3->setText(QApplication::translate("MainWindow", "Mass", 0));
-        label_8->setText(QApplication::translate("MainWindow", "kg", 0));
-        label_5->setText(QApplication::translate("MainWindow", "Damping constant", 0));
-        label->setText(QApplication::translate("MainWindow", "Spring details", 0));
+        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Cloth Animation", 0));
         button1->setText(QApplication::translate("MainWindow", "Go", 0));
         button2->setText(QApplication::translate("MainWindow", "Stop", 0));
         button3->setText(QApplication::translate("MainWindow", "Reset", 0));

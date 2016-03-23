@@ -34,27 +34,27 @@ void MainWindow::displaySpringDetails()
 void MainWindow::box_dampingConstant(float value)
 {
     myopenglwidget->mySim->myFlag->dampingConstant = value;
-    ui->lcd_damping_constant->display(value);
+    //ui->lcd_damping_constant->display(value); // removed display
     myopenglwidget->button_reset();
 }
 
 void MainWindow::box_restLength(float value)
 {
     myopenglwidget->mySim->myFlag->springs[0]->restLength = value;
-    ui->lcd_rest_length->display(value);
+    //ui->lcd_rest_length->display(value); // removed display
     myopenglwidget->button_reset();
 }
 
 void MainWindow::box_mass(float value)
 {
     myopenglwidget->mySim->myFlag->particleMass = value;
-    ui->lcd_mass->display(value);
+    //ui->lcd_mass->display(value); // removed display
     myopenglwidget->button_reset();
 }
 
 void MainWindow::box_springConstant(float value)
 {
     myopenglwidget->mySim->myFlag->springConstant = value;
-    ui->lcd_spring_constant->display(value);
+    //ui->lcd_spring_constant->display(value); // removed display
     myopenglwidget->button_reset();
 }
