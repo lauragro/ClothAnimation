@@ -235,11 +235,11 @@ void Sim::updateForces()
             // Commented out because comparison with constant strings is failing
             // add wind and damping if in sheet mode
             /*if(myFlag->type == SHEET)
-            {
-                myFlag->particles[i][j]->externalForce = myFlag->particles[i][j]->gravityForce - v * myFlag->dampingConstant
-                    //+ 0.1f*vec3(myFlag->particles[i][j]->position.x*abs(sin(t/10)), 0, 0);   // wind for flag
-                    + vec3(5*abs(sin(t/6)), 0, 0);
-            }
+            {*/
+                //myFlag->particles[i][j]->externalForce = myFlag->particles[i][j]->gravityForce - v * myFlag->dampingConstant
+                    //+ 0.05f*vec3(myFlag->particles[i][j]->position.x*abs(sin(t/10)), 0, 0);   // wind for flag
+                    //+ vec3(5*abs(sin(t/6)), 5*abs(sin(t/6)), 5*abs(sin(t/6)));
+            /*}
             // add damping without wind if in blanket mode
             else //(myFlag->type == BLANKET)
             {*/
@@ -296,11 +296,26 @@ bool Sim::collidesWithBall(Particle * thisParticle)
 // Check for collision of one particle with ground
 bool Sim::collidesWithGround(Particle * thisParticle)
 {
-    if( thisParticle->position.y >= myGround->y
-            && thisParticle->position.x >= myGround->xmin
-            && thisParticle->position.x <= myGround->xmax
-            && thisParticle->position.z >= myGround->zmin
-            && thisParticle->position.z <= myGround->zmax   )
+    // particle coords
+    float x = thisParticle->position.x;
+    float y = thisParticle->position.y;
+    float z = thisParticle->position.z;
+
+    // ground coords
+    float ymin = myGround->ymin;
+    float ymax = myGround->ymax;
+    float xmin = myGround->xmin;
+    float xmax = myGround->xmax;
+    float zmin = myGround->zmin;
+    float zmax = myGround->zmax;
+
+    // collides with block
+    if(     y >= ymin
+         && y <= ymax
+         && x >= xmin
+         && x <= xmax
+         && z >= zmin
+         && z <= zmax   )
     {
         // collision detected
         return true;

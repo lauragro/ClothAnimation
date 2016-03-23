@@ -20,7 +20,7 @@ Ground::draw(GLuint texture)
     xmax = 256.0f;
     zmax = xmax;
     ymin = y;
-    ymax = ymin + 256.0f;
+    ymax = ymin + 128.0f;
 
     /* draw the lines */
     //drawFixedGround(width, y);
