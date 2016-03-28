@@ -23,7 +23,13 @@ public:
     vec3 gravityForce;
     bool pinned = false;
 
-
+    // attributes for RK4 integration
+    vec3 position1;
+    vec3 position2;
+    vec3 position3;
+    vec3 velocity1;
+    vec3 velocity2;
+    vec3 velocity3;
 
     // draw function
     void draw();

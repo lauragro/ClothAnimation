@@ -56,7 +56,7 @@ void Sim::draw(GLuint * textures)
 void Sim::simStep()
 {
     int type = 1;
-    float dt = 0.2f;
+    float dt = 0.1f;//2f;
     t += dt;
 
     switch (type)
@@ -67,10 +67,11 @@ void Sim::simStep()
         case 1:
             eulerStep(dt);
             break;
-        case 2:
-            rungeKuttaStep(dt);
+        default://case 2:
+            rungeKuttaStep(dt); // This fails after multiple collisions!
+            /*break;
         default:
-            break;
+            break;*/
     }
 
 }
@@ -94,13 +95,14 @@ void Sim::eulerStep(float dt)
     glm::vec3 x, v, a;
 
     // move ball when cloth is in sheet mode
-    if( myFlag->type == SHEET )
-    {
-        myBall->origin += vec3(10*sin(t/12), 0, 0);
-    }
+    //if( myFlag->type == SHEET )
+    //{
+        //myBall->origin += vec3(0, -sin(t/12), 0);
+
+    //}
 
     // update forces on particles
-    updateForces();
+    updateForces(0);
 
     // update velocities and positions of particles
     for( i=0; i<myFlag->particlesHigh; i++ )
@@ -108,23 +110,11 @@ void Sim::eulerStep(float dt)
         for( j=0; j<myFlag->particlesWide; j++ )
         {
             // pin the corners
-            if(myFlag->particles[i][j]->pinned)
+            if(myFlag->particles[i][j]->pinned
+                    || collidesWithBall(myFlag->particles[i][j],0) || collidesWithGround(myFlag->particles[i][j],0))
             {
                 // set velocity to zero
-                myFlag->particles[i][j]->velocity.x=0.0;
-                myFlag->particles[i][j]->velocity.y=0.0;
-                myFlag->particles[i][j]->velocity.z=0.0;
-
-                continue;   // skip euler for this particle
-            }
-
-            // check for collision with ball or ground
-            else if( collidesWithBall(myFlag->particles[i][j]) || collidesWithGround(myFlag->particles[i][j]))
-            {
-                // set velocity to zero
-                myFlag->particles[i][j]->velocity.x=0.0;
-                myFlag->particles[i][j]->velocity.y=0.0;
-                myFlag->particles[i][j]->velocity.z=0.0;
+                myFlag->particles[i][j]->velocity=vec3(0.0f,0.0f,0.0f);
 
                 continue;   // skip euler for this particle
             }
@@ -146,7 +136,7 @@ void Sim::eulerStep(float dt)
                 x = myFlag->particles[i][j]->position;
 
                 // update position
-                x = x + v*dt;
+                x = x + v*dt;// + 0.5f * a * dt * dt;
                 myFlag->particles[i][j]->position = x;
             }
         }
@@ -156,29 +146,159 @@ void Sim::eulerStep(float dt)
 }
 
 
-// Runge Kutta simulation step
+// Runge Kutta 4th Order simulation step
 void Sim::rungeKuttaStep(float dt)
 {
+    vec3 x,v, dx1, dx2, dx3, dx4, dv1, dv2, dv3, dv4;
     int i,j;
-    float h,x,v,a,k1,k2,k3,k4;
-    h = dt;
 
-    /*for(i=0; i<myFlag->springsHigh; i++)
+    // Step 1
+    updateForces(0);
+    for(i=0; i<myFlag->particlesHigh; i++)
     {
-        for(j=0; j<myFlag->springsWide; j++)
+        for(j=0; j<myFlag->particlesWide; j++)
         {
-            // K1
-            a = acceleration(myFlag->springs[i][j]);
-            v = myFlag->springs[i][j]->xVelocity;
-            v += a*dt;
-            k1 = h * v;
+            // pin the corners and detect collisions
+            if(myFlag->particles[i][j]->pinned
+                    || collidesWithBall(myFlag->particles[i][j],0) || collidesWithGround(myFlag->particles[i][j],0))
+            {
+                // set velocity to zero
+                myFlag->particles[i][j]->velocity=vec3(0.0f,0.0f,0.0f);
+                myFlag->particles[i][j]->velocity1=vec3(0.0f,0.0f,0.0f);
+                myFlag->particles[i][j]->velocity2=vec3(0.0f,0.0f,0.0f);
+                myFlag->particles[i][j]->velocity3=vec3(0.0f,0.0f,0.0f);
 
-            // K2
-            a = acceleration(myFlag->springs[i][j]);
-            // ...etc
+                continue;   // skip euler for this particle
+            }
 
+            // update all other particles
+            else
+            {
+                // capture current position and velocity
+                x = myFlag->particles[i][j]->position;
+                v = myFlag->particles[i][j]->velocity;
+
+                // calculate RK4 values
+                dx1 = dt * v;
+                dv1 = dt * myFlag->particles[i][j]->force;  //acceleration(x,T);
+
+                // store intermediate values
+                myFlag->particles[i][j]->position1 = x + dx1/2.0f;
+                myFlag->particles[i][j]->velocity1 = v + dv1/2.0f;
+            }
         }
-    }*/
+    }
+
+    // Step 2
+    updateForces(1);
+    for(i=0; i<myFlag->particlesHigh; i++)
+    {
+        for(j=0; j<myFlag->particlesWide; j++)
+        {
+            // pin the corners and check for collisions
+            if(myFlag->particles[i][j]->pinned
+                    || collidesWithBall(myFlag->particles[i][j],1) || collidesWithGround(myFlag->particles[i][j],1))
+            {
+                // set velocity to zero
+                myFlag->particles[i][j]->velocity=vec3(0.0f,0.0f,0.0f);
+                myFlag->particles[i][j]->velocity1=vec3(0.0f,0.0f,0.0f);
+                myFlag->particles[i][j]->velocity2=vec3(0.0f,0.0f,0.0f);
+                myFlag->particles[i][j]->velocity3=vec3(0.0f,0.0f,0.0f);
+
+                continue;   // skip euler for this particle
+            }
+
+            // update all other particles
+            else
+            {
+                // capture current position and velocity
+                x = myFlag->particles[i][j]->position;
+                v = myFlag->particles[i][j]->velocity;
+
+                // calculate RK4 values
+                dx2 = dt * (v + dv1/2.0f);
+                dv2 = dt * myFlag->particles[i][j]->force;  //acceleration(x + dx1/2.0f, T + dt/2.0f);
+
+                // store intermediate values
+                myFlag->particles[i][j]->position2 = x + dx2/2.0f;
+                myFlag->particles[i][j]->velocity2 = v + dv2/2.0f;
+            }
+        }
+    }
+
+    // Step 3
+    updateForces(2);
+    for(i=0; i<myFlag->particlesHigh; i++)
+    {
+        for(j=0; j<myFlag->particlesWide; j++)
+        {
+            // pin the corners and check for collisions
+            if(myFlag->particles[i][j]->pinned
+                    || collidesWithBall(myFlag->particles[i][j],2) || collidesWithGround(myFlag->particles[i][j],2))
+            {
+                // set velocity to zero
+                myFlag->particles[i][j]->velocity=vec3(0.0f,0.0f,0.0f);
+                myFlag->particles[i][j]->velocity1=vec3(0.0f,0.0f,0.0f);
+                myFlag->particles[i][j]->velocity2=vec3(0.0f,0.0f,0.0f);
+                myFlag->particles[i][j]->velocity3=vec3(0.0f,0.0f,0.0f);
+
+                continue;   // skip euler for this particle
+            }
+
+            // update all other particles
+            else
+            {
+                // capture current position and velocity
+                x = myFlag->particles[i][j]->position;
+                v = myFlag->particles[i][j]->velocity;
+
+                // calculate RK4 values
+                dx3 = dt * (v + dv2/2.0f);
+                dv3 = dt *  myFlag->particles[i][j]->force;    //acceleration(x + dx2/2.0f, T + dt/2.0f);
+
+                // store intermediate values
+                myFlag->particles[i][j]->position3 = x + dx3;
+                myFlag->particles[i][j]->velocity3 = v + dv3;
+            }
+        }
+    }
+
+    // Step 4
+    updateForces(3);
+    for(i=0; i<myFlag->particlesHigh; i++)
+    {
+        for(j=0; j<myFlag->particlesWide; j++)
+        {
+            // pin the corners and check for collisions
+            if(myFlag->particles[i][j]->pinned
+                    || collidesWithBall(myFlag->particles[i][j],3) || collidesWithGround(myFlag->particles[i][j],3))
+            {
+                // set velocity to zero
+                myFlag->particles[i][j]->velocity=vec3(0.0f,0.0f,0.0f);
+                myFlag->particles[i][j]->velocity1=vec3(0.0f,0.0f,0.0f);
+                myFlag->particles[i][j]->velocity2=vec3(0.0f,0.0f,0.0f);
+                myFlag->particles[i][j]->velocity3=vec3(0.0f,0.0f,0.0f);
+
+                continue;   // skip euler for this particle
+            }
+
+            // update all other particles
+            else
+            {
+                // capture current position and velocity
+                x = myFlag->particles[i][j]->position;
+                v = myFlag->particles[i][j]->velocity;
+
+                // calculate RK4 values
+                dx4 = dt * (v + dv3);
+                dv4 = dt * myFlag->particles[i][j]->force;    // acceleration(x + dx3, T + dt);
+
+                // update final positions and velocities
+                myFlag->particles[i][j]->position = x + dx1/6.0f + dx2/3.0f + dx3/3.0f + dx4/6.0f;
+                myFlag->particles[i][j]->velocity = v + dv1/6.0f + dv2/3.0f + dv3/3.0f + dv4/6.0f;
+            }
+        }
+    }
 }
 
 
@@ -214,7 +334,7 @@ float Sim::acceleration(Particle *thisParticle)
 
 
 // Update forces on all particles
-void Sim::updateForces()
+void Sim::updateForces(int number)
 {
     int i,j;
     glm::vec3 force, v;
@@ -230,7 +350,20 @@ void Sim::updateForces()
             myFlag->particles[i][j]->springForce.z = 0.0f;
 
             // add dampening force externally
-            v = myFlag->particles[i][j]->velocity;
+            switch(number){
+            case 0:
+                v = myFlag->particles[i][j]->velocity;
+                break;
+            case 1:
+                v = myFlag->particles[i][j]->velocity1;
+                break;
+            case 2:
+                v = myFlag->particles[i][j]->velocity2;
+                break;
+            default://case 3:
+                v = myFlag->particles[i][j]->velocity3;
+                //break;
+            }
 
             // Commented out because comparison with constant strings is failing
             // add wind and damping if in sheet mode
@@ -253,7 +386,7 @@ void Sim::updateForces()
     for( i=0; i<myFlag->implementedSprings; i++ )
     {
         // get current spring force
-        force = myFlag->springs[i]->force();
+        force = myFlag->springs[i]->force(number);
 
         // add current spring force to end particles
         myFlag->springs[i]->particle1->springForce += force;
@@ -273,17 +406,45 @@ void Sim::updateForces()
 }
 
 // Check for collision of one particle with ball
-bool Sim::collidesWithBall(Particle * thisParticle)
+bool Sim::collidesWithBall(Particle * thisParticle, int number)
 {
     // find distance from ball's origin
-    vec3 distanceVector = thisParticle->position - myBall->origin;
+    vec3 distanceVector;
+    switch(number){
+    case 0:
+        distanceVector = thisParticle->position - myBall->origin;
+        break;
+    case 1:
+        distanceVector = thisParticle->position1 - myBall->origin;
+        break;
+    case 2:
+        distanceVector = thisParticle->position2 - myBall->origin;
+        break;
+    default://case 3:
+        distanceVector = thisParticle->position3 - myBall->origin;
+        //break;
+    }
+
     float distance = length(distanceVector);
 
     if( distance <= myBall->radius * 1.01f )
     {
         // push particle back to ball's circumference
         vec3 x = myBall->origin + normalize(distanceVector) * myBall->radius * 1.01f;
-        thisParticle->position = x;
+
+        switch(number){
+        case 0:
+            thisParticle->position = x;
+            break;
+        case 1:
+            thisParticle->position1 = x;
+            break;
+        case 2:
+            thisParticle->position2 = x;
+            break;
+        default://case 3:
+            thisParticle->position3 = x;
+        }
 
         // collision detected
         return true;
@@ -294,12 +455,32 @@ bool Sim::collidesWithBall(Particle * thisParticle)
 }
 
 // Check for collision of one particle with ground
-bool Sim::collidesWithGround(Particle * thisParticle)
+bool Sim::collidesWithGround(Particle * thisParticle, int number)
 {
     // particle coords
-    float x = thisParticle->position.x;
-    float y = thisParticle->position.y;
-    float z = thisParticle->position.z;
+    float x,y,z;
+    switch(number){
+    case 0:
+        x = thisParticle->position.x;
+        y = thisParticle->position.y;
+        z = thisParticle->position.z;
+        break;
+    case 1:
+        x = thisParticle->position1.x;
+        y = thisParticle->position1.y;
+        z = thisParticle->position1.z;
+        break;
+    case 2:
+        x = thisParticle->position2.x;
+        y = thisParticle->position2.y;
+        z = thisParticle->position2.z;
+        break;
+    default://case 3:
+        x = thisParticle->position3.x;
+        y = thisParticle->position3.y;
+        z = thisParticle->position3.z;
+        //break;
+    }
 
     // ground coords
     float ymin = myGround->ymin;

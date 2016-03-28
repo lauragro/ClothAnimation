@@ -65,7 +65,6 @@ void Ball::solidSphere(GLdouble radius, GLint slices, GLint stacks)
 //========TEXTURES================================================
 void Ball::drawTextures(GLuint texture)
 {
-    glMatrixMode(GL_MODELVIEW);
     /*glMatrixMode(GL_TEXTURE);
 
     GLfloat planes[] = {0.5, 0.0, 0.0, 0.5}; // s = x/2 + 1/2
@@ -82,30 +81,24 @@ void Ball::drawTextures(GLuint texture)
     glTexGenfv(GL_R, GL_SPHERE_MAP, zPlane);
     glEnable(GL_TEXTURE_GEN_S);
     glEnable(GL_TEXTURE_GEN_T);
-    glEnable(GL_TEXTURE_GEN_R);
+    glEnable(GL_TEXTURE_GEN_R);*/
 
-    glMatrixMode(GL_MODELVIEW);*/
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glTranslatef(origin.x, origin.y, origin.z);
     glShadeModel( GL_SMOOTH );
         //glEnable(GL_TEXTURE_2D);
         glColor3f(1, 1, 1);
         //glBindTexture(GL_TEXTURE_2D, texture);
 
         glBegin(GL_TRIANGLES);
-            /*glTexCoord2f(0.0f, 1.0f); glVertex3f(-200, 100, 0);  // vertex 1
-            glTexCoord2f(0.0f, 0.0f); glVertex3f(-200, 100, -200); // vertex 2
-            glTexCoord2f(1.0f, 0.0f); glVertex3f(0, 100, -200);  // vertex 3
-            glTexCoord2f(1.0f, 1.0f); glVertex3f(0, 100, 0);   // vertex 4*/
-
             int numSlices = 32;
             int numStacks = 32;
-
             GLUquadricObj* pQuadric = gluNewQuadric();  // make the quadric
             assert(pQuadric!=NULL); // make sure the quadric exists
-            glTranslatef(origin.x, origin.y, origin.z); // move sphere to ball's origin
             gluSphere(pQuadric,radius,numSlices,numStacks); // draw the sphere
-
-
         glEnd();
+        glPopMatrix();
         //glDisable(GL_TEXTURE_2D);
 
     //glLoadIdentity();

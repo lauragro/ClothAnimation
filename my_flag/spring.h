@@ -25,7 +25,7 @@ class Spring
         void draw();
 
         // force function
-        glm::vec3 force();
+        glm::vec3 force(int number);
 
 };
 

@@ -30,11 +30,11 @@ class Sim
         void eulerStep(float dt);
         void rungeKuttaStep(float dt);
         float acceleration(Particle *thisParticle);
-        void updateForces();
+        void updateForces(int number);
 
         // Check for collisions of one particle
-        bool collidesWithBall(Particle * thisParticle);
-        bool collidesWithGround(Particle * thisParticle);
+        bool collidesWithBall(Particle * thisParticle, int number);
+        bool collidesWithGround(Particle * thisParticle, int number);
 
         // The components belonging to this simulation
         Flag * myFlag;

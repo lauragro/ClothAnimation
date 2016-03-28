@@ -23,13 +23,13 @@ Spring::Spring(Particle *particle1, Particle *particle2, int springType)
     // set spring constants struct > shear,bend
     switch(springType){
         case 0:
-            this->springConstant = 10.0f;
+            this->springConstant = 12.0f;
             break;
         case 1:
-            this->springConstant = 8.0f;
+            this->springConstant = 10.0f;
             break;
         default:
-            this->springConstant = 8.0f;
+            this->springConstant = 10.0f;
     }
 
 }
@@ -58,7 +58,7 @@ void Spring::draw()
             // green shear springs
             glColor3f(0,1,0);
             break;
-        case 2:
+        default://case 2:
             // red bend springs
             glColor3f(1,0,0);
     }
@@ -70,12 +70,26 @@ void Spring::draw()
 }
 
 // get spring force
-glm::vec3 Spring::force()
+glm::vec3 Spring::force(int number)
 {
     glm::vec3 force,lengthVector,v,x;
 
     // length = x2 - x1
-    lengthVector = particle1->position - particle2->position;
+    switch(number){
+    case 0:
+        lengthVector = particle1->position - particle2->position;
+        break;
+    case 1:
+        lengthVector = particle1->position1 - particle2->position1;
+        break;
+    case 2:
+        lengthVector = particle1->position2 - particle2->position2;
+        break;
+    default://case 3:
+        lengthVector = particle1->position3 - particle2->position3;
+
+    }
+    //lengthVector = particle1->position - particle2->position;
     springLength = (float)length(lengthVector);
 
     // calculate force if length does not equal rest length
@@ -85,7 +99,17 @@ glm::vec3 Spring::force()
         x = normalize(lengthVector) * (springLength-restLength);
 
         // v = v2 - v1
-        v = particle1->velocity - particle2->velocity;
+        /*switch(number){   // don't need v here!
+        case 0:
+            v = particle1->velocity - particle2->velocity;
+        case 1:
+            v = particle1->velocity1 - particle2->velocity1;
+        case 2:
+            v = particle1->velocity2 - particle2->velocity2;
+        case 3:
+            v = particle1->velocity3 - particle2->velocity3;
+
+        }*/
 
         // F = -kx, damping added later as +cv
         force = -1.0f * springConstant * x;

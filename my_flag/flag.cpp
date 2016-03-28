@@ -7,7 +7,7 @@ Flag::Flag(int zCentre)
     width = 900.0;//450.0;
     particleMass = 1.0;
     //springConstant = 100.0;
-    dampingConstant = 1.0f;
+    dampingConstant = 0.4f;
 
     if(type == SHEET)
     {
