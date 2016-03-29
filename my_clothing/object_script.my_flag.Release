@@ -1,0 +1,15 @@
+INPUT(
+./release/main.o
+./release/sim.o
+./release/window.o
+./release/openglwidget.o
+./release/spring.o
+./release/flag.o
+./release/particle.o
+./release/ball.o
+./release/camera.o
+./release/ground.o
+./release/person.o
+./release/moc_window.o
+./release/moc_openglwidget.o
+);
