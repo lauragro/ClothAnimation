@@ -363,7 +363,8 @@ void Sim::updateForces(int number)
         for( j=0; j<myFlag->particlesWide; j++ )
         {
             // F = Fext + Fspring
-            myFlag->particles[i][j]->force = myFlag->particles[i][j]->externalForce + myFlag->particles[i][j]->springForce;
+            myFlag->particles[i][j]->force = myFlag->particles[i][j]->externalForce + myFlag->particles[i][j]->springForce
+                    + 10.0f*vec3(abs(sin(t/10)), 0, 0); // wind
 
             if(myPerson->collidesWith(myFlag->particles[i][j]))
             {
