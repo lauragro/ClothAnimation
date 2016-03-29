@@ -427,10 +427,10 @@ bool Sim::collidesWithBall(Particle * thisParticle, int number)
 
     float distance = length(distanceVector);
 
-    if( distance <= myBall->radius * 1.01f )
+    if( distance <= myBall->radius * 1.02f )
     {
         // push particle back to ball's circumference
-        vec3 x = myBall->origin + normalize(distanceVector) * myBall->radius * 1.01f;
+        vec3 x = myBall->origin + normalize(distanceVector) * myBall->radius * 1.02f;
 
         switch(number){
         case 0:
@@ -483,12 +483,12 @@ bool Sim::collidesWithGround(Particle * thisParticle, int number)
     }
 
     // ground coords
-    float ymin = myGround->ymin;
-    float ymax = myGround->ymax;
-    float xmin = myGround->xmin;
-    float xmax = myGround->xmax;
-    float zmin = myGround->zmin;
-    float zmax = myGround->zmax;
+    float ymin = myGround->ymin - 7.0f;
+    float ymax = myGround->ymax + 7.0f;
+    float xmin = myGround->xmin - 7.0f;
+    float xmax = myGround->xmax + 7.0f;
+    float zmin = myGround->zmin - 7.0f;
+    float zmax = myGround->zmax + 7.0f;
 
     // collides with block
     if(     y >= ymin
