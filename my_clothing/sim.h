@@ -38,7 +38,7 @@ class Sim
         // The components belonging to this simulation
         Flag * myFlag;
         //Ball * myBall;
-        //Ground * myGround;
+        Ground * myGround;
         Person * myPerson;
 
         // Time of sim

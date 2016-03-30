@@ -22,7 +22,8 @@ SOURCES += main.cpp\
     ball.cpp \
     camera.cpp \
     ground.cpp \
-    person.cpp
+    person.cpp \
+    limb.cpp
 
 HEADERS  += \
     sim.h \
@@ -36,7 +37,8 @@ HEADERS  += \
     ball.h \
     camera.h \
     ground.h \
-    person.h
+    person.h \
+    limb.h
 
 FORMS    += \
     MainWindow.ui

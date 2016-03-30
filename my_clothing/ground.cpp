@@ -5,9 +5,9 @@ Ground::Ground(int height)
 {
     y = float(height);
 
-    xmin = -256.0f;
+    xmin = -512.0f;//-256.0f;
     zmin = xmin;
-    xmax = 256.0f;
+    xmax = 512.0f;//256.0f;
     zmax = xmax;
     ymin = y;
     ymax = ymin + 128.0f;

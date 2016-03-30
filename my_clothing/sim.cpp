@@ -8,10 +8,11 @@ Sim::Sim()
 
     //myBall = new Ball(0);
 
-    //myGround = new Ground(myBall->origin.y + myBall->radius);
-
     myPerson = new Person();
     myFlag = new Flag(0);
+
+    myGround = new Ground(myPerson->body->origin.y + myPerson->body->radius);
+
     t = 0;
 
 }
@@ -27,7 +28,7 @@ Sim::~Sim()
 void Sim::draw(GLuint * textures)
 {
     // Draw ground
-    //myGround->draw(textures[0]);
+    myGround->draw(textures[0]);
 
 
     // Draw blue circles
@@ -118,6 +119,11 @@ void Sim::eulerStep(float dt)
             // adjust for collision with person
             } else if(myPerson->collidesWith(myFlag->particles[i][j])){
 
+                // set velocity to zero
+                myFlag->particles[i][j]->velocity=vec3(0.0f,0.0f,0.0f);
+
+                continue;
+            } else if(collidesWithGround(myFlag->particles[i][j],0)){
                 // set velocity to zero
                 myFlag->particles[i][j]->velocity=vec3(0.0f,0.0f,0.0f);
 
@@ -389,7 +395,7 @@ void Sim::updateForces(int number)
 
 
 // Check for collision of one particle with ground
-/*bool Sim::collidesWithGround(Particle * thisParticle, int number)
+bool Sim::collidesWithGround(Particle * thisParticle, int number)
 {
     // particle coords
     float x,y,z;
@@ -430,10 +436,10 @@ void Sim::updateForces(int number)
          && x >= xmin
          && x <= xmax
          && z >= zmin
-         && z <= zmax   )
-    {*/
+         && z <= zmax */  )
+    {
         // push particle back
-        /*switch(number){
+        switch(number){
         case 0:
             thisParticle->position.y = ymin;
             break;
@@ -454,4 +460,4 @@ void Sim::updateForces(int number)
 
     // no collision detected
     return false;
-}*/
+}

@@ -235,6 +235,21 @@ void OpenGLWidget::mouseMoveEvent(QMouseEvent *e)
     updateGL();
 }
 
+/*********** React to keyboard buttons ********/
+void OpenGLWidget::keyPressEvent(QKeyEvent *k)
+{
+    if(k->matches(QKeySequence::MoveToPreviousPage))
+    {
+        mySim->myPerson->setOrigin(vec3(mySim->myPerson->origin.x - 10.0f,
+                                        mySim->myPerson->origin.y,
+                                        mySim->myPerson->origin.z));
+    }
+
+    cout << "LEFT ARROW" << endl;
+
+    updateGL();
+}
+
 
 //========TEXTURES================================================
 void OpenGLWidget::Load2DGLTexture( const char * name, const int texID )

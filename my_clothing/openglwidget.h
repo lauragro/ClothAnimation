@@ -58,7 +58,8 @@ protected:
         void mousePressEvent(QMouseEvent *e);
         void mouseReleaseEvent(QMouseEvent *e);
         void mouseMoveEvent(QMouseEvent *e);
-    //================================================================
+    //==============Key Event Handling ===============================
+        void keyPressEvent(QKeyEvent *k);
 
 private:
         //=====Shader Stuff===================
