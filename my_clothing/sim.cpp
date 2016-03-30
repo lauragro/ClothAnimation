@@ -123,7 +123,10 @@ void Sim::eulerStep(float dt)
                 myFlag->particles[i][j]->velocity=vec3(0.0f,0.0f,0.0f);
 
                 continue;
-            } else if(collidesWithGround(myFlag->particles[i][j],0)){
+
+            // adjust for collision with ground
+            } else if(myGround->collidesWith(myFlag->particles[i][j])){
+
                 // set velocity to zero
                 myFlag->particles[i][j]->velocity=vec3(0.0f,0.0f,0.0f);
 
@@ -325,9 +328,7 @@ void Sim::updateForces(int number)
         for( j=0; j<myFlag->particlesWide; j++ )
         {
             // reset spring force for next calculation
-            myFlag->particles[i][j]->springForce.x = 0.0f;
-            myFlag->particles[i][j]->springForce.y = 0.0f;
-            myFlag->particles[i][j]->springForce.z = 0.0f;
+            myFlag->particles[i][j]->springForce = vec3(0.0f,0.0f,0.0f);
 
             // add dampening force externally
             switch(number){
@@ -345,8 +346,25 @@ void Sim::updateForces(int number)
                 //break;
             }
 
-            // TODO: add wind
-            myFlag->particles[i][j]->externalForce = myFlag->particles[i][j]->gravityForce - v * myFlag->dampingConstant;
+            // Fext = Fgravity + Fdamp + Fwind
+            myFlag->particles[i][j]->externalForce = myFlag->particles[i][j]->gravityForce - v * myFlag->dampingConstant
+                    + 20.0f*vec3(abs(sin(t/10)), 0, 0); // wind;
+
+            // Fext += Fn if collisions occur
+            if(myPerson->collidesWith(myFlag->particles[i][j]))
+            {
+                // compute the response force
+                normalForce = normalize(myFlag->particles[i][j]->position - myPerson->head->origin)
+                        * dot(myFlag->particles[i][j]->force, normalize(myFlag->particles[i][j]->position - myPerson->head->origin));
+                myFlag->particles[i][j]->externalForce += normalForce;
+            }
+
+            if(myGround->collidesWith(myFlag->particles[i][j]))
+            {
+                // compute the response force   DOESNT WORK YET!!!!!!
+                normalForce = myGround->topNormal * dot(myFlag->particles[i][j]->force, myGround->topNormal);
+                myFlag->particles[i][j]->externalForce += normalForce;
+            }
 
         }
     }
@@ -369,23 +387,10 @@ void Sim::updateForces(int number)
         for( j=0; j<myFlag->particlesWide; j++ )
         {
             // F = Fext + Fspring
-            myFlag->particles[i][j]->force = myFlag->particles[i][j]->externalForce + myFlag->particles[i][j]->springForce
-                    + 10.0f*vec3(abs(sin(t/10)), 0, 0); // wind
+            myFlag->particles[i][j]->force = myFlag->particles[i][j]->externalForce + myFlag->particles[i][j]->springForce;
 
-            if(myPerson->collidesWith(myFlag->particles[i][j]))
-            {
-                // compute the response force
-                normalForce = normalize(myFlag->particles[i][j]->position - myPerson->head->origin)
-                        * dot(myFlag->particles[i][j]->force, normalize(myFlag->particles[i][j]->position - myPerson->head->origin));
-                myFlag->particles[i][j]->force -= normalForce;
-            }
 
-            /*if(collidesWithGround(myFlag->particles[i][j],0))
-            {
-                // compute the response force   DOESNT WORK YET!!!!!!
-                normalForce = myGround->topNormal * dot(myFlag->particles[i][j]->force, myGround->topNormal);
-                myFlag->particles[i][j]->force += normalForce;
-            }*/
+
 
         }
 

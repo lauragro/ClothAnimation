@@ -97,7 +97,7 @@ void Sim::eulerStep(float dt)
     // move ball when cloth is in sheet mode
     //if( myFlag->type == SHEET )
     //{
-        //myBall->origin += vec3(0, -sin(t/12), 0);
+        myBall->origin += vec3(0, -sin(t/12), 0);
 
     //}
 

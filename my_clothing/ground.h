@@ -2,6 +2,7 @@
 #define GROUND_H
 
 #include "foundation.h"
+#include "particle.h"
 
 class Ground
 {
@@ -12,6 +13,7 @@ public:
     draw(GLuint texture);
 
     void initializeShader();
+    bool collidesWith(Particle *p);
 
     // parameters for collision detection
     float y;    // Height

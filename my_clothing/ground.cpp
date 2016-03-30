@@ -5,12 +5,12 @@ Ground::Ground(int height)
 {
     y = float(height);
 
-    xmin = -512.0f;//-256.0f;
+    xmin = -1024.0f;//-256.0f;
     zmin = xmin;
-    xmax = 512.0f;//256.0f;
+    xmax = 1024.0f;//256.0f;
     zmax = xmax;
     ymin = y;
-    ymax = ymin + 128.0f;
+    ymax = ymin + 64.0f;
 
     // normal vectors
     bottomNormal = vec3(0.0f, 1.0f, 0.0f);
@@ -45,6 +45,42 @@ Ground::draw(GLuint texture)
     /* Make the grass */
     drawTextures(texture);
 
+}
+
+bool Ground::collidesWith(Particle *p)
+{
+    // particle coords
+    float x,y,z;
+        x = p->position.x;
+        y = p->position.y;
+        z = p->position.z;
+
+
+    // ground coords
+    //float ymin = myGround->ymin;
+    /*float ymax = myGround->ymax;
+    float xmin = myGround->xmin;
+    float xmax = myGround->xmax;
+    float zmin = myGround->zmin;
+    float zmax = myGround->zmax;*/
+
+    // collides with block
+    if(     y >= ymin-5.0f
+         /*&& y <= ymax
+         && x >= xmin
+         && x <= xmax
+         && z >= zmin
+         && z <= zmax */  )
+    {
+        // push particle back
+        p->position.y = ymin- 6.0f;
+
+        // collision detected
+        return true;
+    }
+
+    // no collision detected
+    return false;
 }
 
 //========TEXTURES================================================
