@@ -25,7 +25,7 @@ public:
 
     void draw(GLuint headTexture, GLuint bodyTexture);
 
-    void setOrigin(vec3);
+    void setOrigin(vec3 p);
 
 };
 

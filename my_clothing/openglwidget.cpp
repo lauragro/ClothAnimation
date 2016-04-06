@@ -2,7 +2,8 @@
 #include "openglwidget.h"
 #include "sim.h"
 #include "window.h"
-
+#include <QKeyEvent>
+#include <QKeySequence>
 
 // simulation timer interval (millisec)
 static int timer_interval = 10;
@@ -16,6 +17,9 @@ OpenGLWidget::OpenGLWidget(QWidget *parent) : QGLWidget(parent)
     mySim = new Sim();
     myCamera = new Camera();
     startup();
+
+    // set focus policy for responding to keyboard events
+    this->setFocusPolicy(Qt::StrongFocus);
 }
 
 // Destructor
@@ -238,16 +242,70 @@ void OpenGLWidget::mouseMoveEvent(QMouseEvent *e)
 /*********** React to keyboard buttons ********/
 void OpenGLWidget::keyPressEvent(QKeyEvent *k)
 {
-    if(k->matches(QKeySequence::MoveToPreviousPage))
+    // Amount to move per step
+    float stepSize = 10.0f;
+
+    // Left arrow
+    if(k->matches(QKeySequence::MoveToPreviousChar))
+    //if(k->matches(QKeySequence(Qt::Key_A)))
     {
-        mySim->myPerson->setOrigin(vec3(mySim->myPerson->origin.x - 10.0f,
-                                        mySim->myPerson->origin.y,
-                                        mySim->myPerson->origin.z));
+        vec3 p = vec3(mySim->myPerson->origin.x + stepSize,
+                      mySim->myPerson->origin.y,
+                      mySim->myPerson->origin.z);
+
+        mySim->myPerson->setOrigin(p);
+
+        cout << "LEFT ARROW" << endl;
+
+        //advanceFrame();
+        //updateGL();
+        paintGL();
+    }
+    // Right arrow
+    else if(k->matches(QKeySequence::MoveToNextChar))
+    {
+        vec3 p = vec3(mySim->myPerson->origin.x - stepSize,
+                      mySim->myPerson->origin.y,
+                      mySim->myPerson->origin.z);
+
+        mySim->myPerson->setOrigin(p);
+
+        cout << "RIGHT ARROW" << endl;
+
+        //updateGL();
+        paintGL();
+    }
+    // Up arrow
+    else if(k->matches(QKeySequence::MoveToPreviousLine))
+    {
+        vec3 p = vec3(mySim->myPerson->origin.x,
+                      mySim->myPerson->origin.y,
+                      mySim->myPerson->origin.z - stepSize);
+
+        mySim->myPerson->setOrigin(p);
+
+        cout << "UP ARROW" << endl;
+
+        //updateGL();
+        paintGL();
+    }
+    // Down arrow
+    else if(k->matches(QKeySequence::MoveToNextLine))
+    {
+        vec3 p = vec3(mySim->myPerson->origin.x,
+                      mySim->myPerson->origin.y,
+                      mySim->myPerson->origin.z + stepSize);
+
+        mySim->myPerson->setOrigin(p);
+
+        cout << "DOWN ARROW" << endl;
+
+        //updateGL();
+        paintGL();
     }
 
-    cout << "LEFT ARROW" << endl;
-
-    updateGL();
+    k = NULL;
+    //updateGL();
 }
 
 

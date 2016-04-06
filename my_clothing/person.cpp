@@ -42,6 +42,7 @@ bool Person::collidesWith(Particle *p)
 }
 void Person::setOrigin(vec3 p)
 {
+    origin = p;
     body->origin = p;
     head->origin = body->origin - vec3(0.0f, body->radius + head->radius, 0.0f);
 
