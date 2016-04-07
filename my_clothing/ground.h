@@ -24,6 +24,8 @@ public:
     float ymax;
     float ymin;
 
+    float coefficientOfFriction;
+
     // normal vectors
     vec3 bottomNormal;
     vec3 frontNormal;

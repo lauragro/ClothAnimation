@@ -93,7 +93,7 @@ glm::vec3 Spring::force(int number)
     springLength = (float)length(lengthVector);
 
     // calculate force if length does not equal rest length
-    if( (springLength - restLength) >= EPSILON  )//&& springLength <= 1.5f*restLength)
+    if( abs(springLength - restLength) >= EPSILON  )//&& springLength <= 1.5f*restLength)
     {
         // x = (|L| - L0)(L/|L|)
         x = normalize(lengthVector) * (springLength-restLength);

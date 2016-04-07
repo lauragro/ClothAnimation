@@ -13,6 +13,7 @@ public:
     ~Person();
 
     vec3 origin;    // origin of body
+    float coefficientOfFriction;
 
     Ball * head;
     Ball * body;

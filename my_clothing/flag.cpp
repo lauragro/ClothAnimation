@@ -143,7 +143,7 @@ void Flag::createSheet(int zCentre)
 void Flag::createBlanket(int zCentre)
 {
     float x,y,z;
-    y = -300.0;   // just a bit below the top of the screen
+    y = -450.0;   // just a bit below the top of the screen
 
     float halfWidth = (float)width/2.0f;
     float halfHeight = (float)height/2.0f;

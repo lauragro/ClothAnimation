@@ -28,17 +28,17 @@ Sim::~Sim()
 void Sim::draw(GLuint * textures)
 {
     // Draw ground
-    myGround->draw(textures[0]);
+    //myGround->draw(textures[0]);
 
 
     // Draw blue circles
-    for( int i=0; i<myFlag->particlesHigh; i++ )
+    /*for( int i=0; i<myFlag->particlesHigh; i++ )
     {
         for(int j=0; j<myFlag->particlesWide; j++)
         {
             myFlag->particles[i][j]->draw();
         }
-    }
+    }*/
 
     // Draw ball
     //myBall->draw(textures[1]);
@@ -120,7 +120,22 @@ void Sim::eulerStep(float dt)
             } else if(myPerson->collidesWith(myFlag->particles[i][j])){
 
                 // set velocity to zero
-                myFlag->particles[i][j]->velocity=vec3(0.0f,0.0f,0.0f);
+                //myFlag->particles[i][j]->velocity=vec3(0.0f,0.0f,0.0f);
+
+                // move particle to outside the person
+                if(myFlag->particles[i][j]->position.y >= myPerson->head->origin.y + myPerson->head->radius)
+                {
+                    // bump to outside the body
+                    myFlag->particles[i][j]->position = myPerson->body->origin
+                            + (normalize(myFlag->particles[i][j]->position - myPerson->body->origin)
+                            * myPerson->body->radius * 1.1f);
+                } else {
+                    // bump to outside head
+                    myFlag->particles[i][j]->position = myPerson->head->origin
+                            + (normalize(myFlag->particles[i][j]->position - myPerson->head->origin)
+                            * myPerson->head->radius * 1.1f);
+                }
+
 
                 continue;
 
@@ -128,7 +143,7 @@ void Sim::eulerStep(float dt)
             } else if(myGround->collidesWith(myFlag->particles[i][j])){
 
                 // set velocity to zero
-                myFlag->particles[i][j]->velocity=vec3(0.0f,0.0f,0.0f);
+                //myFlag->particles[i][j]->velocity=vec3(0.0f,0.0f,0.0f);
 
                 continue;
 
@@ -320,7 +335,7 @@ void Sim::eulerStep(float dt)
 void Sim::updateForces(int number)
 {
     int i,j;
-    glm::vec3 force, v, normalForce;
+    glm::vec3 force, v, normalForce, frictionForce;
 
     // Reset forces
     for( i=0; i<myFlag->particlesHigh; i++ )
@@ -347,23 +362,48 @@ void Sim::updateForces(int number)
             }
 
             // Fext = Fgravity + Fdamp + Fwind
-            myFlag->particles[i][j]->externalForce = myFlag->particles[i][j]->gravityForce - v * myFlag->dampingConstant
-                    + 20.0f*vec3(abs(sin(t/10)), 0, 0); // wind;
+            myFlag->particles[i][j]->externalForce = myFlag->particles[i][j]->gravityForce - v * myFlag->dampingConstant;
+                   // + 20.0f*vec3(abs(sin(t/10)), 0, 0); // wind;
 
-            // Fext += Fn if collisions occur
+            // Fext += Fn + Ff if collisions occur
             if(myPerson->collidesWith(myFlag->particles[i][j]))
             {
                 // compute the response force
-                normalForce = normalize(myFlag->particles[i][j]->position - myPerson->head->origin)
-                        * dot(myFlag->particles[i][j]->force, normalize(myFlag->particles[i][j]->position - myPerson->head->origin));
+                normalForce = -1.0f * normalize(myFlag->particles[i][j]->position - myPerson->head->origin)
+                        * dot(myFlag->particles[i][j]->force, normalize(myFlag->particles[i][j]->position - myPerson->head->origin))
+                        * length(myFlag->particles[i][j]->position - myPerson->head->origin);
                 myFlag->particles[i][j]->externalForce += normalForce;
+
+                // compute the friction
+                frictionForce = -1.0f * myPerson->coefficientOfFriction * length(normalForce) * normalize(myFlag->particles[i][j]->force);
+
+                // limit the friction so it doesn't move the particle
+                if(length(frictionForce) >= length(myFlag->particles[i][j]->force))//dot(myFlag->particles[i][j]->force, frictionForce))
+                {
+                    frictionForce = -1.0f * myFlag->particles[i][j]->force;//dot(myFlag->particles[i][j]->force, frictionForce);
+                    //myFlag->particles[i][j]->velocity = vec3(0.0f,0.0f,0.0f);
+                }
+
+                myFlag->particles[i][j]->externalForce += frictionForce;
             }
 
             if(myGround->collidesWith(myFlag->particles[i][j]))
             {
-                // compute the response force   DOESNT WORK YET!!!!!!
+                // compute the response force
                 normalForce = myGround->topNormal * dot(myFlag->particles[i][j]->force, myGround->topNormal);
                 myFlag->particles[i][j]->externalForce += normalForce;
+
+                // compute the friction
+                frictionForce = -1.0f * myGround->coefficientOfFriction * length(normalForce) * normalize(myFlag->particles[i][j]->force);
+
+                // limit the friction so it doesn't move the particle
+                if(length(frictionForce) >= length(myFlag->particles[i][j]->force))//dot(myFlag->particles[i][j]->force, frictionForce))
+                {
+                    frictionForce = -1.0f * myFlag->particles[i][j]->force;//dot(myFlag->particles[i][j]->force, frictionForce);
+                    myFlag->particles[i][j]->velocity = vec3(0.0f,0.0f,0.0f);
+                }
+
+                myFlag->particles[i][j]->externalForce += frictionForce;
             }
 
         }
@@ -396,73 +436,4 @@ void Sim::updateForces(int number)
 
     }
 
-}
-
-
-// Check for collision of one particle with ground
-bool Sim::collidesWithGround(Particle * thisParticle, int number)
-{
-    // particle coords
-    float x,y,z;
-    switch(number){
-    case 0:
-        x = thisParticle->position.x;
-        y = thisParticle->position.y;
-        z = thisParticle->position.z;
-        break;
-    case 1:
-        x = thisParticle->position1.x;
-        y = thisParticle->position1.y;
-        z = thisParticle->position1.z;
-        break;
-    case 2:
-        x = thisParticle->position2.x;
-        y = thisParticle->position2.y;
-        z = thisParticle->position2.z;
-        break;
-    default://case 3:
-        x = thisParticle->position3.x;
-        y = thisParticle->position3.y;
-        z = thisParticle->position3.z;
-        //break;
-    }
-
-    // ground coords
-    float ymin = myGround->ymin;
-    float ymax = myGround->ymax;
-    float xmin = myGround->xmin;
-    float xmax = myGround->xmax;
-    float zmin = myGround->zmin;
-    float zmax = myGround->zmax;
-
-    // collides with block
-    if(     y >= ymin
-         /*&& y <= ymax
-         && x >= xmin
-         && x <= xmax
-         && z >= zmin
-         && z <= zmax */  )
-    {
-        // push particle back
-        switch(number){
-        case 0:
-            thisParticle->position.y = ymin;
-            break;
-        case 1:
-            thisParticle->position1.y = ymin;
-            break;
-        case 2:
-            thisParticle->position2.y = ymin;
-            break;
-        default://case 3:
-            thisParticle->position3.y = ymin;
-            //break;
-        }
-
-        // collision detected
-        return true;
-    }
-
-    // no collision detected
-    return false;
 }

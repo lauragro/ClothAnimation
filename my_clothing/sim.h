@@ -33,7 +33,7 @@ class Sim
         void updateForces(int number);
 
         // Check for collisions of one particle
-        bool collidesWithGround(Particle * thisParticle, int number);
+        //bool collidesWithGround(Particle * thisParticle, int number);
 
         // The components belonging to this simulation
         Flag * myFlag;

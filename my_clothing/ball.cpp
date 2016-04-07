@@ -86,7 +86,7 @@ bool Ball::collidesWith(Particle * p, int number)
     if( distance <= radius * 1.1f )
     {
         // push particle back to ball's circumference
-        vec3 x = origin + normalize(distanceVector) * radius * 1.1f;
+        /*vec3 x = origin + normalize(distanceVector) * radius * 1.1f;
 
         switch(number){
         case 0:
@@ -100,7 +100,7 @@ bool Ball::collidesWith(Particle * p, int number)
             break;
         default:    // case 3:
             p->position3 = x;
-        }
+        }*/
 
         // collision detected
         return true;

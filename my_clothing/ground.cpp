@@ -5,6 +5,8 @@ Ground::Ground(int height)
 {
     y = float(height);
 
+    coefficientOfFriction = 10.0f;   // TODO: experiment to find a good one
+
     xmin = -1024.0f;//-256.0f;
     zmin = xmin;
     xmax = 1024.0f;//256.0f;

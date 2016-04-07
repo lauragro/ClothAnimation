@@ -10,6 +10,8 @@ Person::Person()
     head->origin = body->origin - vec3(0.0f, 3.0f*body->radius, 0.0f);   // move head up
     body->radius = 2.0f * head->radius; // increase body size
 
+    coefficientOfFriction = 10.0f;   // TODO: experiment to find a good one
+
     /*vec3 limbStart = body->origin - vec3(body->radius, 0.0f, 0.0f);   // add limbs if there's time :)
     vec3 limbEnd = limbStart - vec3(body->radius, 0.0f, 0.0f);
     leftArm = new Limb(limbStart, limbEnd);
