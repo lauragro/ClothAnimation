@@ -29,7 +29,7 @@ class Sim
         void simStep();
         void rightStep(float dt);
         void eulerStep(float dt);
-        //void rungeKuttaStep(float dt);
+        void rungeKuttaStep(float dt);
         void updateForces(int number);
 
         // Check for collisions of one particle

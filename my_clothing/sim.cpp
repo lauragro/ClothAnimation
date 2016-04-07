@@ -69,8 +69,8 @@ void Sim::simStep()
             eulerStep(dt);
             break;
         default://case 2:
-            //rungeKuttaStep(dt); // This fails after multiple collisions!
-            break;
+            rungeKuttaStep(dt); // This fails after multiple collisions!
+            //break;
     }
 
 }
@@ -120,7 +120,7 @@ void Sim::eulerStep(float dt)
             } else if(myPerson->collidesWith(myFlag->particles[i][j])){
 
                 // set velocity to zero
-                //myFlag->particles[i][j]->velocity=vec3(0.0f,0.0f,0.0f);
+                myFlag->particles[i][j]->velocity=vec3(0.0f,0.0f,0.0f);
 
                 // move particle to outside the person
                 if(myFlag->particles[i][j]->position.y >= myPerson->head->origin.y + myPerson->head->radius)
@@ -135,7 +135,6 @@ void Sim::eulerStep(float dt)
                             + (normalize(myFlag->particles[i][j]->position - myPerson->head->origin)
                             * myPerson->head->radius * 1.1f);
                 }
-
 
                 continue;
 
@@ -168,6 +167,7 @@ void Sim::eulerStep(float dt)
                 x = x + v*dt;// + 0.5f * a * dt * dt;
                 myFlag->particles[i][j]->position = x;
             }
+
         }
 
     }
@@ -176,7 +176,7 @@ void Sim::eulerStep(float dt)
 
 
 // Runge Kutta 4th Order simulation step
-/*void Sim::rungeKuttaStep(float dt)
+void Sim::rungeKuttaStep(float dt)
 {
     vec3 x,v, dx1, dx2, dx3, dx4, dv1, dv2, dv3, dv4;
     int i,j;
@@ -189,7 +189,7 @@ void Sim::eulerStep(float dt)
         {
             // pin the corners and detect collisions
             if(myFlag->particles[i][j]->pinned
-                    || collidesWithBall(myFlag->particles[i][j],0) || collidesWithGround(myFlag->particles[i][j],0))
+                    || myPerson->collidesWith(myFlag->particles[i][j]) || myGround->collidesWith(myFlag->particles[i][j]))
             {
                 // set velocity to zero
                 myFlag->particles[i][j]->velocity=vec3(0.0f,0.0f,0.0f);
@@ -226,7 +226,7 @@ void Sim::eulerStep(float dt)
         {
             // pin the corners and check for collisions
             if(myFlag->particles[i][j]->pinned
-                    || collidesWithBall(myFlag->particles[i][j],1) || collidesWithGround(myFlag->particles[i][j],1))
+                    || myPerson->collidesWith(myFlag->particles[i][j]) || myGround->collidesWith(myFlag->particles[i][j]))
             {
                 // set velocity to zero
                 myFlag->particles[i][j]->velocity=vec3(0.0f,0.0f,0.0f);
@@ -263,7 +263,7 @@ void Sim::eulerStep(float dt)
         {
             // pin the corners and check for collisions
             if(myFlag->particles[i][j]->pinned
-                    || collidesWithBall(myFlag->particles[i][j],2) || collidesWithGround(myFlag->particles[i][j],2))
+                    || myPerson->collidesWith(myFlag->particles[i][j]) || myGround->collidesWith(myFlag->particles[i][j]))
             {
                 // set velocity to zero
                 myFlag->particles[i][j]->velocity=vec3(0.0f,0.0f,0.0f);
@@ -300,7 +300,7 @@ void Sim::eulerStep(float dt)
         {
             // pin the corners and check for collisions
             if(myFlag->particles[i][j]->pinned
-                    || collidesWithBall(myFlag->particles[i][j],3) || collidesWithGround(myFlag->particles[i][j],3))
+                    || myPerson->collidesWith(myFlag->particles[i][j]) || myGround->collidesWith(myFlag->particles[i][j]))
             {
                 // set velocity to zero
                 myFlag->particles[i][j]->velocity=vec3(0.0f,0.0f,0.0f);
@@ -328,7 +328,7 @@ void Sim::eulerStep(float dt)
             }
         }
     }
-}*/
+}
 
 
 // Update forces on all particles
@@ -363,15 +363,15 @@ void Sim::updateForces(int number)
 
             // Fext = Fgravity + Fdamp + Fwind
             myFlag->particles[i][j]->externalForce = myFlag->particles[i][j]->gravityForce - v * myFlag->dampingConstant;
-                   // + 20.0f*vec3(abs(sin(t/10)), 0, 0); // wind;
+                    //+ 20.0f*vec3(abs(sin(t/10)), 0, 0); // wind;
 
             // Fext += Fn + Ff if collisions occur
             if(myPerson->collidesWith(myFlag->particles[i][j]))
             {
                 // compute the response force
                 normalForce = -1.0f * normalize(myFlag->particles[i][j]->position - myPerson->head->origin)
-                        * dot(myFlag->particles[i][j]->force, normalize(myFlag->particles[i][j]->position - myPerson->head->origin))
-                        * length(myFlag->particles[i][j]->position - myPerson->head->origin);
+                        * dot(myFlag->particles[i][j]->force, normalize(myFlag->particles[i][j]->position - myPerson->head->origin));
+                        //* length(myFlag->particles[i][j]->position - myPerson->head->origin);
                 myFlag->particles[i][j]->externalForce += normalForce;
 
                 // compute the friction
@@ -429,11 +429,11 @@ void Sim::updateForces(int number)
             // F = Fext + Fspring
             myFlag->particles[i][j]->force = myFlag->particles[i][j]->externalForce + myFlag->particles[i][j]->springForce;
 
-
-
-
         }
 
     }
+
+    cout << "(" << myFlag->particles[16][16]->force.x << ", " << myFlag->particles[16][16]->force.y
+          << ", " << myFlag->particles[16][16]->force.z << ")" << endl;
 
 }
