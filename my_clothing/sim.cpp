@@ -28,7 +28,7 @@ Sim::~Sim()
 void Sim::draw(GLuint * textures)
 {
     // Draw ground
-    //myGround->draw(textures[0]);
+    myGround->draw(textures[0]);
 
 
     // Draw blue circles
@@ -120,7 +120,7 @@ void Sim::eulerStep(float dt)
             } else if(myPerson->collidesWith(myFlag->particles[i][j])){
 
                 // set velocity to zero
-                myFlag->particles[i][j]->velocity=vec3(0.0f,0.0f,0.0f);
+                //myFlag->particles[i][j]->velocity=vec3(0.0f,0.0f,0.0f);
 
                 // move particle to outside the person
                 if(myFlag->particles[i][j]->position.y >= myPerson->head->origin.y + myPerson->head->radius)
@@ -166,12 +166,63 @@ void Sim::eulerStep(float dt)
                 // update position
                 x = x + v*dt;// + 0.5f * a * dt * dt;
                 myFlag->particles[i][j]->position = x;
+
+                // ignore very small velocities
+                /*if(length(v) <= EPSILON)
+                {
+                    myFlag->particles[i][j]->velocity = vec3(0.0f,0.0f,0.0f);
+                }
+                // ignore very small forces
+                if(length(a) <= EPSILON)
+                {
+
+                }*/
             }
 
         }
 
     }
 
+
+    // adjust for any collisions that have taken place this time step
+    /*for( i=0; i<myFlag->particlesHigh; i++ )
+    {
+        for( j=0; j<myFlag->particlesWide; j++)
+        {
+            if(myPerson->collidesWith(myFlag->particles[i][j])){
+
+                // set velocity to zero
+                //myFlag->particles[i][j]->velocity=vec3(0.0f,0.0f,0.0f);
+
+                // move particle to outside the person
+                /*if(myFlag->particles[i][j]->position.y >= myPerson->head->origin.y + myPerson->head->radius)
+                {
+                    // bump to outside the body
+                    myFlag->particles[i][j]->position = myFlag->particles[i][j]->position
+                            + normalize(myFlag->particles[i][j]->position - myPerson->body->origin)
+                            * (myPerson->body->radius - length(myFlag->particles[i][j]->position - myPerson->body->origin));
+                } else {
+                    // bump to outside head
+                    myFlag->particles[i][j]->position = myFlag->particles[i][j]->position
+                            + ( normalize(myFlag->particles[i][j]->position - myPerson->head->origin)
+                            * (myPerson->head->radius - length(myFlag->particles[i][j]->position - myPerson->head->origin)) );
+                }*/
+
+                /*if(myFlag->particles[i][j]->position.y >= myPerson->head->origin.y + myPerson->head->radius)
+                {
+                    // bump to outside the body
+                    myFlag->particles[i][j]->position = myPerson->body->origin
+                            + (normalize(myFlag->particles[i][j]->position - myPerson->body->origin)
+                            * myPerson->body->radius * 1.1f);
+                } else {
+                    // bump to outside head
+                    myFlag->particles[i][j]->position = myPerson->head->origin
+                            + (normalize(myFlag->particles[i][j]->position - myPerson->head->origin)
+                            * myPerson->head->radius * 1.1f);
+                }
+            }
+        }
+    }*/
 }
 
 

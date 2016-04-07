@@ -258,7 +258,7 @@ void OpenGLWidget::keyPressEvent(QKeyEvent *k)
         cout << "LEFT ARROW" << endl;
 
         // assure the simulation step occurs
-        advanceFrame();
+        //advanceFrame();
     }
     // Right arrow
     else if(k->matches(QKeySequence::MoveToNextChar))
@@ -272,7 +272,7 @@ void OpenGLWidget::keyPressEvent(QKeyEvent *k)
         cout << "RIGHT ARROW" << endl;
 
         // assure the simulation step occurs
-        advanceFrame();
+        //advanceFrame();
     }
     // Up arrow
     else if(k->matches(QKeySequence::MoveToPreviousLine))
@@ -286,7 +286,7 @@ void OpenGLWidget::keyPressEvent(QKeyEvent *k)
         cout << "UP ARROW" << endl;
 
         // assure the simulation step occurs
-        advanceFrame();
+        //advanceFrame();
     }
     // Down arrow
     else if(k->matches(QKeySequence::MoveToNextLine))
@@ -300,7 +300,7 @@ void OpenGLWidget::keyPressEvent(QKeyEvent *k)
         cout << "DOWN ARROW" << endl;
 
         // assure the simulation step occurs
-        advanceFrame();
+        //advanceFrame();
     }
 
     //k = NULL;

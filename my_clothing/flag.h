@@ -17,6 +17,8 @@ public:
     Flag(int zCentre);
     ~Flag();
 
+    void draw();
+
     // type of flag to make
     //char * type = SHEET;
     char * type = BLANKET;
@@ -50,6 +52,8 @@ private:
     void createSheet(int zCentre);
     void createBlanket(int zCentre);
 
+    void drawTriangle(Particle *p1, Particle *p2, Particle *p3, const vec3 colour);
+    vec3 calcTriangleNormal(Particle *p1,Particle *p2,Particle *p3);
 
 };
 

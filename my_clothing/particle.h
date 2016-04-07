@@ -22,6 +22,8 @@ public:
     vec3 springForce;
     vec3 gravityForce;
     bool pinned = false;
+    vec3 normal;    // not of unit length as it is a
+                    // sum of neighboring triangle normals at each step
 
     // attributes for RK4 integration
     vec3 position1;

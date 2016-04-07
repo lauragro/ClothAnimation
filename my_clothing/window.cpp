@@ -58,3 +58,8 @@ void MainWindow::box_springConstant(float value)
     //ui->lcd_spring_constant->display(value); // removed display
     myopenglwidget->button_reset();
 }
+
+void  MainWindow::dampingSlider(int a)
+{
+      box_dampingConstant(a/10.0);
+}

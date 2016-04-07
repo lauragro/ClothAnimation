@@ -77,6 +77,38 @@
      </item>
     </layout>
    </widget>
+   <widget class="QSlider" name="horizontalSlider">
+    <property name="geometry">
+     <rect>
+      <x>890</x>
+      <y>350</y>
+      <width>160</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="maximum">
+     <number>10</number>
+    </property>
+    <property name="pageStep">
+     <number>1</number>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>900</x>
+      <y>330</y>
+      <width>121</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Damping Coef</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -126,8 +158,8 @@
    <slot>button_go()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>929</x>
-     <y>593</y>
+     <x>930</x>
+     <y>488</y>
     </hint>
     <hint type="destinationlabel">
      <x>435</x>
@@ -158,12 +190,28 @@
    <slot>button_reset()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>929</x>
-     <y>629</y>
+     <x>930</x>
+     <y>549</y>
     </hint>
     <hint type="destinationlabel">
      <x>435</x>
      <y>353</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>dampingSlider(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>907</x>
+     <y>393</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>859</x>
+     <y>386</y>
     </hint>
    </hints>
   </connection>
@@ -175,5 +223,6 @@
   <slot>box_restLength(float)</slot>
   <slot>box_mass(float)</slot>
   <slot>box_springConstant(float)</slot>
+  <slot>dampingSlider(int)</slot>
  </slots>
 </ui>

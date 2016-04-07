@@ -166,3 +166,86 @@ void Flag::createBlanket(int zCentre)
 
     // don't pin anything yet
 }
+
+/* Calculate the triangle normal between three particles */
+vec3 Flag::calcTriangleNormal(Particle *p1,Particle *p2,Particle *p3)
+{
+    vec3 pos1 = p1->position;
+    vec3 pos2 = p2->position;
+    vec3 pos3 = p3->position;
+
+    vec3 v1 = pos2-pos1;
+    vec3 v2 = pos3-pos1;
+
+    return cross(v1, v2);
+}
+
+/* Draw a single triangle with shading */
+void Flag::drawTriangle(Particle *p1, Particle *p2, Particle *p3, const vec3 colour)
+{
+    glColor3fv( (GLfloat*) &colour );
+
+    glNormal3fv((GLfloat *) &(p1->normal)); // should I normalize these? they are not of unit length.
+    glVertex3fv((GLfloat *) &(p1->position ));
+
+    glNormal3fv((GLfloat *) &(p2->normal));
+    glVertex3fv((GLfloat *) &(p2->position ));
+
+    glNormal3fv((GLfloat *) &(p3->normal));
+    glVertex3fv((GLfloat *) &(p3->position ));
+}
+
+/* Draw flag with shaders */
+void Flag::draw()
+{
+    int i,j;
+    vec3 normal;
+
+    // reset normals (which where written to last frame)
+    for(i=0; i<particlesHigh; i++)
+    {
+        for (j=0; j<particlesWide; j++)
+        {
+            particles[i][j]->normal = vec3(0.0f,0.0f,0.0f);
+        }
+
+    }
+
+    //create smooth per particle normals by adding up all the (hard) triangle normals that each particle is part of
+    for(int x = 0; x<num_particles_width-1; x++)
+    {
+        for(int y=0; y<num_particles_height-1; y++)
+        {
+            normal = calcTriangleNormal(getParticle(x+1,y),getParticle(x,y),getParticle(x,y+1));
+            getParticle(x+1,y)->addToNormal(normal);
+            getParticle(x,y)->addToNormal(normal);
+            getParticle(x,y+1)->addToNormal(normal);
+
+            normal = calcTriangleNormal(getParticle(x+1,y+1),getParticle(x+1,y),getParticle(x,y+1));
+            getParticle(x+1,y+1)->addToNormal(normal);
+            getParticle(x+1,y)->addToNormal(normal);
+            getParticle(x,y+1)->addToNormal(normal);
+        }
+    }
+
+    glBegin(GL_TRIANGLES);
+    for(int x = 0; x<num_particles_width-1; x++)
+    {
+        for(int y=0; y<num_particles_height-1; y++)
+        {
+            Vec3 color(0,0,0);
+            if (x%2) // red and white color is interleaved according to which column number
+                color = Vec3(0.6f,0.2f,0.2f);
+            else
+                color = Vec3(1.0f,1.0f,1.0f);
+
+            drawTriangle(getParticle(x+1,y),getParticle(x,y),getParticle(x,y+1),color);
+            drawTriangle(getParticle(x+1,y+1),getParticle(x+1,y),getParticle(x,y+1),color);
+        }
+    }
+    glEnd();
+}
+
+
+
+

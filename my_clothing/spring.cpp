@@ -23,13 +23,13 @@ Spring::Spring(Particle *particle1, Particle *particle2, int springType)
     // set spring constants struct > shear,bend
     switch(springType){
         case 0:
-            this->springConstant = 12.0f;
+            this->springConstant = 14.0f;
             break;
         case 1:
-            this->springConstant = 10.0f;
+            this->springConstant = 12.0f;
             break;
         default:
-            this->springConstant = 10.0f;
+            this->springConstant = 12.0f;
     }
 
 }

@@ -66,7 +66,7 @@ void Camera::MouseMove(double x, double y)
       dolly_factor += (lastY - y);// * 0.1f;
       if (dolly_factor < 100) dolly_factor = 100;
       //if (dolly_factor < -100) dolly_factor = -100;
-      if (dolly_factor > 1000) dolly_factor = 1000;
+      if (dolly_factor > 2000) dolly_factor = 2000;
 
       // dolly
       //CameraPos *= glm::mix( CameraPos, dolly_factor * CameraPos, 0.1 );

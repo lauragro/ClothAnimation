@@ -15,9 +15,11 @@
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHeaderView>
+#include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QSlider>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QToolBar>
 #include <QtWidgets/QWidget>
@@ -35,6 +37,8 @@ public:
     QPushButton *button1;
     QPushButton *button2;
     QPushButton *button3;
+    QSlider *horizontalSlider;
+    QLabel *label;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -78,6 +82,15 @@ public:
 
         gridLayout->addWidget(button3, 2, 0, 1, 1);
 
+        horizontalSlider = new QSlider(centralWidget);
+        horizontalSlider->setObjectName(QStringLiteral("horizontalSlider"));
+        horizontalSlider->setGeometry(QRect(890, 350, 160, 22));
+        horizontalSlider->setMaximum(10);
+        horizontalSlider->setPageStep(1);
+        horizontalSlider->setOrientation(Qt::Horizontal);
+        label = new QLabel(centralWidget);
+        label->setObjectName(QStringLiteral("label"));
+        label->setGeometry(QRect(900, 330, 121, 16));
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
@@ -94,6 +107,7 @@ public:
         QObject::connect(button1, SIGNAL(clicked()), openGLWidget, SLOT(button_go()));
         QObject::connect(button2, SIGNAL(clicked()), openGLWidget, SLOT(button_stop()));
         QObject::connect(button3, SIGNAL(clicked()), openGLWidget, SLOT(button_reset()));
+        QObject::connect(horizontalSlider, SIGNAL(valueChanged(int)), MainWindow, SLOT(dampingSlider(int)));
 
         QMetaObject::connectSlotsByName(MainWindow);
     } // setupUi
@@ -104,6 +118,7 @@ public:
         button1->setText(QApplication::translate("MainWindow", "Go", 0));
         button2->setText(QApplication::translate("MainWindow", "Stop", 0));
         button3->setText(QApplication::translate("MainWindow", "Reset", 0));
+        label->setText(QApplication::translate("MainWindow", "Damping Coef", 0));
     } // retranslateUi
 
 };

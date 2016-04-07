@@ -33,6 +33,7 @@ public slots:
     void box_restLength(float value);
     void box_mass(float value);
     void box_springConstant(float value);
+    void dampingSlider(int a);
 
 
 };

@@ -83,7 +83,7 @@ bool Ball::collidesWith(Particle * p, int number)
 
     float distance = length(distanceVector);
 
-    if( distance <= radius * 1.1f )
+    if( distance < radius * 1.1f )  // <=
     {
         // push particle back to ball's circumference
         /*vec3 x = origin + normalize(distanceVector) * radius * 1.1f;

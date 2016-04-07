@@ -107,7 +107,7 @@ void Ground::drawTextures(GLuint texture)
         glEnd();
 
         // FRONT
-        glBegin(GL_QUADS);
+        /*glBegin(GL_QUADS);
             glTexCoord2f(0.0f, 1.0f); glVertex3f(xmin, ymin, zmax);  // vertex 1
             glTexCoord2f(0.0f, 0.0f); glVertex3f(xmax, ymin, zmax); // vertex 2
             glTexCoord2f(1.0f, 0.0f); glVertex3f(xmax, ymax, zmax);  // vertex 3
@@ -136,14 +136,14 @@ void Ground::drawTextures(GLuint texture)
             glTexCoord2f(0.0f, 0.0f); glVertex3f(xmin, ymax, zmin); // vertex 2
             glTexCoord2f(1.0f, 0.0f); glVertex3f(xmin, ymin, zmin);  // vertex 3
             glTexCoord2f(1.0f, 1.0f); glVertex3f(xmin, ymin, zmax);   // vertex 4
-        glEnd();
+        glEnd();*/
 
         // BOTTOM
         glBegin(GL_QUADS);
-            glTexCoord2f(0.0f, 1.0f); glVertex3f(xmin, ymax, zmin);  // vertex 1
-            glTexCoord2f(0.0f, 0.0f); glVertex3f(xmin, ymax, zmax); // vertex 2
-            glTexCoord2f(1.0f, 0.0f); glVertex3f(xmax, ymax, zmax);  // vertex 3
-            glTexCoord2f(1.0f, 1.0f); glVertex3f(xmax, ymax, zmin);   // vertex 4
+            glTexCoord2f(0.0f, 1.0f); glVertex3f(xmin, ymin, zmin);  // vertex 1
+            glTexCoord2f(0.0f, 0.0f); glVertex3f(xmin, ymin, zmax); // vertex 2
+            glTexCoord2f(1.0f, 0.0f); glVertex3f(xmax, ymin, zmax);  // vertex 3
+            glTexCoord2f(1.0f, 1.0f); glVertex3f(xmax, ymin, zmin);   // vertex 4
         glEnd();
 
         glDisable(GL_TEXTURE_2D);
