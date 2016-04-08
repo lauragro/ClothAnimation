@@ -43,13 +43,17 @@ void Sim::draw(GLuint * textures)
     // Draw ball
     //myBall->draw(textures[1]);
 
+    // Draw person
     myPerson->draw(textures[1],textures[1]);
 
     // Draw connecting lines
-    for( int i=0; i<myFlag->implementedSprings; i++ )
+    /*for( int i=0; i<myFlag->implementedSprings; i++ )
     {
         myFlag->springs[i]->draw();
-    }
+    }*/
+
+    // Draw flag
+    myFlag->draw();
 
 }
 

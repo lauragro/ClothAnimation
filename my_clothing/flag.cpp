@@ -183,23 +183,32 @@ vec3 Flag::calcTriangleNormal(Particle *p1,Particle *p2,Particle *p3)
 /* Draw a single triangle with shading */
 void Flag::drawTriangle(Particle *p1, Particle *p2, Particle *p3, const vec3 colour)
 {
+    vec3 norm;
+
     glColor3fv( (GLfloat*) &colour );
 
-    glNormal3fv((GLfloat *) &(p1->normal)); // should I normalize these? they are not of unit length.
-    glVertex3fv((GLfloat *) &(p1->position ));
+    norm = normalize(p3->normal);
+    glNormal3fv((GLfloat *) &norm);
+    glVertex3fv((GLfloat *) &(p3->position ));
 
-    glNormal3fv((GLfloat *) &(p2->normal));
+    norm = normalize(p2->normal);
+    glNormal3fv((GLfloat *) &norm);
     glVertex3fv((GLfloat *) &(p2->position ));
 
-    glNormal3fv((GLfloat *) &(p3->normal));
-    glVertex3fv((GLfloat *) &(p3->position ));
+    norm = normalize(p1->normal);   // must normalize each particle's "normal" as they are not of unit length.
+    glNormal3fv((GLfloat *) &norm);
+    glVertex3fv((GLfloat *) &(p1->position ));
+
+
+
+
 }
 
 /* Draw flag with shaders */
 void Flag::draw()
 {
     int i,j;
-    vec3 normal;
+    vec3 normal,colour;
 
     // reset normals (which where written to last frame)
     for(i=0; i<particlesHigh; i++)
@@ -212,35 +221,51 @@ void Flag::draw()
     }
 
     //create smooth per particle normals by adding up all the (hard) triangle normals that each particle is part of
-    for(int x = 0; x<num_particles_width-1; x++)
+    for( i=0; i<particlesHigh-1; i++)
+    //for(int x = 0; x<num_particles_width-1; x++)
     {
-        for(int y=0; y<num_particles_height-1; y++)
+        for( j=0; j<particlesWide-1; j++)
+        //for(int y=0; y<num_particles_height-1; y++)
         {
-            normal = calcTriangleNormal(getParticle(x+1,y),getParticle(x,y),getParticle(x,y+1));
-            getParticle(x+1,y)->addToNormal(normal);
-            getParticle(x,y)->addToNormal(normal);
-            getParticle(x,y+1)->addToNormal(normal);
+            normal = calcTriangleNormal(    particles[i+1][j],//getParticle(x+1,y),
+                                            particles[i][j],//getParticle(x,y),
+                                            particles[i][j+1]);//getParticle(x,y+1));
+            particles[i+1][j]->normal += normal;
+            particles[i][j]->normal += normal;
+            particles[i][j+1]->normal += normal;
 
-            normal = calcTriangleNormal(getParticle(x+1,y+1),getParticle(x+1,y),getParticle(x,y+1));
-            getParticle(x+1,y+1)->addToNormal(normal);
-            getParticle(x+1,y)->addToNormal(normal);
-            getParticle(x,y+1)->addToNormal(normal);
+            normal = calcTriangleNormal(    particles[i+1][j+1],//getParticle(x+1,y+1),
+                                            particles[i+1][j],//getParticle(x+1,y),
+                                            particles[i][j+1]);//getParticle(x,y+1));
+            particles[i+1][j+1]->normal += normal;
+            particles[i+1][j]->normal += normal;
+            particles[i][j+1]->normal += normal;
         }
     }
 
     glBegin(GL_TRIANGLES);
-    for(int x = 0; x<num_particles_width-1; x++)
+    for( i=0; i<particlesHigh-1; i++ )
+    //for(int x = 0; x<num_particles_width-1; x++)
     {
-        for(int y=0; y<num_particles_height-1; y++)
+        for( j=0; j<particlesWide-1; j++)
+        //for(int y=0; y<num_particles_height-1; y++)
         {
-            Vec3 color(0,0,0);
-            if (x%2) // red and white color is interleaved according to which column number
-                color = Vec3(0.6f,0.2f,0.2f);
-            else
-                color = Vec3(1.0f,1.0f,1.0f);
+            //vec3 colour = vec3(0.0f,0.0f,0.0f);
+            if (i%2 == 0)
+            {
+                // red and white color is interleaved according to which column number
+                colour = vec3(0.6f,0.2f,0.2f);
+            } else
+            {
+                colour = vec3(1.0f,1.0f,0.0f);
+            }
 
-            drawTriangle(getParticle(x+1,y),getParticle(x,y),getParticle(x,y+1),color);
-            drawTriangle(getParticle(x+1,y+1),getParticle(x+1,y),getParticle(x,y+1),color);
+            drawTriangle(particles[i+1][j], //getParticle(x+1,y),
+                        particles[i][j],    //getParticle(x,y),
+                        particles[i][j+1],colour);//getParticle(x,y+1),colour);
+            drawTriangle(particles[i+1][j+1],//getParticle(x+1,y+1),
+                        particles[i+1][j],  //getParticle(x+1,y),
+                        particles[i][j+1],colour);//getParticle(x,y+1),colour);
         }
     }
     glEnd();
