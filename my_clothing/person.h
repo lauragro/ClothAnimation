@@ -12,7 +12,9 @@ public:
     Person();
     ~Person();
 
-    vec3 origin;    // origin of body
+    vec3 origin;    // origin of body (aka. position)
+    vec3 velocity;
+    vec3 acceleration;  // not needed?
     float coefficientOfFriction;
 
     Ball * head;

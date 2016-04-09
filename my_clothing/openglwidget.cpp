@@ -88,7 +88,7 @@ void OpenGLWidget::initializeGL()
     GLfloat global_ambient[] = {0.5,0.5,0.5,1.0};
     glLightModelfv(GL_LIGHT_MODEL_AMBIENT, global_ambient);
 
-    timer->start(); // timer should run always, not tied to animation
+    timer->start(50); // 20 fps: timer should run always, not tied to animation
     // frame timer is controlled by go and stop buttons
 
 }
@@ -138,7 +138,7 @@ void OpenGLWidget::advanceFrame()
         cerr << "Simulation stopped \n";
     }
 
-    updateGL();
+    //updateGL();   // only update graphics when advance time occurs, not when advance frame does.
 
 }
 
@@ -224,26 +224,27 @@ void OpenGLWidget::resizeGL( int winw, int winh )
 void OpenGLWidget::mousePressEvent(QMouseEvent *e)
 {
     myCamera->MouseButton(e, true);
-    updateGL();
+    //updateGL();   // not necessary
 }
 
 void OpenGLWidget::mouseReleaseEvent(QMouseEvent *e)
 {
     myCamera->MouseButton(e, false);
-    updateGL();
+    //updateGL();   // not necessary
 }
 
 void OpenGLWidget::mouseMoveEvent(QMouseEvent *e)
 {
     myCamera->MouseMove(e->x(), e->y());
-    updateGL();
+    //updateGL();   // not necessary
 }
 
 /*********** React to keyboard buttons ********/
 void OpenGLWidget::keyPressEvent(QKeyEvent *k)
 {
     // Amount to move per step
-    float stepSize = 10.0f;
+    float stepSize = 5.0f;
+    mySim->stepSize = stepSize;
 
     // Left arrow
     if(k->matches(QKeySequence::MoveToPreviousChar))
@@ -255,10 +256,13 @@ void OpenGLWidget::keyPressEvent(QKeyEvent *k)
 
         mySim->myPerson->setOrigin(p);
 
+        mySim->personMoved = true;
+        mySim->directionMoved = vec3(1.1f,0.0f,0.0f);
+
         cout << "LEFT ARROW" << endl;
 
         // assure the simulation step occurs
-        //advanceFrame();
+        advanceFrame();
     }
     // Right arrow
     else if(k->matches(QKeySequence::MoveToNextChar))
@@ -268,6 +272,9 @@ void OpenGLWidget::keyPressEvent(QKeyEvent *k)
                       mySim->myPerson->origin.z);
 
         mySim->myPerson->setOrigin(p);
+
+        mySim->personMoved = true;
+        mySim->directionMoved = vec3(-1.1f,0.0f,0.0f);
 
         cout << "RIGHT ARROW" << endl;
 
@@ -283,6 +290,10 @@ void OpenGLWidget::keyPressEvent(QKeyEvent *k)
 
         mySim->myPerson->setOrigin(p);
 
+        mySim->personMoved = true;
+        mySim->directionMoved = vec3(0.0f,0.0f,-1.1f);
+
+
         cout << "UP ARROW" << endl;
 
         // assure the simulation step occurs
@@ -296,6 +307,9 @@ void OpenGLWidget::keyPressEvent(QKeyEvent *k)
                       mySim->myPerson->origin.z + stepSize);
 
         mySim->myPerson->setOrigin(p);
+
+        mySim->personMoved = true;
+        mySim->directionMoved = vec3(0.0f,0.0f,1.1f);
 
         cout << "DOWN ARROW" << endl;
 

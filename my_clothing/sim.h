@@ -32,6 +32,11 @@ class Sim
         void rungeKuttaStep(float dt);
         void updateForces(int number);
 
+        // for fixing collisions when person moves
+        bool personMoved;
+        vec3 directionMoved;
+        float stepSize;
+
         // Check for collisions of one particle
         //bool collidesWithGround(Particle * thisParticle, int number);
 

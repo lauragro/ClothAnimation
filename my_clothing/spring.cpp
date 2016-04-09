@@ -112,7 +112,7 @@ glm::vec3 Spring::force(int number)
         }*/
 
         // F = -kx, damping added later as +cv
-        force = -1.0f * springConstant * x;
+        force = -1.0f * springConstant * x * 0.5f;
 
         return force;
     }

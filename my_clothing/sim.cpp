@@ -9,6 +9,7 @@ Sim::Sim()
     //myBall = new Ball(0);
 
     myPerson = new Person();
+    personMoved = false;    // in test stage now
     myFlag = new Flag(0);
 
     myGround = new Ground(myPerson->body->origin.y + myPerson->body->radius);
@@ -96,7 +97,7 @@ void Sim::rightStep(float dt)
 void Sim::eulerStep(float dt)
 {
     int i,j;
-    glm::vec3 x, v, a;
+    vec3 x, v, a, newOrigin, newVelocity;
 
     // move ball when cloth is in sheet mode
     //if( myFlag->type == SHEET )
@@ -104,6 +105,36 @@ void Sim::eulerStep(float dt)
         //myBall->origin += vec3(0, -sin(t/12), 0);
 
     //}
+
+    // TEST MOVE PERSON HERE
+    /*newOrigin = myPerson->origin + vec3(0.0f,-sin(t/24),0.0f);
+    newVelocity = (newOrigin - myPerson->origin)/dt;                    // v = dx/dt
+    myPerson->acceleration = (newVelocity - myPerson->velocity)/dt;     // a = dv/dt (update acceleration)
+    myPerson->velocity = newVelocity;   // update velocity
+    myPerson->setOrigin(newOrigin);     // update position*/
+
+    if(personMoved)
+    {
+        for( i=0; i<myFlag->particlesHigh; i++ )
+        {
+            for( j=0; j<myFlag->particlesWide; j++ )
+            {
+                if(myPerson->collidesWith(myFlag->particles[i][j]))
+                {
+                    myFlag->particles[i][j]->position += (directionMoved * stepSize);
+                    myFlag->particles[i][j]->pinned = true;
+                }
+                else
+                {
+                    myFlag->particles[i][j]->pinned = false;
+                }
+            }
+        }
+
+        // reset flag
+        personMoved = false;
+    }
+
 
     // update forces on particles
     updateForces(0);
@@ -117,9 +148,9 @@ void Sim::eulerStep(float dt)
             if(myFlag->particles[i][j]->pinned)
             {
                 // set velocity to zero
-                myFlag->particles[i][j]->velocity=vec3(0.0f,0.0f,0.0f);
+                //myFlag->particles[i][j]->velocity=vec3(0.0f,0.0f,0.0f);
 
-                continue;
+                //continue;
 
             // adjust for collision with person
             } else if(myPerson->collidesWith(myFlag->particles[i][j])){
@@ -149,7 +180,7 @@ void Sim::eulerStep(float dt)
                 // set velocity to zero
                 //myFlag->particles[i][j]->velocity=vec3(0.0f,0.0f,0.0f);
 
-                continue;
+                //continue;
 
             // update all other particles
             }
@@ -170,6 +201,14 @@ void Sim::eulerStep(float dt)
 
                 // update position
                 x = x + v*dt;// + 0.5f * a * dt * dt;
+
+                // check collisions again
+                /*if(length(x-myPerson->head->origin) < myPerson->head->radius
+                        || length(x-myPerson->body->origin) < myPerson->body->radius)
+                {
+                    //continue;   // don't update position in this case
+                }*/
+
                 myFlag->particles[i][j]->position = x;
 
                 // ignore very small velocities
@@ -228,6 +267,9 @@ void Sim::eulerStep(float dt)
             }
         }
     }*/
+
+
+
 }
 
 
@@ -424,10 +466,21 @@ void Sim::updateForces(int number)
             // Fext += Fn + Ff if collisions occur
             if(myPerson->collidesWith(myFlag->particles[i][j]))
             {
+
+                myFlag->particles[i][j]->velocity = myPerson->velocity;
+
                 // compute the response force
-                normalForce = -1.0f * normalize(myFlag->particles[i][j]->position - myPerson->head->origin)
-                        * dot(myFlag->particles[i][j]->force, normalize(myFlag->particles[i][j]->position - myPerson->head->origin));
-                        //* length(myFlag->particles[i][j]->position - myPerson->head->origin);
+                if(myFlag->particles[i][j]->position.y > myPerson->head->origin.y + myPerson->head->radius)
+                {
+                    normalForce = -1.0f * normalize(myFlag->particles[i][j]->position - myPerson->body->origin)
+                            * dot(myFlag->particles[i][j]->force, normalize(myFlag->particles[i][j]->position - myPerson->body->origin))
+                            * length(myFlag->particles[i][j]->position - myPerson->body->origin);
+                } else {
+                    normalForce = -1.0f * normalize(myFlag->particles[i][j]->position - myPerson->head->origin)
+                            * dot(myFlag->particles[i][j]->force, normalize(myFlag->particles[i][j]->position - myPerson->head->origin))
+                            * length(myFlag->particles[i][j]->position - myPerson->head->origin);
+                }
+
                 myFlag->particles[i][j]->externalForce += normalForce;
 
                 // compute the friction
@@ -436,14 +489,14 @@ void Sim::updateForces(int number)
                 // limit the friction so it doesn't move the particle
                 if(length(frictionForce) >= length(myFlag->particles[i][j]->force))//dot(myFlag->particles[i][j]->force, frictionForce))
                 {
-                    frictionForce = -1.0f * myFlag->particles[i][j]->force;//dot(myFlag->particles[i][j]->force, frictionForce);
-                    //myFlag->particles[i][j]->velocity = vec3(0.0f,0.0f,0.0f);
+                    frictionForce = -1.0f * myFlag->particles[i][j]->force;   // dot(myFlag->particles[i][j]->force, frictionForce);
+                    //myFlag->particles[i][j]->velocity = myPerson->velocity; // velocity is equal to person if friction stops it
                 }
 
                 myFlag->particles[i][j]->externalForce += frictionForce;
             }
 
-            if(myGround->collidesWith(myFlag->particles[i][j]))
+            /*if(myGround->collidesWith(myFlag->particles[i][j]))
             {
                 // compute the response force
                 normalForce = myGround->topNormal * dot(myFlag->particles[i][j]->force, myGround->topNormal);
@@ -453,14 +506,14 @@ void Sim::updateForces(int number)
                 frictionForce = -1.0f * myGround->coefficientOfFriction * length(normalForce) * normalize(myFlag->particles[i][j]->force);
 
                 // limit the friction so it doesn't move the particle
-                if(length(frictionForce) >= length(myFlag->particles[i][j]->force))//dot(myFlag->particles[i][j]->force, frictionForce))
+                if(length(frictionForce) >= length(myFlag->particles[i][j]->force)) // dot(myFlag->particles[i][j]->force, frictionForce))
                 {
-                    frictionForce = -1.0f * myFlag->particles[i][j]->force;//dot(myFlag->particles[i][j]->force, frictionForce);
+                    frictionForce = -1.0f * myFlag->particles[i][j]->force; // dot(myFlag->particles[i][j]->force, frictionForce);
                     myFlag->particles[i][j]->velocity = vec3(0.0f,0.0f,0.0f);
                 }
 
                 myFlag->particles[i][j]->externalForce += frictionForce;
-            }
+            }*/
 
         }
     }
