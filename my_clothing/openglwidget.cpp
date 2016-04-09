@@ -88,7 +88,7 @@ void OpenGLWidget::initializeGL()
     GLfloat global_ambient[] = {0.5,0.5,0.5,1.0};
     glLightModelfv(GL_LIGHT_MODEL_AMBIENT, global_ambient);
 
-    timer->start(50); // 20 fps: timer should run always, not tied to animation
+    timer->start(100); // 20 fps: timer should run always, not tied to animation
     // frame timer is controlled by go and stop buttons
 
 }
@@ -243,8 +243,8 @@ void OpenGLWidget::mouseMoveEvent(QMouseEvent *e)
 void OpenGLWidget::keyPressEvent(QKeyEvent *k)
 {
     // Amount to move per step
-    float stepSize = 5.0f;
-    mySim->stepSize = stepSize;
+    float stepSize = 2.0f;
+    mySim->stepSize = stepSize+1.0f;
 
     // Left arrow
     if(k->matches(QKeySequence::MoveToPreviousChar))

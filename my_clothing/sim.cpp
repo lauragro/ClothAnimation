@@ -145,7 +145,7 @@ void Sim::eulerStep(float dt)
         for( j=0; j<myFlag->particlesWide; j++ )
         {
             // pin the corners
-            if(myFlag->particles[i][j]->pinned)
+            /*if(myFlag->particles[i][j]->pinned)
             {
                 // set velocity to zero
                 //myFlag->particles[i][j]->velocity=vec3(0.0f,0.0f,0.0f);
@@ -153,7 +153,7 @@ void Sim::eulerStep(float dt)
                 //continue;
 
             // adjust for collision with person
-            } else if(myPerson->collidesWith(myFlag->particles[i][j])){
+            } else*/ if(myPerson->collidesWith(myFlag->particles[i][j])){
 
                 // set velocity to zero
                 //myFlag->particles[i][j]->velocity=vec3(0.0f,0.0f,0.0f);
