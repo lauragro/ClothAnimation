@@ -28,7 +28,8 @@ Sim::~Sim()
 void Sim::draw(GLuint * textures)
 {
     // Draw ground
-    myGround->draw(textures[0]);
+    //myGround->draw(textures[0]);  // for desktop
+    myGround->drawFixedGround();    // for laptop
 
 
     // Draw blue circles
@@ -47,13 +48,13 @@ void Sim::draw(GLuint * textures)
     myPerson->draw(textures[1],textures[1]);
 
     // Draw connecting lines
-    /*for( int i=0; i<myFlag->implementedSprings; i++ )
+    for( int i=0; i<myFlag->implementedSprings; i++ )
     {
-        myFlag->springs[i]->draw();
-    }*/
+        myFlag->springs[i]->draw(); // for laptop
+    }
 
     // Draw flag
-    myFlag->draw();
+    //myFlag->draw(); // for desktop
 
 }
 

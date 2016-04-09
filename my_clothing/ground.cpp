@@ -151,10 +151,13 @@ void Ground::drawTextures(GLuint texture)
 
 
 // draw a fixed vertex ground
-/*void drawFixedGround(int width, float y)
+void Ground::drawFixedGround()
 {
+    int y = ymin;
+    int width = xmax*2;
+
     glBegin(GL_LINES);
-        for( int i=0; i<width/2; i+=10)
+        for( int i=0; i<width/2; i+=50)
         {
             // back line
             glVertex3f(-width/2+i, y, -width/2+i);
@@ -173,4 +176,4 @@ void Ground::drawTextures(GLuint texture)
             glVertex3f(-width/2+i, y, -width/2+i);
         }
     glEnd();
-}*/
+}

@@ -11,6 +11,7 @@ public:
     ~Ground();
 
     draw(GLuint texture);
+    void drawFixedGround();
 
     void initializeShader();
     bool collidesWith(Particle *p);
@@ -42,7 +43,7 @@ private:
     //====================================
 
     // todo: fix this
-    //void drawFixedGround(int width, float y);
+
     //==========================================
 };
 
