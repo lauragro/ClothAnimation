@@ -139,10 +139,10 @@ void Flag::createSheet(int zCentre)
 
 
 /* Construct all particles for a horizontally lying blanket */
-void Flag::createBlanket(int zCentre, float y)
+void Flag::createBlanket(int zCentre, float startHeight)
 {
-    float x,z;
-    //y = -450.0;   // just a bit below the top of the screen
+    float x,y,z;
+    y = startHeight;   // at the snowman's neck
 
     float halfWidth = (float)width/2.0f;
     float halfHeight = (float)height/2.0f;

@@ -147,6 +147,7 @@ void Ball::drawTextures(GLuint texture)
             GLUquadricObj* pQuadric = gluNewQuadric();  // make the quadric
             assert(pQuadric!=NULL); // make sure the quadric exists
             gluSphere(pQuadric,radius,numSlices,numStacks); // draw the sphere
+            gluDeleteQuadric(pQuadric);
         glEnd();
         glPopMatrix();
         //glDisable(GL_TEXTURE_2D);

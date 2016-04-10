@@ -10,7 +10,7 @@ Sim::Sim()
 
     myPerson = new Person();
     personMoved = false;    // in test stage now
-    myFlag = new Flag(0);
+    myFlag = new Flag(0, myPerson->body->origin.y - myPerson->body->radius);
 
     myGround = new Ground(myPerson->body->origin.y + myPerson->body->radius);
 
@@ -29,8 +29,8 @@ Sim::~Sim()
 void Sim::draw(GLuint * textures)
 {
     // Draw ground
-    //myGround->draw(textures[0]);  // for desktop
-    myGround->drawFixedGround();    // for laptop
+    myGround->draw(textures[0]);  // for desktop
+    //myGround->drawFixedGround();    // for laptop
 
 
     // Draw blue circles
@@ -49,13 +49,13 @@ void Sim::draw(GLuint * textures)
     myPerson->draw(textures[1],textures[1]);
 
     // Draw connecting lines
-    for( int i=0; i<myFlag->implementedSprings; i++ )
+    /*for( int i=0; i<myFlag->implementedSprings; i++ )
     {
         myFlag->springs[i]->draw(); // for laptop
-    }
+    }*/
 
     // Draw flag
-    //myFlag->draw(); // for desktop
+    myFlag->draw(); // for desktop
 
 }
 
@@ -202,22 +202,15 @@ void Sim::eulerStep(float dt)
                 // update position
                 x = x + v*dt;// + 0.5f * a * dt * dt;
 
-                // check collisions again
-                /*if(length(x-myPerson->head->origin) < myPerson->head->radius
-                        || length(x-myPerson->body->origin) < myPerson->body->radius)
-                {
-                    //continue;   // don't update position in this case
-                }*/
-
                 myFlag->particles[i][j]->position = x;
 
                 // ignore very small velocities
-                /*if(length(v) <= EPSILON)
+                if(length(v) <= EPSILON)
                 {
                     myFlag->particles[i][j]->velocity = vec3(0.0f,0.0f,0.0f);
                 }
                 // ignore very small forces
-                if(length(a) <= EPSILON)
+                /*if(length(a) <= EPSILON)
                 {
 
                 }*/
@@ -435,6 +428,11 @@ void Sim::updateForces(int number)
     int i,j;
     glm::vec3 force, v, normalForce, frictionForce;
 
+    float dangerSquare[4] = {myPerson->origin.x - myPerson->body->radius,  // xmin
+                            myPerson->origin.x + myPerson->body->radius,  // mxax
+                            myPerson->origin.z - myPerson->body->radius,  // zmin
+                            myPerson->origin.z + myPerson->body->radius}; // zmax
+
     // Reset forces
     for( i=0; i<myFlag->particlesHigh; i++ )
     {
@@ -496,7 +494,11 @@ void Sim::updateForces(int number)
                 myFlag->particles[i][j]->externalForce += frictionForce;
             }
 
-            /*if(myGround->collidesWith(myFlag->particles[i][j]))
+            if(myGround->collidesWith(myFlag->particles[i][j])
+                    && (   myFlag->particles[i][j]->position.x < dangerSquare[0]    // add forces only when outside the danger square
+                        || myFlag->particles[i][j]->position.x > dangerSquare[1]
+                        || myFlag->particles[i][j]->position.z < dangerSquare[2]
+                        || myFlag->particles[i][j]->position.z > dangerSquare[3]) )
             {
                 // compute the response force
                 normalForce = myGround->topNormal * dot(myFlag->particles[i][j]->force, myGround->topNormal);
@@ -513,7 +515,7 @@ void Sim::updateForces(int number)
                 }
 
                 myFlag->particles[i][j]->externalForce += frictionForce;
-            }*/
+            }
 
         }
     }

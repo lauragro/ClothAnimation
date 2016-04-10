@@ -14,7 +14,7 @@ class Flag
 {
 public:
     // constructor/destructor
-    Flag(int zCentre);
+    Flag(int zCentre, float startHeight);
     ~Flag();
 
     void draw();
@@ -50,7 +50,7 @@ public:
 
 private:
     void createSheet(int zCentre);
-    void createBlanket(int zCentre);
+    void createBlanket(int zCentre, float startHeight);
 
     void drawTriangle(Particle *p1, Particle *p2, Particle *p3, const vec3 colour);
     vec3 calcTriangleNormal(Particle *p1,Particle *p2,Particle *p3);
