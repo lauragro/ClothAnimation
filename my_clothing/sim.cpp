@@ -544,7 +544,7 @@ void Sim::updateForces(int number)
 
     }
 
-    cout << "(" << myFlag->particles[16][16]->force.x << ", " << myFlag->particles[16][16]->force.y
-          << ", " << myFlag->particles[16][16]->force.z << ")" << endl;
+    //cout << "(" << myFlag->particles[16][16]->force.x << ", " << myFlag->particles[16][16]->force.y
+    //      << ", " << myFlag->particles[16][16]->force.z << ")" << endl;
 
 }

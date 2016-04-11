@@ -138,17 +138,22 @@ void Ball::drawTextures(GLuint texture)
     glShadeModel( GL_SMOOTH );
         glEnable(GL_DEPTH_TEST);
         //glEnable(GL_TEXTURE_2D);
-        glColor3f(1, 1, 1);
+        glColor3f(0, .2, .2);
         //glBindTexture(GL_TEXTURE_2D, texture);
 
-        glBegin(GL_TRIANGLES);
+        //glBegin(GL_TRIANGLES);
             int numSlices = 32;
             int numStacks = 32;
-            GLUquadricObj* pQuadric = gluNewQuadric();  // make the quadric
-            assert(pQuadric!=NULL); // make sure the quadric exists
-            gluSphere(pQuadric,radius,numSlices,numStacks); // draw the sphere
-            gluDeleteQuadric(pQuadric);
-        glEnd();
+            GLUquadricObj* sphere = gluNewQuadric();  // make the quadric
+            assert(sphere!=NULL); // make sure the quadric exists
+
+            gluQuadricDrawStyle(sphere,GLU_FILL);
+            gluQuadricNormals(sphere,GLU_SMOOTH);
+            gluQuadricOrientation(sphere,GLU_OUTSIDE);
+            gluQuadricTexture(sphere,GL_TRUE);
+            gluSphere(sphere,radius,numSlices,numStacks); // draw the sphere
+            gluDeleteQuadric(sphere);
+        //glEnd();
         glPopMatrix();
         //glDisable(GL_TEXTURE_2D);
 

@@ -139,10 +139,10 @@ void Flag::createSheet(int zCentre)
 
 
 /* Construct all particles for a horizontally lying blanket */
-void Flag::createBlanket(int zCentre, float y)
+void Flag::createBlanket(int zCentre, float startHeight)
 {
-    float x,z;
-    //y = -450.0;   // just a bit below the top of the screen
+    float x,y,z;
+    y = startHeight;   // at the snowman's neck
 
     float halfWidth = (float)width/2.0f;
     float halfHeight = (float)height/2.0f;
@@ -186,6 +186,7 @@ void Flag::drawTriangle(Particle *p1, Particle *p2, Particle *p3, const vec3 col
 
     glColor3fv( (GLfloat*) &colour );
 
+    //norm = normalize(calcTriangleNormal(p1,p2,p3));
     norm = normalize(p3->normal);
     glNormal3fv((GLfloat *) &norm);
     glVertex3fv((GLfloat *) &(p3->position ));
@@ -221,10 +222,8 @@ void Flag::draw()
 
     //create smooth per particle normals by adding up all the (hard) triangle normals that each particle is part of
     for( i=0; i<particlesHigh-1; i++)
-    //for(int x = 0; x<num_particles_width-1; x++)
     {
         for( j=0; j<particlesWide-1; j++)
-        //for(int y=0; y<num_particles_height-1; y++)
         {
             normal = calcTriangleNormal(    particles[i+1][j],//getParticle(x+1,y),
                                             particles[i][j],//getParticle(x,y),
@@ -244,19 +243,17 @@ void Flag::draw()
 
     glBegin(GL_TRIANGLES);
     for( i=0; i<particlesHigh-1; i++ )
-    //for(int x = 0; x<num_particles_width-1; x++)
     {
         for( j=0; j<particlesWide-1; j++)
-        //for(int y=0; y<num_particles_height-1; y++)
         {
             //vec3 colour = vec3(0.0f,0.0f,0.0f);
-            if (i%2 == 0)
+            if (j%2 == 0)
             {
                 // red and white color is interleaved according to which column number
                 colour = vec3(0.6f,0.2f,0.2f);
             } else
             {
-                colour = vec3(1.0f,1.0f,0.0f);
+                colour = vec3(1.0f,0.0f,0.0f);
             }
 
             drawTriangle(particles[i+1][j], //getParticle(x+1,y),
