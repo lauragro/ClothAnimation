@@ -11,15 +11,17 @@ Particle::Particle()
 Particle::Particle(float x, float y, float z)
 {
     mass = 1.0f;
-    position = vec3(x, y, z);
+    position = position_old = vec3(x, y, z);
     position1 = vec3(x, y, z);
     position2 = vec3(x, y, z);
     position3 = vec3(x, y, z);
-    velocity = vec3(0.0f,0.0f,0.0f);
+    velocity = velocity_old = vec3(0.0f,0.0f,0.0f);
     velocity1 = vec3(0.0f,0.0f,0.0f);
     velocity2 = vec3(0.0f,0.0f,0.0f);
     velocity3 = vec3(0.0f,0.0f,0.0f);
     gravityForce = vec3(0.0f,9.81f,0.0f);
+
+    acceleration = acceleration_old = vec3(0.0f,0.0f,0.0f);
 }
 
 // total state constructor

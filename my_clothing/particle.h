@@ -14,9 +14,9 @@ public:
 
     // attributes
     float mass;
-    vec3 position;
-    vec3 velocity;
-    vec3 acceleration;
+    vec3 position, position_old;
+    vec3 velocity, velocity_old;
+    vec3 acceleration, acceleration_old;
     vec3 force;
     vec3 externalForce;
     vec3 springForce;

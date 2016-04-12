@@ -180,7 +180,7 @@ void Sim::eulerStep(float dt)
                 // set velocity to zero
                 //myFlag->particles[i][j]->velocity=vec3(0.0f,0.0f,0.0f);
 
-                //continue;
+                continue;
 
             // update all other particles
             }
@@ -209,11 +209,7 @@ void Sim::eulerStep(float dt)
                 {
                     myFlag->particles[i][j]->velocity = vec3(0.0f,0.0f,0.0f);
                 }
-                // ignore very small forces
-                /*if(length(a) <= EPSILON)
-                {
 
-                }*/
             }
 
         }
@@ -438,6 +434,11 @@ void Sim::updateForces(int number)
     {
         for( j=0; j<myFlag->particlesWide; j++ )
         {
+            // update old positions/velocities/accelerations
+            myFlag->particles[i][j]->position_old = myFlag->particles[i][j]->position;
+            myFlag->particles[i][j]->velocity_old = myFlag->particles[i][j]->velocity;
+            myFlag->particles[i][j]->acceleration_old = myFlag->particles[i][j]->acceleration;
+
             // reset spring force for next calculation
             myFlag->particles[i][j]->springForce = vec3(0.0f,0.0f,0.0f);
 
@@ -518,6 +519,7 @@ void Sim::updateForces(int number)
             }
 
         }
+
     }
 
     // Add on current spring forces
