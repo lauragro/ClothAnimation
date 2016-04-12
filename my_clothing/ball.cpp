@@ -135,10 +135,12 @@ void Ball::drawTextures(GLuint texture)
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
     glTranslatef(origin.x, origin.y, origin.z);
+
+    glRotatef(45.0f,0.0f,0.0f,1.0f);
     glShadeModel( GL_SMOOTH );
         glEnable(GL_DEPTH_TEST);
         //glEnable(GL_TEXTURE_2D);
-        glColor3f(0, .2, .2);
+        glColor3f(0, 1, 1);
         //glBindTexture(GL_TEXTURE_2D, texture);
 
         //glBegin(GL_TRIANGLES);

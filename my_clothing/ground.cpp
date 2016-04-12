@@ -99,6 +99,7 @@ void Ground::drawTextures(GLuint texture)
         glBindTexture(GL_TEXTURE_2D, texture);
 
         // TOP
+        glNormal3f(0.0f,-1.0f,0.0f);
         glBegin(GL_QUADS);
             glTexCoord2f(0.0f, 1.0f); glVertex3f(xmin, ymin, zmax);  // vertex 1
             glTexCoord2f(0.0f, 0.0f); glVertex3f(xmin, ymin, zmin); // vertex 2
