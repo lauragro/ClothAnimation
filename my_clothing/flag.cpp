@@ -160,10 +160,13 @@ void Flag::createBlanket(int zCentre, float startHeight)
 
             // create particle
             particles[i][j] = new Particle(x,y,z);
+
         }
     }
 
-    // don't pin anything yet
+    // secure clothing to top of body
+    particles[particlesHigh/2][particlesWide/2]->pinned = true;
+
 }
 
 /* Calculate the triangle normal between three particles */

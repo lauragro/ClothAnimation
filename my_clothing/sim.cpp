@@ -267,11 +267,11 @@ void Sim::semiImplicitEuler(float dt)
                 if(myPerson->collidesWith(myFlag->particles[i][j]))
                 {
                     myFlag->particles[i][j]->position += (directionMoved * stepSize);
-                    myFlag->particles[i][j]->pinned = true;
+                    //myFlag->particles[i][j]->pinned = true;
                 }
                 else
                 {
-                    myFlag->particles[i][j]->pinned = false;
+                    //myFlag->particles[i][j]->pinned = false;
                 }
             }
         }
@@ -289,7 +289,12 @@ void Sim::semiImplicitEuler(float dt)
         {
             p = myFlag->particles[i][j];
 
-            if(myPerson->collidesWith(p)){//myFlag->particles[i][j])){
+            if(p->pinned)
+            {
+                p->position = myPerson->body->origin - vec3(0.0f,myPerson->body->radius,0.0f);
+            }
+
+            else if(myPerson->collidesWith(p)){//myFlag->particles[i][j])){
 
                 // set velocity to zero
                 //myFlag->particles[i][j]->velocity=vec3(0.0f,0.0f,0.0f);
