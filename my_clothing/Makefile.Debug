@@ -291,6 +291,8 @@ debug/moc_window.cpp: ui_MainWindow.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qtabbar.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qtabwidget.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qrubberband.h \
+		C:/Qt/5.4/mingw491_32/include/QtWidgets/QLabel \
+		C:/Qt/5.4/mingw491_32/include/QtWidgets/qlabel.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/QMainWindow \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qmainwindow.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/QMenuBar \
@@ -299,6 +301,7 @@ debug/moc_window.cpp: ui_MainWindow.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/QPushButton \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qpushbutton.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qabstractbutton.h \
+		C:/Qt/5.4/mingw491_32/include/QtWidgets/QSlider \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/QStatusBar \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qstatusbar.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/QToolBar \
@@ -687,7 +690,6 @@ debug/moc_window.cpp: ui_MainWindow.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qfontcombobox.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qgroupbox.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qkeysequenceedit.h \
-		C:/Qt/5.4/mingw491_32/include/QtWidgets/qlabel.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qlcdnumber.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qmdiarea.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qmdisubwindow.h \
@@ -2001,6 +2003,8 @@ debug/main.o: main.cpp window.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qtabbar.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qtabwidget.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qrubberband.h \
+		C:/Qt/5.4/mingw491_32/include/QtWidgets/QLabel \
+		C:/Qt/5.4/mingw491_32/include/QtWidgets/qlabel.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/QMainWindow \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qmainwindow.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/QMenuBar \
@@ -2009,6 +2013,7 @@ debug/main.o: main.cpp window.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/QPushButton \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qpushbutton.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qabstractbutton.h \
+		C:/Qt/5.4/mingw491_32/include/QtWidgets/QSlider \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/QStatusBar \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qstatusbar.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/QToolBar \
@@ -2397,7 +2402,6 @@ debug/main.o: main.cpp window.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qfontcombobox.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qgroupbox.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qkeysequenceedit.h \
-		C:/Qt/5.4/mingw491_32/include/QtWidgets/qlabel.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qlcdnumber.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qmdiarea.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qmdisubwindow.h \
@@ -3131,6 +3135,8 @@ debug/window.o: window.cpp window.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qtabbar.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qtabwidget.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qrubberband.h \
+		C:/Qt/5.4/mingw491_32/include/QtWidgets/QLabel \
+		C:/Qt/5.4/mingw491_32/include/QtWidgets/qlabel.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/QMainWindow \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qmainwindow.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/QMenuBar \
@@ -3139,6 +3145,7 @@ debug/window.o: window.cpp window.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/QPushButton \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qpushbutton.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qabstractbutton.h \
+		C:/Qt/5.4/mingw491_32/include/QtWidgets/QSlider \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/QStatusBar \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qstatusbar.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/QToolBar \
@@ -3527,7 +3534,6 @@ debug/window.o: window.cpp window.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qfontcombobox.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qgroupbox.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qkeysequenceedit.h \
-		C:/Qt/5.4/mingw491_32/include/QtWidgets/qlabel.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qlcdnumber.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qmdiarea.h \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/qmdisubwindow.h \
@@ -4126,9 +4132,11 @@ debug/openglwidget.o: openglwidget.cpp C:/Qt/5.4/mingw491_32/include/QtOpenGL/Qt
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/QButtonGroup \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/QGridLayout \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/QHeaderView \
+		C:/Qt/5.4/mingw491_32/include/QtWidgets/QLabel \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/QMainWindow \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/QMenuBar \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/QPushButton \
+		C:/Qt/5.4/mingw491_32/include/QtWidgets/QSlider \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/QStatusBar \
 		C:/Qt/5.4/mingw491_32/include/QtWidgets/QToolBar \
 		C:/Qt/5.4/mingw491_32/include/QtGui/QKeyEvent \

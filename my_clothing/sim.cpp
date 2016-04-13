@@ -29,8 +29,8 @@ Sim::~Sim()
 void Sim::draw(GLuint * textures)
 {
     // Draw ground
-    myGround->draw(textures[0]);  // for desktop
-    //myGround->drawFixedGround();    // for laptop
+    //myGround->draw(textures[0]);  // for desktop
+    myGround->drawFixedGround();    // for laptop
 
 
     // Draw blue circles
@@ -49,30 +49,33 @@ void Sim::draw(GLuint * textures)
     myPerson->draw(textures[1],textures[1]);
 
     // Draw connecting lines
-    /*for( int i=0; i<myFlag->implementedSprings; i++ )
+    for( int i=0; i<myFlag->implementedSprings; i++ )
     {
         myFlag->springs[i]->draw(); // for laptop
-    }*/
+    }
 
     // Draw flag
-    myFlag->draw(); // for desktop
+    //myFlag->draw(); // for desktop
 
 }
 
 // Simulation step using interpolation
 void Sim::simStep()
 {
-    int type = 1;
+    int type = 2;
     float dt = 0.1f;//2f;
     t += dt;
 
     switch (type)
     {
         case 0:
-            rightStep(dt);
+            rightStep();
             break;
         case 1:
             eulerStep(dt);
+            break;
+        case 2:
+            semiImplicitEuler(dt);
             break;
         default://case 2:
             rungeKuttaStep(dt); // This fails after multiple collisions!
@@ -82,7 +85,7 @@ void Sim::simStep()
 }
 
 // Move right simulation step
-void Sim::rightStep(float dt)
+void Sim::rightStep()
 {
     for(int i=0; i<myFlag->particlesHigh; i++)
     {
@@ -97,21 +100,7 @@ void Sim::rightStep(float dt)
 void Sim::eulerStep(float dt)
 {
     int i,j;
-    vec3 x, v, a, newOrigin, newVelocity;
-
-    // move ball when cloth is in sheet mode
-    //if( myFlag->type == SHEET )
-    //{
-        //myBall->origin += vec3(0, -sin(t/12), 0);
-
-    //}
-
-    // TEST MOVE PERSON HERE
-    /*newOrigin = myPerson->origin + vec3(0.0f,-sin(t/24),0.0f);
-    newVelocity = (newOrigin - myPerson->origin)/dt;                    // v = dx/dt
-    myPerson->acceleration = (newVelocity - myPerson->velocity)/dt;     // a = dv/dt (update acceleration)
-    myPerson->velocity = newVelocity;   // update velocity
-    myPerson->setOrigin(newOrigin);     // update position*/
+    vec3 x, v, a;
 
     if(personMoved)
     {
@@ -261,6 +250,100 @@ void Sim::eulerStep(float dt)
 
 }
 
+// Semi-Implicit Euler simulation step
+void Sim::semiImplicitEuler(float dt)
+{
+    int i,j;
+    vec3 x,v,a,x_prime,v_prime,a_prime;
+    Particle *p;
+
+    // Check if user moved character
+    if(personMoved)
+    {
+        for( i=0; i<myFlag->particlesHigh; i++ )
+        {
+            for( j=0; j<myFlag->particlesWide; j++ )
+            {
+                if(myPerson->collidesWith(myFlag->particles[i][j]))
+                {
+                    myFlag->particles[i][j]->position += (directionMoved * stepSize);
+                    myFlag->particles[i][j]->pinned = true;
+                }
+                else
+                {
+                    myFlag->particles[i][j]->pinned = false;
+                }
+            }
+        }
+
+        // reset flag
+        personMoved = false;
+    }
+
+
+    // get new values for current and next x,v,a
+    updateForces(0);
+    for(i=0; i<myFlag->particlesHigh; i++)
+    {
+        for(j=0; j<myFlag->particlesWide; j++)
+        {
+            p = myFlag->particles[i][j];
+
+            if(myPerson->collidesWith(myFlag->particles[i][j])){
+
+                // set velocity to zero
+                //myFlag->particles[i][j]->velocity=vec3(0.0f,0.0f,0.0f);
+
+                // move particle to outside the person
+                if(myFlag->particles[i][j]->position.y >= myPerson->head->origin.y + myPerson->head->radius)
+                {
+                    // bump to outside the body
+                    myFlag->particles[i][j]->position = myPerson->body->origin
+                            + (normalize(myFlag->particles[i][j]->position - myPerson->body->origin)
+                            * myPerson->body->radius * 1.1f);
+                } else {
+                    // bump to outside head
+                    myFlag->particles[i][j]->position = myPerson->head->origin
+                            + (normalize(myFlag->particles[i][j]->position - myPerson->head->origin)
+                            * myPerson->head->radius * 1.1f);
+                }
+
+                continue;
+
+            // adjust for collision with ground
+            } else if(myGround->collidesWith(myFlag->particles[i][j])){
+
+                // set velocity to zero
+                //myFlag->particles[i][j]->velocity=vec3(0.0f,0.0f,0.0f);
+
+                continue;
+
+            // update all other particles
+            }
+            else
+            {
+                // values at current time
+                x = p->position_old;
+                v = p->velocity_old;
+                a = p->acceleration_old;
+
+                // euler to approximate future values
+                v_prime = v + dt * a;
+                x_prime = x + dt * v_prime;
+                a_prime = p->acceleration;
+
+                // use approx future values to find s.e.i. result
+                v = v + dt * a_prime;
+                p->velocity = v;
+                p->position += v*dt;
+
+            }
+
+        }
+
+    }
+
+}
 
 // Runge Kutta 4th Order simulation step
 void Sim::rungeKuttaStep(float dt)
@@ -540,8 +623,9 @@ void Sim::updateForces(int number)
         for( j=0; j<myFlag->particlesWide; j++ )
         {
             // F = Fext + Fspring
-            myFlag->particles[i][j]->force = myFlag->particles[i][j]->externalForce + myFlag->particles[i][j]->springForce;
-
+            force = myFlag->particles[i][j]->externalForce + myFlag->particles[i][j]->springForce;
+            myFlag->particles[i][j]->force = force;
+            myFlag->particles[i][j]->acceleration = force;  // mass = 1
         }
 
     }

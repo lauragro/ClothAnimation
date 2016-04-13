@@ -4,7 +4,7 @@
 // Constructor
 Camera::Camera()
 {
-
+    linelength = 0.02f;
 }
 
 // Destructor

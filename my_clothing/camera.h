@@ -54,7 +54,7 @@ public:
     //===========Camera stuff from Lucky and 305 assignment===========
         unsigned int width;
         unsigned int height;
-        const float linelength = 0.02f;
+        float linelength;// = 0.02f;
         float vppos_x;
         float vppos_y;
 

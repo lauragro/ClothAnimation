@@ -71,9 +71,9 @@ void OpenGLWidget::initializeGL()
 
     /* Setup lighting ******************************/
     GLfloat light0_pos[] = {1.0,-1000.0,1.0,1.0};
-    GLfloat light0_dir[] = {0.0,0.0,0.0,0.0};
+    //GLfloat light0_dir[] = {0.0,0.0,0.0,0.0};
     GLfloat diffuse0[] = {1.0,1.0,1.0,-1.0};
-    GLfloat ambient0[] = {0.5,0.5,0.5,1.0};
+    //GLfloat ambient0[] = {0.5,0.5,0.5,1.0};
     GLfloat specular0[] = {1.0,1.0,1.0,-1.0};
 
     glEnable(GL_LIGHTING);

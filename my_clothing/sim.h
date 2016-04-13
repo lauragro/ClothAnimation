@@ -27,8 +27,9 @@ class Sim
 
         // Progesses the simulation forward
         void simStep();
-        void rightStep(float dt);
+        void rightStep();
         void eulerStep(float dt);
+        void semiImplicitEuler(float dt);                 // integrate one time step with s.i.e.
         void rungeKuttaStep(float dt);
         void updateForces(int number);
 
