@@ -24,8 +24,8 @@ public:
     char * type = BLANKET;
 
     // constants
-    static const int particlesHigh = 32; //12;
-    static const int particlesWide = 32;
+    static const int particlesHigh = 33; //12;
+    static const int particlesWide = 33;
 
     // 12 spring method
     static const int numStructureSprings = (particlesHigh-1)*particlesWide + (particlesWide-1)*particlesHigh; // max 4 per particle

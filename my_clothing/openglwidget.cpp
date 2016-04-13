@@ -391,7 +391,16 @@ void OpenGLWidget::initializeShader()
     glShadeModel(GL_SMOOTH);
     glEnable(GL_MULTISAMPLE);
     glEnable(GL_TEXTURE_2D);
-    Load2DGLTexture("../grass.bmp",0);
-    LoadSphereGLTexture("../volleyball.jpg",1);
+    //glEnable(GL_FRAMEBUFFER_SRGB);  // proper colour balancing
+    //Load2DGLTexture("../grass.bmp",0);
+
+
+    Load2DGLTexture("../American_oak_pxr128.tif",0);
+    //Load
+
+    //LoadSphereGLTexture("../volleyball.jpg",1);
+
+    LoadSphereGLTexture("../Penguin-Face.png",1);
+    LoadSphereGLTexture("../Penguin-Body.png",2);
 
 }

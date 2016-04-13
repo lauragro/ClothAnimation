@@ -32,6 +32,9 @@ public:
     vec3 velocity1;
     vec3 velocity2;
     vec3 velocity3;
+    vec3 acceleration1;
+    vec3 acceleration2;
+    vec3 acceleration3;
 
     // draw function
     void draw();

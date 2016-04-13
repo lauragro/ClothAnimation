@@ -46,7 +46,7 @@ void Sim::draw(GLuint * textures)
     //myBall->draw(textures[1]);
 
     // Draw person
-    myPerson->draw(textures[1],textures[1]);
+    myPerson->draw(textures[1],textures[2]);
 
     // Draw connecting lines
     /*for( int i=0; i<myFlag->implementedSprings; i++ )
@@ -281,7 +281,7 @@ void Sim::semiImplicitEuler(float dt)
     }
 
 
-    // get new values for current and next x,v,a
+    // get values for current x,v,a
     updateForces(0);
     for(i=0; i<myFlag->particlesHigh; i++)
     {
@@ -289,23 +289,30 @@ void Sim::semiImplicitEuler(float dt)
         {
             p = myFlag->particles[i][j];
 
-            if(myPerson->collidesWith(myFlag->particles[i][j])){
+            if(myPerson->collidesWith(p)){//myFlag->particles[i][j])){
 
                 // set velocity to zero
                 //myFlag->particles[i][j]->velocity=vec3(0.0f,0.0f,0.0f);
 
                 // move particle to outside the person
-                if(myFlag->particles[i][j]->position.y >= myPerson->head->origin.y + myPerson->head->radius)
+                if(p->position.y >= myPerson->head->origin.y + myPerson->head->radius)
+                //if(myFlag->particles[i][j]->position.y >= myPerson->head->origin.y + myPerson->head->radius)
                 {
                     // bump to outside the body
-                    myFlag->particles[i][j]->position = myPerson->body->origin
-                            + (normalize(myFlag->particles[i][j]->position - myPerson->body->origin)
+                    p->position = myPerson->body->origin
+                            + (normalize(p->position - myPerson->body->origin)
                             * myPerson->body->radius * 1.1f);
+                    //myFlag->particles[i][j]->position = myPerson->body->origin
+                    //        + (normalize(myFlag->particles[i][j]->position - myPerson->body->origin)
+                    //        * myPerson->body->radius * 1.1f);
                 } else {
                     // bump to outside head
-                    myFlag->particles[i][j]->position = myPerson->head->origin
-                            + (normalize(myFlag->particles[i][j]->position - myPerson->head->origin)
+                    p->position = myPerson->head->origin
+                            + (normalize(p->position - myPerson->head->origin)
                             * myPerson->head->radius * 1.1f);
+                    //myFlag->particles[i][j]->position = myPerson->head->origin
+                    //        + (normalize(myFlag->particles[i][j]->position - myPerson->head->origin)
+                    //        * myPerson->head->radius * 1.1f);
                 }
 
                 continue;
@@ -336,13 +343,40 @@ void Sim::semiImplicitEuler(float dt)
                 v = v + dt * a_prime;
                 p->velocity = v;
                 p->position += v*dt;
+                p->acceleration = a_prime;
 
+                p->position1 = x_prime;
+                p->velocity1 = v_prime;
             }
 
         }
 
     }
 
+    // get values for next x,v,a
+    /*updateForces(1);
+    for(i=0; i<myFlag->particlesHigh; i++)
+    {
+        for(j=0; j<myFlag->particlesWide; j++)
+        {
+
+                p = myFlag->particles[i][j];
+                // use approx future values to find s.e.i. result
+                x = p->position;
+                v = p->velocity;
+                a_prime = p->acceleration1;
+
+                v = v + dt * a_prime;
+                //x = x + dt * v;
+                p->velocity = v;
+                p->position = x + v*dt;
+                p->acceleration = a_prime;
+
+
+
+        }
+
+    }*/
 }
 
 // Runge Kutta 4th Order simulation step
@@ -505,7 +539,7 @@ void Sim::rungeKuttaStep(float dt)
 void Sim::updateForces(int number)
 {
     int i,j;
-    glm::vec3 force, v, normalForce, frictionForce;
+    glm::vec3 force, pos, v, normalForce, frictionForce;
 
     float dangerSquare[4] = {myPerson->origin.x - myPerson->body->radius,  // xmin
                             myPerson->origin.x + myPerson->body->radius,  // mxax
@@ -529,15 +563,19 @@ void Sim::updateForces(int number)
             switch(number){
             case 0:
                 v = myFlag->particles[i][j]->velocity;
+                pos = myFlag->particles[i][j]->position;
                 break;
             case 1:
                 v = myFlag->particles[i][j]->velocity1;
+                pos = myFlag->particles[i][j]->position1;
                 break;
             case 2:
                 v = myFlag->particles[i][j]->velocity2;
+                pos = myFlag->particles[i][j]->position2;
                 break;
             default://case 3:
                 v = myFlag->particles[i][j]->velocity3;
+                pos = myFlag->particles[i][j]->position3;
                 //break;
             }
 
@@ -552,15 +590,22 @@ void Sim::updateForces(int number)
                 myFlag->particles[i][j]->velocity = myPerson->velocity;
 
                 // compute the response force
-                if(myFlag->particles[i][j]->position.y > myPerson->head->origin.y + myPerson->head->radius)
+                if(pos.y > myPerson->head->origin.y + myPerson->head->radius)
+                //if(myFlag->particles[i][j]->position.y > myPerson->head->origin.y + myPerson->head->radius)
                 {
-                    normalForce = -1.0f * normalize(myFlag->particles[i][j]->position - myPerson->body->origin)
-                            * dot(myFlag->particles[i][j]->force, normalize(myFlag->particles[i][j]->position - myPerson->body->origin))
-                            * length(myFlag->particles[i][j]->position - myPerson->body->origin);
+                    normalForce = -1.0f * normalize(pos - myPerson->body->origin)
+                            * dot(myFlag->particles[i][j]->force, normalize(pos - myPerson->body->origin))
+                            * length(pos - myPerson->body->origin);
+                    //normalForce = -1.0f * normalize(myFlag->particles[i][j]->position - myPerson->body->origin)
+                    //        * dot(myFlag->particles[i][j]->force, normalize(myFlag->particles[i][j]->position - myPerson->body->origin))
+                    //        * length(myFlag->particles[i][j]->position - myPerson->body->origin);
                 } else {
-                    normalForce = -1.0f * normalize(myFlag->particles[i][j]->position - myPerson->head->origin)
-                            * dot(myFlag->particles[i][j]->force, normalize(myFlag->particles[i][j]->position - myPerson->head->origin))
-                            * length(myFlag->particles[i][j]->position - myPerson->head->origin);
+                    normalForce = -1.0f * normalize(pos - myPerson->head->origin)
+                            * dot(myFlag->particles[i][j]->force, normalize(pos - myPerson->head->origin))
+                            * length(pos - myPerson->head->origin);
+                    //normalForce = -1.0f * normalize(myFlag->particles[i][j]->position - myPerson->head->origin)
+                    //        * dot(myFlag->particles[i][j]->force, normalize(myFlag->particles[i][j]->position - myPerson->head->origin))
+                    //        * length(myFlag->particles[i][j]->position - myPerson->head->origin);
                 }
 
                 myFlag->particles[i][j]->externalForce += normalForce;
@@ -595,7 +640,23 @@ void Sim::updateForces(int number)
                 if(length(frictionForce) >= length(myFlag->particles[i][j]->force)) // dot(myFlag->particles[i][j]->force, frictionForce))
                 {
                     frictionForce = -1.0f * myFlag->particles[i][j]->force; // dot(myFlag->particles[i][j]->force, frictionForce);
-                    myFlag->particles[i][j]->velocity = vec3(0.0f,0.0f,0.0f);
+
+                    switch(number){
+                    case 0:
+                        myFlag->particles[i][j]->velocity = vec3(0.0f,0.0f,0.0f);
+
+                        break;
+                    case 1:
+                        myFlag->particles[i][j]->velocity1 = vec3(0.0f,0.0f,0.0f);
+                        break;
+                    case 2:
+                        myFlag->particles[i][j]->velocity2 = vec3(0.0f,0.0f,0.0f);
+                        break;
+                    default://case 3:
+                        myFlag->particles[i][j]->velocity3 = vec3(0.0f,0.0f,0.0f);
+                    }
+
+
                 }
 
                 myFlag->particles[i][j]->externalForce += frictionForce;
@@ -625,7 +686,15 @@ void Sim::updateForces(int number)
             // F = Fext + Fspring
             force = myFlag->particles[i][j]->externalForce + myFlag->particles[i][j]->springForce;
             myFlag->particles[i][j]->force = force;
-            myFlag->particles[i][j]->acceleration = force;  // mass = 1
+
+            switch(number){
+            case 0:
+                myFlag->particles[i][j]->acceleration = force;  // mass = 1
+                break;
+            default:
+                myFlag->particles[i][j]->acceleration1 = force; // mass = 1
+                //break;
+            }
         }
 
     }

@@ -21,7 +21,7 @@ Particle::Particle(float x, float y, float z)
     velocity3 = vec3(0.0f,0.0f,0.0f);
     gravityForce = vec3(0.0f,9.81f,0.0f);
 
-    acceleration = acceleration_old = vec3(0.0f,0.0f,0.0f);
+    acceleration = acceleration_old = acceleration1 = vec3(0.0f,0.0f,0.0f);
 
     pinned = false;
 }
