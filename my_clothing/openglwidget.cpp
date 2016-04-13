@@ -70,23 +70,38 @@ void OpenGLWidget::initializeGL()
     initializeShader();
 
     /* Setup lighting ******************************/
-    GLfloat light0_pos[] = {1.0,-1000.0,1.0,1.0};
-    //GLfloat light0_dir[] = {0.0,0.0,0.0,0.0};
-    GLfloat diffuse0[] = {1.0,1.0,1.0,-1.0};
-    //GLfloat ambient0[] = {0.5,0.5,0.5,1.0};
-    GLfloat specular0[] = {1.0,1.0,1.0,-1.0};
-
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
+
+    // Create light components
+    GLfloat ambientLight[] = { 0.2f, 0.2f, 0.2f, 1.0f };
+    GLfloat diffuseLight[] = { 0.8f, 0.8f, 0.8, 1.0f };
+    GLfloat specularLight[] = { 0.5f, 0.5f, 0.5f, 1.0f };
+    GLfloat position[] = { 1000.0f, 1000.0f, 1000.0f, 1.0f };
+
+    // Assign created components to GL_LIGHT0
+    glLightfv(GL_LIGHT0, GL_AMBIENT, ambientLight);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuseLight);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, specularLight);
+    glLightfv(GL_LIGHT0, GL_POSITION, position);
+
+
+    /*GLfloat light0_pos[] = {100.0f,-1000.0f,100.0f,1.0f};
+    //GLfloat light0_dir[] = {0.0,0.0,0.0,0.0};
+    GLfloat diffuse0[] = {1.0f,1.0f,1.0f,-1.0f};
+    //GLfloat ambient0[] = {0.5,0.5,0.5,1.0};
+    GLfloat specular0[] = {1.0f,1.0f,1.0f,-1.0f};
+
+
 
     glLightfv(GL_LIGHT0, GL_POSITION, light0_pos);
     //glLightfv(GL_LIGHT0, GL_AMBIENT, ambient0);
     glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse0);
-    glLightfv(GL_LIGHT0, GL_SPECULAR, specular0);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, specular0);*/
 
     // add a small amount of white light everywhere
-    GLfloat global_ambient[] = {0.5,0.5,0.5,1.0};
-    glLightModelfv(GL_LIGHT_MODEL_AMBIENT, global_ambient);
+    //GLfloat global_ambient[] = {0.5f,0.5f,0.5f,1.0f};
+    //glLightModelfv(GL_LIGHT_MODEL_AMBIENT, global_ambient);
 
     timer->start(50); // 20 fps: timer should run always, not tied to animation
     // frame timer is controlled by go and stop buttons
@@ -109,7 +124,7 @@ void OpenGLWidget::paintGL()
 
     gluLookAt(myCamera->CameraPos.x, myCamera->CameraPos.y, myCamera->CameraPos.z,  // camera xyz
               0, 0, 0,       // target xyz
-              0, -1, 0);      // up xyz*/
+              0, -1, 0);     // up xyz*/
     //=============================================================
 
 
@@ -193,7 +208,7 @@ void OpenGLWidget::button_reset()
 {
     button_stop();      // end current simulation
     mySim = new Sim();  // create new simulation
-    initializeShader();    //reset grass etc.
+    initializeShader(); // reset grass etc.
     startup();          // start timers
     advanceFrame();     // draw starting position
 

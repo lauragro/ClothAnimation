@@ -187,15 +187,15 @@ void Flag::drawTriangle(Particle *p1, Particle *p2, Particle *p3, const vec3 col
     glColor3fv( (GLfloat*) &colour );
 
     //norm = normalize(calcTriangleNormal(p1,p2,p3));
-    norm = normalize(p3->normal);
+    norm = -1.0f*normalize(p3->normal);
     glNormal3fv((GLfloat *) &norm);
     glVertex3fv((GLfloat *) &(p3->position ));
 
-    norm = normalize(p2->normal);
+    norm = -1.0f*normalize(p2->normal);
     glNormal3fv((GLfloat *) &norm);
     glVertex3fv((GLfloat *) &(p2->position ));
 
-    norm = normalize(p1->normal);   // must normalize each particle's "normal" as they are not of unit length.
+    norm = -1.0f*normalize(p1->normal);   // must normalize each particle's "normal" as they are not of unit length.
     glNormal3fv((GLfloat *) &norm);
     glVertex3fv((GLfloat *) &(p1->position ));
 
