@@ -361,7 +361,8 @@ void OpenGLWidget::LoadSphereGLTexture( const char * name, const int texID )
 {
     QImage img;
 
-    if(!img.load(name)){
+    if(!img.load(name))
+    {
         std::cerr << "ERROR in loading image" << std::endl;
     }
 
@@ -395,8 +396,8 @@ void OpenGLWidget::initializeShader()
     //Load2DGLTexture("../grass.bmp",0);
 
 
-    Load2DGLTexture("../American_oak_pxr128.tif",0);
-    //Load
+    //Load2DGLTexture("../American_oak_pxr128.tif",0);
+    Load2DGLTexture("../Gray_marble_pxr128_bmp.tif",0);
 
     //LoadSphereGLTexture("../volleyball.jpg",1);
 

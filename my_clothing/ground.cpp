@@ -95,7 +95,7 @@ void Ground::drawTextures(GLuint texture)
     glShadeModel( GL_SMOOTH );
         glEnable(GL_TEXTURE_2D);
         glEnable(GL_DEPTH_TEST);
-        glColor3f(0.5, 0.5, 0);
+        glColor3f(1, 1, 1);
         glBindTexture(GL_TEXTURE_2D, texture);
 
         // TOP

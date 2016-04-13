@@ -292,6 +292,8 @@ void Sim::semiImplicitEuler(float dt)
             if(p->pinned)
             {
                 p->position = myPerson->body->origin - vec3(0.0f,myPerson->body->radius,0.0f);
+
+                continue;
             }
 
             else if(myPerson->collidesWith(p)){//myFlag->particles[i][j])){
@@ -352,6 +354,7 @@ void Sim::semiImplicitEuler(float dt)
 
                 p->position1 = x_prime;
                 p->velocity1 = v_prime;
+
             }
 
         }
